@@ -86,6 +86,7 @@ const SkeletonOne = () => {
   );
 };
 const SkeletonTwo = () => {
+  const [widths, setWidths] = React.useState<string[]>([]);
   const variants = {
     initial: {
       width: 0,
@@ -104,6 +105,12 @@ const SkeletonTwo = () => {
     },
   };
   const arr = new Array(6).fill(0);
+
+  React.useEffect(() => {
+    setWidths(arr.map(() => Math.random() * (100 - 40) + 40 + "%"));
+  }, []);
+
+
   return (
     <motion.div
       initial="initial"
@@ -116,7 +123,7 @@ const SkeletonTwo = () => {
           key={"skelenton-two" + i}
           variants={variants}
           style={{
-            maxWidth: Math.random() * (100 - 40) + 40 + "%",
+            maxWidth: widths[i] || '0%',
           }}
           className="flex flex-row rounded-full border border-neutral-100 dark:border-white/[0.2] p-2  items-center space-x-2 bg-neutral-100 dark:bg-black w-full h-4"
         ></motion.div>
@@ -352,3 +359,5 @@ const items = [
     icon: <IconBoxAlignRightFilled className="h-4 w-4 text-neutral-500" />,
   },
 ];
+
+    
