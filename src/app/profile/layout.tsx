@@ -191,10 +191,12 @@ export default function DashboardLayout({
             </DropdownMenu>
             </ClientOnly>
           <div className="p-2">
-            <Button className="w-full justify-between bg-black text-white dark:bg-white dark:text-black">
-              <Zap />
-              <span>Upgrade to Pro</span>
-              <ChevronRight />
+            <Button asChild className="w-full justify-between bg-black text-white dark:bg-white dark:text-black">
+              <Link href="/pricing">
+                <Zap />
+                <span>Upgrade to Pro</span>
+                <ChevronRight />
+              </Link>
             </Button>
           </div>
         </SidebarFooter>
