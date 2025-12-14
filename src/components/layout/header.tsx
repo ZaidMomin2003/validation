@@ -4,6 +4,7 @@
 import AuthButton from '@/components/auth-button';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { SidebarTrigger } from '@/components/ui/sidebar';
+import { ClientOnly } from '@/components/ClientOnly';
 
 export default function Header() {
   return (
@@ -13,8 +14,10 @@ export default function Header() {
           <SidebarTrigger className="md:hidden" />
         </div>
         <div className="flex flex-1 items-center justify-end space-x-2">
-          <ThemeToggle />
-          <AuthButton />
+          <ClientOnly>
+            <ThemeToggle />
+            <AuthButton />
+          </ClientOnly>
         </div>
       </div>
     </header>
