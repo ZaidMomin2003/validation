@@ -9,9 +9,7 @@ import { useScroll } from 'framer-motion'
 
 const menuItems = [
     { name: 'Features', href: '#link' },
-    { name: 'Solution', href: '#link' },
     { name: 'Pricing', href: '/pricing' },
-    { name: 'About', href: '#link' },
 ]
 
 export const HeroHeader = () => {
