@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { FileUp, MousePointerClick, Download } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { FileUpload } from "@/components/ui/file-upload";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export default function BulkValidatePage() {
     const [files, setFiles] = useState<File[]>([]);
@@ -25,11 +26,29 @@ export default function BulkValidatePage() {
         </p>
       </div>
 
-      <Card>
-        <CardContent className="p-6">
-            <FileUpload onChange={handleFileUpload} />
-        </CardContent>
-      </Card>
+      <Tabs defaultValue="clean">
+        <div className="flex justify-center p-2">
+          <TabsList>
+            <TabsTrigger value="clean">Clean</TabsTrigger>
+            <TabsTrigger value="validate">Validate</TabsTrigger>
+          </TabsList>
+        </div>
+        <TabsContent value="clean">
+          <Card>
+            <CardContent className="p-6">
+                <FileUpload onChange={handleFileUpload} />
+            </CardContent>
+          </Card>
+        </TabsContent>
+        <TabsContent value="validate">
+           <Card>
+            <CardContent className="p-6">
+                <FileUpload onChange={handleFileUpload} />
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
+
 
       <div className="grid gap-4">
         <h2 className="text-2xl font-bold">How it works</h2>
