@@ -1,4 +1,4 @@
-import { MailCheck } from 'lucide-react';
+import { Bot } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export default function Logo({ className }: { className?: string }) {
@@ -9,8 +9,10 @@ export default function Logo({ className }: { className?: string }) {
         className
       )}
     >
-      <MailCheck className="h-6 w-6 text-primary" />
-      <span>VeriFlow</span>
+      <div className="bg-primary text-primary-foreground p-2 rounded-md">
+        <Bot className="h-6 w-6" />
+      </div>
+      <span>Talxify</span>
     </div>
   );
 }
