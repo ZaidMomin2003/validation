@@ -136,23 +136,6 @@ export default function BulkValidatePage() {
                         <p className="text-sm text-muted-foreground">Select the column containing email addresses. We've highlighted our best guess.</p>
                     </div>
 
-                    <div>
-                        <h3 className="font-semibold mb-2">Verification Mode</h3>
-                        <div className="grid grid-cols-3 gap-2">
-                            <Button variant="outline" className="flex items-center justify-center gap-2 border-green-500 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300">
-                                <CheckCircle className="h-4 w-4" />
-                                <span>Standard</span>
-                            </Button>
-                            <Button variant="outline" className="flex items-center justify-center gap-2" disabled>
-                                <Lock className="h-4 w-4" />
-                                <span>Ultra</span>
-                            </Button>
-                             <Button variant="outline" className="flex items-center justify-center gap-2" disabled>
-                                <span>Legacy</span>
-                            </Button>
-                        </div>
-                    </div>
-
                     <div className="overflow-x-auto">
                         <Table>
                             <TableHeader>
