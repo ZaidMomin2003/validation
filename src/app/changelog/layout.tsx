@@ -107,7 +107,7 @@ export default function DashboardLayout({
             <SidebarGroupLabel>QUICK LINKS</SidebarGroupLabel>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton href="/changelog">
+                <SidebarMenuButton href="/changelog" isActive={pathname === '/changelog'}>
                   <FileText />
                   Changelog
                 </SidebarMenuButton>

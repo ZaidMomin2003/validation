@@ -8,10 +8,19 @@ import {
   FileText,
   MessageSquare,
   User,
+  LogOut,
   Zap,
   ChevronRight,
+  Sun,
+  Moon,
+  ChevronsUpDown,
+  FileClock,
+  UserCog,
+  CreditCard,
 } from 'lucide-react';
 import { usePathname } from 'next/navigation';
+import Link from 'next/link';
+import { useTheme } from 'next-themes';
 
 import {
   Sidebar,
@@ -29,6 +38,22 @@ import {
 import Logo from '@/components/logo';
 import Header from '@/components/layout/header';
 import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuPortal,
+  DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { useAuth } from '@/hooks/useAuth';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { ClientOnly } from '@/components/ClientOnly';
+
 
 export default function DashboardLayout({
   children,
@@ -36,6 +61,18 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const { user, signOut } = useAuth();
+  const { setTheme } = useTheme();
+
+  const getInitials = (name?: string | null) => {
+    if (!name) return 'U';
+    return name
+      .split(' ')
+      .map((n) => n[0])
+      .join('')
+      .toUpperCase();
+  };
+
   return (
     <>
       <Sidebar>
@@ -71,7 +108,7 @@ export default function DashboardLayout({
             <SidebarGroupLabel>QUICK LINKS</SidebarGroupLabel>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton href="#">
+                <SidebarMenuButton href="/changelog">
                   <FileText />
                   Changelog
                 </SidebarMenuButton>
@@ -85,20 +122,74 @@ export default function DashboardLayout({
             </SidebarMenu>
           </SidebarGroup>
           <SidebarSeparator />
-          <SidebarGroup>
-             <SidebarMenu>
-                <SidebarMenuItem>
-                    <SidebarMenuButton href="#">
-                        <User />
-                        <div className="flex flex-col">
-                            <span>My Account</span>
+          <ClientOnly>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <div className="p-2 cursor-pointer">
+                    <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-sidebar-accent transition-colors">
+                        {user && (
+                             <Avatar className="h-9 w-9">
+                                <AvatarImage src={user.photoURL ?? ""} alt={user.displayName ?? "User"} />
+                                <AvatarFallback>{getInitials(user.displayName)}</AvatarFallback>
+                            </Avatar>
+                        )}
+                        <div className="flex flex-col text-left">
+                            <span className="text-sm font-medium">{user?.displayName}</span>
                             <span className="text-xs text-muted-foreground">Free Plan</span>
                         </div>
-                        <ChevronRight className="ml-auto" />
-                    </SidebarMenuButton>
-                </SidebarMenuItem>
-             </SidebarMenu>
-          </SidebarGroup>
+                        <ChevronsUpDown className="ml-auto h-4 w-4 text-muted-foreground" />
+                    </div>
+                </div>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-64 mb-2" side="top" align="start">
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link href="/profile">
+                    <UserCog className="mr-2 h-4 w-4" />
+                    <span>Profile</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/subscription">
+                    <CreditCard className="mr-2 h-4 w-4" />
+                    <span>Subscription</span>
+                  </Link>
+                </DropdownMenuItem>
+                 <DropdownMenuItem asChild>
+                  <Link href="/changelog">
+                    <FileClock className="mr-2 h-4 w-4" />
+                    <span>Changelog</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSub>
+                  <DropdownMenuSubTrigger>
+                    <Sun className="h-4 w-4 mr-2 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+                    <Moon className="absolute h-4 w-4 mr-2 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+                    <span>Toggle theme</span>
+                  </DropdownMenuSubTrigger>
+                  <DropdownMenuPortal>
+                    <DropdownMenuSubContent>
+                      <DropdownMenuItem onClick={() => setTheme('light')}>
+                        Light
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => setTheme('dark')}>
+                        Dark
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => setTheme('system')}>
+                        System
+                      </DropdownMenuItem>
+                    </DropdownMenuSubContent>
+                  </DropdownMenuPortal>
+                </DropdownMenuSub>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={signOut}>
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>Log out</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            </ClientOnly>
           <div className="p-2">
             <Button className="w-full justify-between bg-black text-white dark:bg-white dark:text-black">
               <Zap />
