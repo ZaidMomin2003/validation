@@ -10,12 +10,14 @@ interface FileUploadProps {
   onChange: (files: File[]) => void;
   accept?: string;
   multiple?: boolean;
+  actionLabel?: string;
 }
 
 export function FileUpload({
   onChange,
   accept = ".csv, .xlsx",
   multiple = false,
+  actionLabel = "Start Verification",
 }: FileUploadProps) {
   const [files, setFiles] = useState<File[]>([]);
   const [isDragging, setIsDragging] = useState(false);
@@ -64,6 +66,11 @@ export function FileUpload({
     const newFiles = files.filter((_, i) => i !== index);
     setFiles(newFiles);
     onChange(newFiles);
+  };
+
+  const handleReset = () => {
+    setFiles([]);
+    onChange([]);
   };
 
   return (
@@ -124,8 +131,8 @@ export function FileUpload({
             ))}
             </ul>
             <div className="flex justify-center mt-4 gap-2">
-                <Button variant="outline" onClick={() => setFiles([])}>Upload another file</Button>
-                <Button>Start Verification</Button>
+                <Button variant="outline" onClick={handleReset}>Upload another file</Button>
+                <Button>{actionLabel}</Button>
             </div>
         </div>
       )}

@@ -26,6 +26,7 @@ export default function BulkValidatePage() {
     const [tableData, setTableData] = React.useState<TableData | null>(null);
     const [emailColumnIndex, setEmailColumnIndex] = React.useState<number | null>(null);
     const [isLoading, setIsLoading] = React.useState(false);
+    const [activeTab, setActiveTab] = React.useState('clean');
     const { toast } = useToast();
 
     const processFile = (file: File) => {
@@ -167,7 +168,7 @@ export default function BulkValidatePage() {
             <div className="border-t p-6 flex items-center justify-end">
                 <div className="flex items-center gap-2">
                     <Button variant="outline" onClick={handleReset}>Reset</Button>
-                    <Button>Validate</Button>
+                    <Button>{activeTab === 'clean' ? 'Clean' : 'Validate'}</Button>
                 </div>
             </div>
         </Card>
@@ -175,7 +176,7 @@ export default function BulkValidatePage() {
 
     const renderFileUpload = () => (
         <>
-            <Tabs defaultValue="clean">
+            <Tabs defaultValue="clean" onValueChange={setActiveTab} value={activeTab}>
                 <div className="flex justify-start">
                     <TabsList>
                         <TabsTrigger value="clean">Clean</TabsTrigger>
@@ -185,14 +186,14 @@ export default function BulkValidatePage() {
                 <TabsContent value="clean">
                 <Card>
                     <CardContent className="w-full max-w-4xl mx-auto p-0">
-                        <FileUpload onChange={handleFileUpload} accept=".csv, .xlsx" />
+                        <FileUpload onChange={handleFileUpload} accept=".csv, .xlsx" actionLabel={activeTab === 'clean' ? 'Start Cleaning' : 'Start Validation'}/>
                     </CardContent>
                 </Card>
                 </TabsContent>
                 <TabsContent value="validate">
                 <Card>
                     <CardContent className="w-full max-w-4xl mx-auto p-0">
-                        <FileUpload onChange={handleFileUpload} accept=".csv, .xlsx" />
+                        <FileUpload onChange={handleFileUpload} accept=".csv, .xlsx" actionLabel={activeTab === 'clean' ? 'Start Cleaning' : 'Start Validation'}/>
                     </CardContent>
                 </Card>
                 </TabsContent>
@@ -281,5 +282,3 @@ export default function BulkValidatePage() {
   </main>
   );
 }
-
-    
