@@ -52,7 +52,7 @@ export default function DashboardLayout({
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <SidebarMenuButton href="#">
+              <SidebarMenuButton href="/single-email">
                 <Mail />
                 Single Email
               </SidebarMenuButton>
