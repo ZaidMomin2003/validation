@@ -5,10 +5,12 @@ import { BentoGridThirdDemo } from '@/components/layout/feature-section';
 
 export default function Home() {
   return (
-    <>
+    <div className="bg-neutral-950">
       <HeroHeader />
       <HeroSection />
-      <BentoGridThirdDemo />
-    </>
+      <div className="py-20">
+        <BentoGridThirdDemo />
+      </div>
+    </div>
   );
 }
