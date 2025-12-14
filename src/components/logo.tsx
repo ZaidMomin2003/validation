@@ -1,3 +1,4 @@
+
 'use client';
 
 import { cn } from '@/lib/utils';
@@ -12,9 +13,10 @@ export default function Logo({ className }: { className?: string }) {
       <div className="flex flex-col">
         <span className="font-bold text-lg text-foreground">Verilist</span>
         <span className="text-sm text-muted-foreground -mt-1 hidden md:block">
-          Email Verification
+          by Talxify
         </span>
       </div>
     </div>
   );
 }
+
