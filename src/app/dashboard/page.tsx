@@ -1,8 +1,7 @@
 
 'use client';
 
-import { CloudUpload, Download, FileCheck, FileUp } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Download, FileCheck, FileUp } from 'lucide-react';
 import {
   Card,
   CardContent,
@@ -12,6 +11,8 @@ import {
 } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { SidebarTrigger } from '@/components/ui/sidebar';
+import { FileUpload } from '@/components/ui/file-upload';
+import React from 'react';
 
 export default function DashboardPage() {
   const howToUseSteps = [
@@ -31,6 +32,10 @@ export default function DashboardPage() {
       description: 'Download a CSV instantly categorizing emails as valid or invalid.',
     },
   ];
+
+  const handleFileUpload = (files: File[]) => {
+    console.log(files);
+  };
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
@@ -58,33 +63,13 @@ export default function DashboardPage() {
                   </p>
                 </div>
                 <TabsContent value="standard">
-                  <div className="mt-4 flex h-64 w-full flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 dark:border-gray-600 dark:bg-gray-800">
-                    <CloudUpload className="h-12 w-12 text-gray-400" />
-                    <p className="mt-4 text-sm text-muted-foreground">
-                      <span className="font-semibold">Click to upload</span> or drag and
-                      drop
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      .csv or .xlsx (MAX. 1000 rows)
-                    </p>
-                    <Button variant="outline" className="mt-4">
-                      Select File
-                    </Button>
+                  <div className="mt-4 min-h-64">
+                    <FileUpload onChange={handleFileUpload} />
                   </div>
                 </TabsContent>
                 <TabsContent value="catch-all">
-                  <div className="mt-4 flex h-64 w-full flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 dark:border-gray-600 dark:bg-gray-800">
-                    <CloudUpload className="h-12 w-12 text-gray-400" />
-                    <p className="mt-4 text-sm text-muted-foreground">
-                      <span className="font-semibold">Click to upload</span> or drag and
-                      drop
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      .csv or .xlsx (MAX. 1000 rows)
-                    </p>
-                    <Button variant="outline" className="mt-4">
-                      Select File
-                    </Button>
+                  <div className="mt-4 min-h-64">
+                    <FileUpload onChange={handleFileUpload} />
                   </div>
                 </TabsContent>
               </Tabs>
