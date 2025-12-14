@@ -17,6 +17,7 @@ import {
   FileClock,
   UserCog,
   CreditCard,
+  LifeBuoy,
 } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
@@ -108,13 +109,13 @@ export default function DashboardLayout({
             <SidebarGroupLabel>QUICK LINKS</SidebarGroupLabel>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton href="/changelog">
-                  <FileText />
-                  Changelog
+                <SidebarMenuButton href="/support" isActive={pathname === '/support'}>
+                  <LifeBuoy />
+                  Support
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton href="#">
+                <SidebarMenuButton href="/feedback" isActive={pathname === '/feedback'}>
                   <MessageSquare />
                   Feedback
                 </SidebarMenuButton>
