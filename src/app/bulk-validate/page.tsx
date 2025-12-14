@@ -13,6 +13,7 @@ import { useToast } from '@/hooks/use-toast';
 import * as XLSX from 'xlsx';
 
 const PREVIEW_ROW_COUNT = 8;
+const PREVIEW_COLUMN_COUNT = 4;
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 interface TableData {
@@ -137,7 +138,7 @@ export default function BulkValidatePage() {
                         <Table>
                             <TableHeader>
                                 <TableRow>
-                                    {tableData?.headers.map((header, index) => (
+                                    {tableData?.headers.slice(0, tableData.headers.length > PREVIEW_COLUMN_COUNT ? PREVIEW_COLUMN_COUNT : tableData.headers.length).map((header, index) => (
                                         <TableHead key={index} className={index === emailColumnIndex ? "bg-muted sticky top-0" : "sticky top-0 bg-background"}>
                                             <div className="flex items-center gap-1">
                                                 {header}
@@ -150,7 +151,7 @@ export default function BulkValidatePage() {
                             <TableBody>
                                 {tableData?.rows.map((row, rowIndex) => (
                                     <TableRow key={rowIndex}>
-                                        {row.map((cell, cellIndex) => (
+                                        {row.slice(0, tableData.headers.length > PREVIEW_COLUMN_COUNT ? PREVIEW_COLUMN_COUNT : tableData.headers.length).map((cell, cellIndex) => (
                                             <TableCell key={cellIndex} className={cellIndex === emailColumnIndex ? "bg-muted" : ""}>
                                                 {cell}
                                             </TableCell>
@@ -280,3 +281,5 @@ export default function BulkValidatePage() {
   </main>
   );
 }
+
+    
