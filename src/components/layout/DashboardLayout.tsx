@@ -53,6 +53,7 @@ import {
 import { useAuth } from '@/hooks/useAuth';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ClientOnly } from '@/components/ClientOnly';
+import { Badge } from '@/components/ui/badge';
 
 export default function DashboardLayout({
   children,
@@ -155,9 +156,12 @@ export default function DashboardLayout({
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link href="/subscription">
-                    <CreditCard className="mr-2 h-4 w-4" />
-                    <span>Subscription</span>
+                  <Link href="/subscription" className='flex items-center justify-between w-full'>
+                    <div className='flex items-center'>
+                      <CreditCard className="mr-2 h-4 w-4" />
+                      <span>Subscription</span>
+                    </div>
+                    <Badge variant="secondary">Free</Badge>
                   </Link>
                 </DropdownMenuItem>
                  <DropdownMenuItem asChild>
