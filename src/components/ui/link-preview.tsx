@@ -48,22 +48,11 @@ export const LinkPreview = ({
 
   const [isOpen, setOpen] = React.useState(false);
 
-  const [scope, animate] = useAnimate();
-
-  const onOpenChange = (open: boolean) => {
-    if (open) {
-      animate(scope.current, {
-        opacity: 1,
-      });
-    }
-
-    setOpen(open);
-  };
   return (
     <HoverCardPrimitive.Root
       openDelay={50}
       closeDelay={100}
-      onOpenChange={onOpenChange}
+      onOpenChange={setOpen}
     >
       <HoverCardPrimitive.Trigger asChild>
         <a
@@ -94,10 +83,6 @@ export const LinkPreview = ({
               }}
               exit={{ opacity: 0, y: 20, scale: 0.6 }}
               className="shadow-xl rounded-xl"
-              style={{
-                x: "-50%",
-              }}
-              ref={scope}
             >
               <a
                 href={url}
