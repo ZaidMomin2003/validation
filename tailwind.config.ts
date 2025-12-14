@@ -17,8 +17,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        body: ['Inter', 'sans-serif'],
-        headline: ['Inter', 'sans-serif'],
+        body: ['var(--font-inter)', 'sans-serif'],
+        headline: ['var(--font-inter)', 'sans-serif'],
         code: ['monospace'],
       },
       colors: {
@@ -75,6 +75,7 @@ export default {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
+        xl: "calc(var(--radius) + 4px)",
       },
       keyframes: {
         'accordion-down': {
@@ -97,6 +98,16 @@ export default {
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
+      },
+      height: {
+        '10.5': '2.625rem',
+        '320': '80rem',
+      },
+      width: {
+        '140': '35rem',
+      },
+      translate: {
+        '87.5': '21.875rem',
       },
     },
   },

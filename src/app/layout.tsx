@@ -1,12 +1,18 @@
 
 'use client';
 
-import type { Metadata } from 'next';
 import './globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/toaster';
 import { AuthProvider } from '@/context/AuthContext';
 import { SidebarProvider } from '@/components/ui/sidebar';
+import { Inter } from 'next/font/google';
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+})
+
 
 export default function RootLayout({
   children,
@@ -28,7 +34,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="font-body antialiased">
+      <body className={`${inter.variable} font-body antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
