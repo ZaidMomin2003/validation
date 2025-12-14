@@ -2,6 +2,7 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { BackgroundRippleEffect } from "./background-ripple-effect";
 
 export const Cover = ({
   children,
@@ -11,12 +12,11 @@ export const Cover = ({
   className?: string;
 }) => {
   return (
-    <div className={cn("relative inline-block", className)}>
+    <div className={cn("relative inline-block text-white", className)}>
       <AnimatePresence>
         <motion.div
-          initial={{ scaleX: 1 }}
+          initial={{ scale: 1 }}
           animate={{
-            scaleX: [1, 1.2, 1],
             transition: {
               duration: 2,
               ease: "circOut",
@@ -25,25 +25,12 @@ export const Cover = ({
               repeatType: "reverse",
             },
           }}
-          className="absolute inset-0 bg-gradient-to-r from-purple-600 to-indigo-600 origin-left z-10"
+          className="absolute inset-0 bg-black origin-left z-10 rounded-xl overflow-hidden"
         >
-          <motion.div
-            initial={{ scaleX: 1 }}
-            animate={{
-              scaleX: [1, 0],
-              transition: {
-                duration: 1,
-                ease: "circOut",
-                delay: 2,
-                repeat: Infinity,
-                repeatType: "reverse",
-              },
-            }}
-            className="absolute inset-0 bg-gradient-to-r from-purple-600 to-indigo-600 origin-left z-10"
-          />
+            <BackgroundRippleEffect />
         </motion.div>
       </AnimatePresence>
-      <span className="relative z-0">{children}</span>
+      <span className="relative z-20 px-2">{children}</span>
     </div>
   );
 };
