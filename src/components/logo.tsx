@@ -12,7 +12,7 @@ export default function Logo({ className }: { className?: string }) {
       )}
     >
       <MailCheck className="h-6 w-6 text-primary" />
-      <span className="font-headline">VeriFlow</span>
+      <span>VeriFlow</span>
     </Link>
   );
 }

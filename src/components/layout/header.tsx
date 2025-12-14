@@ -8,7 +8,7 @@ import { ClientOnly } from '@/components/ClientOnly';
 export default function Header() {
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur-sm">
+    <header className="sticky top-0 z-10 w-full border-b bg-background/95 backdrop-blur-sm">
       <div className="container flex h-14 items-center">
         <div className="mr-4 flex items-center gap-2">
           <SidebarTrigger className="md:hidden" />
