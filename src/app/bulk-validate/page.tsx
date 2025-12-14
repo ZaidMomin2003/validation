@@ -21,12 +21,18 @@ interface TableData {
     rows: string[][];
 }
 
+interface PreviewTableData {
+    headers: string[];
+    rows: string[][];
+}
+
 export default function BulkValidatePage() {
     const [files, setFiles] = React.useState<File[]>([]);
     const [tableData, setTableData] = React.useState<TableData | null>(null);
     const [emailColumnIndex, setEmailColumnIndex] = React.useState<number | null>(null);
     const [isLoading, setIsLoading] = React.useState(false);
     const [activeTab, setActiveTab] = React.useState('clean');
+    const [previewData, setPreviewData] = React.useState<PreviewTableData | null>(null);
     const { toast } = useToast();
 
     const processFile = (file: File) => {
@@ -50,7 +56,8 @@ export default function BulkValidatePage() {
                     headers.map((_, index) => row[index] ? String(row[index]) : '')
                 );
                 
-                setTableData({ headers, rows });
+                const fullTableData = { headers, rows };
+                setTableData(fullTableData);
 
                 let bestCandidate = -1;
                 let maxEmailCount = 0;
@@ -67,8 +74,9 @@ export default function BulkValidatePage() {
                         bestCandidate = colIndex;
                     }
                 });
-
+                
                 setEmailColumnIndex(bestCandidate);
+                generatePreviewData(fullTableData, bestCandidate);
 
             } catch (error) {
                 console.error("File processing error:", error);
@@ -95,6 +103,35 @@ export default function BulkValidatePage() {
         reader.readAsArrayBuffer(file);
     };
 
+    const generatePreviewData = (data: TableData, emailIndex: number | null) => {
+        if (!data) {
+            setPreviewData(null);
+            return;
+        }
+
+        const previewHeaders: string[] = [];
+        const columnOrder: number[] = [];
+
+        if (emailIndex !== null && emailIndex !== -1) {
+            previewHeaders.push(data.headers[emailIndex]);
+            columnOrder.push(emailIndex);
+        }
+
+        for (let i = 0; i < data.headers.length && previewHeaders.length < PREVIEW_COLUMN_COUNT; i++) {
+            if (i !== emailIndex) {
+                previewHeaders.push(data.headers[i]);
+                columnOrder.push(i);
+            }
+        }
+        
+        const previewRows = data.rows.map(row => {
+            return columnOrder.map(colIndex => row[colIndex]);
+        });
+
+        setPreviewData({ headers: previewHeaders, rows: previewRows });
+    };
+
+
     const handleFileUpload = (uploadedFiles: File[]) => {
         setFiles(uploadedFiles);
         if (uploadedFiles.length > 0) {
@@ -105,6 +142,7 @@ export default function BulkValidatePage() {
     const handleReset = () => {
         setFiles([]);
         setTableData(null);
+        setPreviewData(null);
         setEmailColumnIndex(null);
         setIsLoading(false);
     };
@@ -139,21 +177,21 @@ export default function BulkValidatePage() {
                         <Table>
                             <TableHeader>
                                 <TableRow>
-                                    {tableData?.headers.slice(0, tableData.headers.length > PREVIEW_COLUMN_COUNT ? PREVIEW_COLUMN_COUNT : tableData.headers.length).map((header, index) => (
-                                        <TableHead key={index} className={index === emailColumnIndex ? "bg-muted sticky top-0" : "sticky top-0 bg-background"}>
+                                    {previewData?.headers.map((header, index) => (
+                                        <TableHead key={index} className={index === 0 && emailColumnIndex !== null ? "bg-muted sticky top-0" : "sticky top-0 bg-background"}>
                                             <div className="flex items-center gap-1">
                                                 {header}
-                                                {index === emailColumnIndex && <CheckCircle className="h-4 w-4 text-primary" />}
+                                                {index === 0 && emailColumnIndex !== null && <CheckCircle className="h-4 w-4 text-primary" />}
                                             </div>
                                         </TableHead>
                                     ))}
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {tableData?.rows.map((row, rowIndex) => (
+                                {previewData?.rows.map((row, rowIndex) => (
                                     <TableRow key={rowIndex}>
-                                        {row.slice(0, tableData.headers.length > PREVIEW_COLUMN_COUNT ? PREVIEW_COLUMN_COUNT : tableData.headers.length).map((cell, cellIndex) => (
-                                            <TableCell key={cellIndex} className={cellIndex === emailColumnIndex ? "bg-muted" : ""}>
+                                        {row.map((cell, cellIndex) => (
+                                            <TableCell key={cellIndex} className={cellIndex === 0 && emailColumnIndex !== null ? "bg-muted" : ""}>
                                                 {cell}
                                             </TableCell>
                                         ))}
@@ -277,8 +315,10 @@ export default function BulkValidatePage() {
             </div>
         )}
         
-        {isLoading ? renderLoading() : (tableData ? renderTable() : renderFileUpload())}
+        {isLoading ? renderLoading() : ((tableData && previewData) ? renderTable() : renderFileUpload())}
     </div>
   </main>
   );
 }
+
+    
