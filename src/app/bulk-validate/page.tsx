@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, 'react';
+import React from 'react';
 import { FileUp, MousePointerClick, Download, CheckCircle, Info, Loader2 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { FileUpload } from "@/components/ui/file-upload";
