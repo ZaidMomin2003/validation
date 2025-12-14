@@ -44,17 +44,17 @@ export function HeroSection() {
                     <div className="relative pt-24">
                         <div className="absolute inset-0 -z-10 size-full [background:radial-gradient(125%_125%_at_50%_100%,transparent_0%,hsl(var(--background))_75%)]"></div>
                         <div className="mx-auto max-w-5xl px-6">
-                            <div className="sm:mx-auto lg:mr-auto lg:mt-0">
+                            <div className="mx-auto text-center lg:mt-0">
                                 <TextEffect
                                     as="h1"
-                                    className="mt-8 max-w-2xl text-balance text-5xl font-medium md:text-6xl lg:mt-16">
+                                    className="mt-8 max-w-2xl text-balance text-5xl font-medium md:text-6xl lg:mt-16 mx-auto">
                                     Verify and Clean Your Email Lists Instantly
                                 </TextEffect>
                                 <TextEffect
                                     per="line"
                                     delay={0.5}
                                     as="p"
-                                    className="mt-8 max-w-2xl text-pretty text-lg text-muted-foreground">
+                                    className="mt-8 max-w-2xl text-pretty text-lg text-muted-foreground mx-auto">
                                     Our powerful and easy-to-use tool helps you clean, validate, and maintain your email lists, ensuring higher deliverability and better campaign results.
                                 </TextEffect>
 
@@ -70,7 +70,7 @@ export function HeroSection() {
                                         },
                                         ...transitionVariants,
                                     }}
-                                    className="mt-12 flex items-center gap-2">
+                                    className="mt-12 flex items-center justify-center gap-2">
                                     <div
                                         key={1}
                                         className="bg-foreground/10 rounded-[calc(var(--radius)+0.125rem)] border p-0.5">
