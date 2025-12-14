@@ -50,7 +50,7 @@ export default function DashboardLayout({
             <SidebarMenuItem>
               <SidebarMenuButton href="/bulk-validate" isActive={pathname === '/bulk-validate'}>
                 <FileUp />
-                Bulk validate
+                Clean and validate
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
