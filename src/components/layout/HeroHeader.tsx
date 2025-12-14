@@ -44,7 +44,7 @@ export const HeroHeader = () => {
                                 {loading ? null : user ? (
                                     <Button asChild size="sm">
                                         <Link href="/bulk-validate">
-                                            <span>App</span>
+                                            <span>Go To App</span>
                                         </Link>
                                     </Button>
                                 ) : (
