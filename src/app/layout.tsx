@@ -21,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <title>VeriFlow</title>
+        <title>Verilist</title>
         <meta
           name="description"
           content="Bulk email verification made easy."
