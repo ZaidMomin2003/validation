@@ -12,6 +12,7 @@ export default function BulkValidatePage() {
 
     const handleFileUpload = (uploadedFiles: File[]) => {
         setFiles(uploadedFiles);
+        console.log(uploadedFiles);
     };
     
   return (
@@ -27,7 +28,7 @@ export default function BulkValidatePage() {
       </div>
 
       <Tabs defaultValue="clean">
-        <div className="flex justify-start p-2">
+        <div className="flex justify-start">
           <TabsList>
             <TabsTrigger value="clean">Clean</TabsTrigger>
             <TabsTrigger value="validate">Validate</TabsTrigger>
@@ -35,14 +36,14 @@ export default function BulkValidatePage() {
         </div>
         <TabsContent value="clean">
           <Card>
-            <CardContent className="p-6">
+            <CardContent className="w-full max-w-4xl mx-auto p-0">
                 <FileUpload onChange={handleFileUpload} />
             </CardContent>
           </Card>
         </TabsContent>
         <TabsContent value="validate">
            <Card>
-            <CardContent className="p-6">
+            <CardContent className="w-full max-w-4xl mx-auto p-0">
                 <FileUpload onChange={handleFileUpload} />
             </CardContent>
           </Card>
