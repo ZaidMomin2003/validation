@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import Image from 'next/image';
 import Link from 'next/link';
+import { BackgroundRippleEffect } from '@/components/ui/background-ripple-effect';
 
 export default function Home() {
   const heroImage = PlaceHolderImages.find((img) => img.id === 'hero-dashboard-image');
@@ -12,9 +13,9 @@ export default function Home() {
     <>
       <HeroHeader />
       <main className="flex-1">
-        <section className="relative pt-32 pb-16 md:pt-48 md:pb-24">
-          <div className="absolute inset-0 -z-10 bg-grid-slate-100/[0.05] bg-top [mask-image:linear-gradient(to_bottom,white,transparent_100%)] dark:bg-grid-slate-700/[0.05]"></div>
-          <div className="container">
+        <section className="relative pt-32 pb-16 md:pt-48 md:pb-24 overflow-hidden">
+          <BackgroundRippleEffect />
+          <div className="container relative z-10">
             <div className="mx-auto max-w-3xl text-center">
               <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-6xl">
                 Boost Deliverability, Not Your Bounce Rate.

@@ -94,10 +94,22 @@ export default {
             height: '0',
           },
         },
+        "cell-ripple": {
+          "0%": {
+            opacity: "0.4",
+          },
+          "50%": {
+            opacity: "0.8",
+          },
+          "100%": {
+            opacity: "0.4",
+          },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
+        "cell-ripple": "cell-ripple var(--duration, 200ms) ease-out 1 var(--delay, 0ms)",
       },
       height: {
         '10.5': '2.625rem',
