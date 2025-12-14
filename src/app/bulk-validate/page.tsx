@@ -109,16 +109,16 @@ export default function BulkValidatePage() {
             setPreviewData(null);
             return;
         }
-
+    
         const previewHeaders: string[] = [];
         const columnOrder: number[] = [];
-
+    
         if (emailIndex !== null && emailIndex !== -1) {
             previewHeaders.push(data.headers[emailIndex]);
             columnOrder.push(emailIndex);
         }
-
-        for (let i = 0; i < data.headers.length && previewHeaders.length < data.headers.length; i++) {
+    
+        for (let i = 0; i < data.headers.length && previewHeaders.length < PREVIEW_COLUMN_COUNT; i++) {
             if (i !== emailIndex) {
                 previewHeaders.push(data.headers[i]);
                 columnOrder.push(i);
@@ -128,8 +128,12 @@ export default function BulkValidatePage() {
         const previewRows = data.rows.slice(0, PREVIEW_ROW_COUNT).map(row => {
             return columnOrder.map(colIndex => row[colIndex]);
         });
+    
+        const fullPreviewHeaders = data.headers.slice();
+        const fullPreviewRows = data.rows.slice(0, PREVIEW_ROW_COUNT).map(row => row.slice());
 
-        setPreviewData({ headers: previewHeaders, rows: previewRows });
+
+        setPreviewData({ headers: fullPreviewHeaders, rows: fullPreviewRows });
     };
 
 
@@ -148,74 +152,102 @@ export default function BulkValidatePage() {
         setIsLoading(false);
     };
 
-    const renderTable = () => (
-        <Card>
-            <CardHeader>
-                <div className="flex items-center justify-between">
-                    <CardTitle className="text-2xl">Select Email Column</CardTitle>
-                    <TooltipProvider>
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <Button variant="ghost" size="icon">
-                                    <Info className="h-5 w-5 text-muted-foreground" />
-                                </Button>
-                            </TooltipTrigger>
-                            <TooltipContent side="left" className="max-w-xs">
-                                <p>You can only validate up to 1000 emails at a time. We will only verify the first 1000 emails from your list. Upgrade to the Pro Plan for 10,000 emails / list.</p>
-                            </TooltipContent>
-                        </Tooltip>
-                    </TooltipProvider>
-                </div>
-            </CardHeader>
-            <CardContent>
-                <div className="space-y-6">
-                    <div>
-                        <h3 className="font-semibold">Email Column</h3>
-                        <p className="text-sm text-muted-foreground">Select the column containing email addresses. We've highlighted our best guess.</p>
-                    </div>
+    const renderTable = () => {
+        if (!previewData) return null;
 
-                    <div className="relative max-h-[400px] overflow-auto">
-                        <Table>
-                            <TableHeader>
-                                <TableRow>
-                                    {previewData?.headers.map((header, index) => (
-                                        <TableHead key={index} className={cn("sticky top-0 bg-background", index === 0 && emailColumnIndex !== null && "bg-muted")}>
-                                            <div className="flex items-center gap-1">
-                                                {header}
-                                                {index === 0 && emailColumnIndex !== null && <CheckCircle className="h-4 w-4 text-primary" />}
-                                            </div>
-                                        </TableHead>
-                                    ))}
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {previewData?.rows.map((row, rowIndex) => (
-                                    <TableRow key={rowIndex}>
-                                        {row.map((cell, cellIndex) => (
-                                            <TableCell 
-                                                key={cellIndex} 
-                                                className={cn("max-w-xs truncate", cellIndex === 0 && emailColumnIndex !== null && "bg-muted")}
-                                                title={cell}
-                                            >
-                                                {cell}
-                                            </TableCell>
+        const displayHeaders = [];
+        const displayRows: string[][] = [];
+        const columnMap: number[] = [];
+
+        if (emailColumnIndex !== null && emailColumnIndex !== -1) {
+            displayHeaders.push(previewData.headers[emailColumnIndex]);
+            columnMap.push(emailColumnIndex);
+        }
+
+        for (let i = 0; i < previewData.headers.length && displayHeaders.length < PREVIEW_COLUMN_COUNT; i++) {
+            if (i !== emailColumnIndex) {
+                displayHeaders.push(previewData.headers[i]);
+                columnMap.push(i);
+            }
+        }
+
+        previewData.rows.forEach(row => {
+            const newRow = columnMap.map(colIndex => row[colIndex]);
+            displayRows.push(newRow);
+        });
+
+        const originalHeaders = previewData.headers;
+        const originalRows = previewData.rows;
+
+        return (
+            <Card>
+                <CardHeader>
+                    <div className="flex items-center justify-between">
+                        <CardTitle className="text-2xl">Select Email Column</CardTitle>
+                        <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <Button variant="ghost" size="icon">
+                                        <Info className="h-5 w-5 text-muted-foreground" />
+                                    </Button>
+                                </TooltipTrigger>
+                                <TooltipContent side="left" className="max-w-xs">
+                                    <p>You can only validate up to 1000 emails at a time. We will only verify the first 1000 emails from your list. Upgrade to the Pro Plan for 10,000 emails / list.</p>
+                                </TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
+                    </div>
+                </CardHeader>
+                <CardContent>
+                    <div className="space-y-6">
+                        <div>
+                            <h3 className="font-semibold">Email Column</h3>
+                            <p className="text-sm text-muted-foreground">Select the column containing email addresses. We've highlighted our best guess.</p>
+                        </div>
+    
+                        <div className="relative max-h-[400px] overflow-auto">
+                            <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        {originalHeaders.map((header, index) => (
+                                            <TableHead key={index} className={cn("sticky top-0 bg-background", index === emailColumnIndex && "bg-muted")}>
+                                                <div className="flex items-center gap-1">
+                                                    {header}
+                                                    {index === emailColumnIndex && <CheckCircle className="h-4 w-4 text-primary" />}
+                                                </div>
+                                            </TableHead>
                                         ))}
                                     </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
+                                </TableHeader>
+                                <TableBody>
+                                    {originalRows.map((row, rowIndex) => (
+                                        <TableRow key={rowIndex}>
+                                            {row.map((cell, cellIndex) => (
+                                                <TableCell 
+                                                    key={cellIndex} 
+                                                    className={cn("max-w-xs truncate", cellIndex === emailColumnIndex && "bg-muted")}
+                                                    title={cell}
+                                                >
+                                                    {cell}
+                                                </TableCell>
+                                            ))}
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </div>
+    
                     </div>
-
+                </CardContent>
+                <div className="border-t p-6 flex items-center justify-end">
+                    <div className="flex items-center gap-2">
+                        <Button variant="outline" onClick={handleReset}>Reset</Button>
+                        <Button>{activeTab === 'clean' ? 'Clean' : 'Validate'}</Button>
+                    </div>
                 </div>
-            </CardContent>
-            <div className="border-t p-6 flex items-center justify-end">
-                <div className="flex items-center gap-2">
-                    <Button variant="outline" onClick={handleReset}>Reset</Button>
-                    <Button>{activeTab === 'clean' ? 'Clean' : 'Validate'}</Button>
-                </div>
-            </div>
-        </Card>
-    );
+            </Card>
+        );
+    }
 
     const renderFileUpload = () => (
         <>
