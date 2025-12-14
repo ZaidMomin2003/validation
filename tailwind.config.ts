@@ -20,6 +20,7 @@ export default {
         body: ['var(--font-inter)', 'sans-serif'],
         headline: ['var(--font-inter)', 'sans-serif'],
         code: ['monospace'],
+        geist: ['Geist', 'sans-serif'],
       },
       colors: {
         background: 'hsl(var(--background))',
@@ -94,22 +95,19 @@ export default {
             height: '0',
           },
         },
-        "cell-ripple": {
+        "grid": {
           "0%": {
-            opacity: "0.4",
-          },
-          "50%": {
-            opacity: "0.8",
+            transform: "translateY(-50%)",
           },
           "100%": {
-            opacity: "0.4",
+            transform: "translateY(0)",
           },
         },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
-        "cell-ripple": "cell-ripple var(--duration, 200ms) ease-out 1 var(--delay, 0ms)",
+        "grid": "grid 15s linear infinite",
       },
       height: {
         '10.5': '2.625rem',
