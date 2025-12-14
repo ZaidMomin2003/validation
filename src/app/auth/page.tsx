@@ -11,7 +11,7 @@ export default function AuthPage() {
 
   useEffect(() => {
     if (!loading) {
-        router.push("/dashboard");
+        router.push("/bulk-validate");
     }
   }, [user, loading, router]);
 
