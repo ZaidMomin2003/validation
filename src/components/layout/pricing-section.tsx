@@ -2,13 +2,14 @@
 import { Button } from '@/components/ui/button'
 import { Check } from 'lucide-react'
 import Link from 'next/link'
+import { Cover } from '@/components/ui/cover';
 
 export default function PricingSection() {
     return (
         <div className="relative py-16 md:py-32">
             <div className="mx-auto max-w-5xl px-6">
                 <div className="mx-auto max-w-2xl text-center">
-                    <h2 className="text-balance text-3xl font-bold text-gray-200 md:text-4xl lg:text-5xl">Start managing your company smarter today</h2>
+                    <h2 className="text-balance text-3xl font-bold text-gray-200 md:text-4xl lg:text-5xl">Verify thousands of emails <Cover>fast</Cover></h2>
                 </div>
                 <div className="mt-8 md:mt-20">
                     <div className="bg-card relative rounded-3xl border shadow-2xl shadow-zinc-950/5">
