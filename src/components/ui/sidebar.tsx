@@ -1,9 +1,10 @@
+
 "use client"
 
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { VariantProps, cva } from "class-variance-authority"
-import { PanelLeft, ChevronRight } from "lucide-react"
+import { PanelLeft } from "lucide-react"
 
 import { useIsMobile } from "@/hooks/use-mobile"
 import { cn } from "@/lib/utils"
@@ -567,7 +568,6 @@ const SidebarMenuButton = React.forwardRef<
         {...props}
       >
         {children}
-        {isActive && <ChevronRight className="ml-auto h-4 w-4" />}
       </Comp>
     )
 
