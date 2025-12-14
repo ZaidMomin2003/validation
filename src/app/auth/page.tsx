@@ -1,4 +1,3 @@
-
 'use client';
 
 import { LogoIcon } from '@/components/logo-icon'
@@ -18,8 +17,8 @@ export default function LoginPage() {
 
     return (
         <section className="flex min-h-screen bg-zinc-50 px-4 py-16 md:py-32 dark:bg-transparent">
-            <div
-                
+            <form
+                action=""
                 className="bg-card m-auto h-fit w-full max-w-sm rounded-[calc(var(--radius)+.125rem)] border p-0.5 shadow-md">
                 <div className="p-8 pb-6">
                     <div>
@@ -141,7 +140,7 @@ export default function LoginPage() {
                         </Button>
                     </p>
                 </div>
-            </div>
+            </form>
         </section>
     )
 }
