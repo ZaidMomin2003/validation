@@ -11,7 +11,7 @@ export default function Logo({ className }: { className?: string }) {
       </div>
       <div className="flex flex-col">
         <span className="font-bold text-lg text-foreground">Verilist</span>
-        <span className="text-sm text-muted-foreground -mt-1">
+        <span className="text-sm text-muted-foreground -mt-1 hidden md:block">
           Email Verification
         </span>
       </div>
