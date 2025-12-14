@@ -5,6 +5,12 @@
       "description": "Abstract representation of data flow and verification",
       "imageUrl": "https://images.unsplash.com/photo-1626908013351-800ddd734b8a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxhYnN0cmFjdCUyMGRhdGF8ZW58MHx8fHwxNzY1NjA4ODAxfDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "abstract data"
+    },
+    {
+      "id": "hero-dashboard-image",
+      "description": "A clean and modern dashboard user interface for a SaaS application.",
+      "imageUrl": "https://images.unsplash.com/photo-1651760464181-49092525ca3b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxTYWFTJTIwZGFzaGJvYXJkfGVufDB8fHx8MTc2NTY0ODk2Nnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "SaaS dashboard"
     }
   ]
 }

@@ -5,7 +5,6 @@ import './globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/toaster';
 import { AuthProvider } from '@/context/AuthContext';
-import { SidebarProvider } from '@/components/ui/sidebar';
 import { Inter } from 'next/font/google';
 
 const inter = Inter({
@@ -42,7 +41,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <AuthProvider>
-            <SidebarProvider>{children}</SidebarProvider>
+            {children}
           </AuthProvider>
           <Toaster />
         </ThemeProvider>
