@@ -1,13 +1,12 @@
+
+'use client';
+
 import type { Metadata } from 'next';
 import './globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/toaster';
 import { AuthProvider } from '@/context/AuthContext';
-
-export const metadata: Metadata = {
-  title: 'VeriFlow',
-  description: 'Bulk email verification made easy.',
-};
+import { SidebarProvider } from '@/components/ui/sidebar';
 
 export default function RootLayout({
   children,
@@ -17,6 +16,11 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <title>VeriFlow</title>
+        <meta
+          name="description"
+          content="Bulk email verification made easy."
+        />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
@@ -32,9 +36,9 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <AuthProvider>
-            {children}
-            <Toaster />
+            <SidebarProvider>{children}</SidebarProvider>
           </AuthProvider>
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>
