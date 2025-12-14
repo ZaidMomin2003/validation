@@ -33,6 +33,7 @@ import {
   SidebarGroup,
   SidebarGroupLabel,
   SidebarSeparator,
+  SidebarProvider,
 } from '@/components/ui/sidebar';
 import Logo from '@/components/logo';
 import Header from '@/components/layout/header';
@@ -72,7 +73,7 @@ export default function DashboardLayout({
   };
 
   return (
-    <>
+    <SidebarProvider>
       <Sidebar>
         <SidebarHeader>
           <div className="flex h-14 items-center px-4">
@@ -208,6 +209,6 @@ export default function DashboardLayout({
         <Header />
         {children}
       </SidebarInset>
-    </>
+    </SidebarProvider>
   );
 }
