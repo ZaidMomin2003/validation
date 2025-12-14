@@ -27,7 +27,7 @@ export default function BulkValidatePage() {
       </div>
 
       <Tabs defaultValue="clean">
-        <div className="flex justify-center p-2">
+        <div className="flex justify-start p-2">
           <TabsList>
             <TabsTrigger value="clean">Clean</TabsTrigger>
             <TabsTrigger value="validate">Validate</TabsTrigger>
