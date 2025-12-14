@@ -5,7 +5,6 @@ import {
   FileUp,
   Mail,
   History,
-  ListFilter,
   FileText,
   MessageSquare,
   User,

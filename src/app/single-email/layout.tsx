@@ -60,15 +60,9 @@ export default function DashboardLayout({
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <SidebarMenuButton href="#" isActive={pathname === '/lists'}>
+              <SidebarMenuButton href="/lists" isActive={pathname === '/lists'}>
                 <History />
                 Lists
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton href="#" isActive={pathname === '/sort-the-list'}>
-                <ListFilter />
-                Sort the list
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
