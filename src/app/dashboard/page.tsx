@@ -2,7 +2,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { FileUp, MousePointerSquare, Download } from 'lucide-react';
+import { FileUp, MousePointerClick, Download } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { FileUpload } from "@/components/ui/file-upload";
 
@@ -54,7 +54,7 @@ export default function DashboardPage() {
             <CardHeader>
                 <div className="flex items-center gap-4">
                     <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                        <MousePointerSquare className="h-6 w-6 text-primary" />
+                        <MousePointerClick className="h-6 w-6 text-primary" />
                     </div>
                     <CardTitle>2. Select check type</CardTitle>
                 </div>
