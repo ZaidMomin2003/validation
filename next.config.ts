@@ -39,6 +39,12 @@ const nextConfig: NextConfig = {
         hostname: 'html.tailus.io',
         port: '',
         pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'api.microlink.io',
+        port: '',
+        pathname: '/**',
       }
     ],
   },
