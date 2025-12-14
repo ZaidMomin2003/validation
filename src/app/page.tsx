@@ -5,6 +5,7 @@ import { BentoGridThirdDemo } from '@/components/layout/feature-section';
 import { FaqSection } from '@/components/layout/faq-section';
 import PricingSection from '@/components/layout/pricing-section';
 import { LinkPreviewDemo } from '@/components/layout/link-preview-demo';
+import HowItWorksSection from '@/components/layout/how-it-works-section';
 import Footer from '@/components/layout/footer';
 
 export default function Home() {
@@ -13,6 +14,7 @@ export default function Home() {
       <HeroHeader />
       <HeroSection />
       <LinkPreviewDemo />
+      <HowItWorksSection />
       <div className="py-20">
         <BentoGridThirdDemo />
       </div>
