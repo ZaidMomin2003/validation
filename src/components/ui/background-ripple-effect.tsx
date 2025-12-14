@@ -86,7 +86,6 @@ const DivGrid = ({
     gridTemplateColumns: `repeat(${cols}, ${cellSize}px)`,
     gridTemplateRows: `repeat(${rows}, ${cellSize}px)`,
     width: cols * cellSize,
-    height: rows * cellSize,
     marginInline: "auto",
   };
  
