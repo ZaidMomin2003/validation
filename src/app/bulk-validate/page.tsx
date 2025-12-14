@@ -2,7 +2,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { FileUp, MousePointerClick, Download, Check, Lock, Info, CheckCircle, XCircle } from 'lucide-react';
+import { FileUp, MousePointerClick, Download, CheckCircle, Lock, Info, Loader2 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { FileUpload } from "@/components/ui/file-upload";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -11,37 +11,103 @@ import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
+import { useToast } from '@/hooks/use-toast';
+import * as XLSX from 'xlsx';
 
-// Mock data for demonstration until file parsing is implemented
-const mockData = {
-    headers: ["NNAMED: 2", "UNNAMED: 3", "EMAIL", "UNNAMED: 5", "DOMAIN", "SYSTEM"],
-    rows: [
-        ["GA.org.au Inc", "Sports", "0000info@pga.org.au", "Strathfield", "pga.org.au", "TH"],
-        ["PwC Indonesia", "Business And Industrial", "michelle@pwc.com", "Little Rock", "pwc.com", "TI"],
-        ["Westchester", "Business And Industrial", "michelle.trader@westchester.com", "Alpharetta", "westchester.com", "TH"],
-        ["Wave Navigators", "Technology And Computing", "michelle.ward@navigators.org", "Colorado Springs", "navigators.org", "TH"],
-        ["Insightsoftware", "Business And Industrial", "michelle.werkmeister@insightsoftware.com", "Osborne Park", "insightsoftware.com", "TI"],
-    ],
-    emailColumnIndex: 2
-};
+const PREVIEW_ROW_COUNT = 5;
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+interface TableData {
+    headers: string[];
+    rows: string[][];
+}
 
 export default function BulkValidatePage() {
     const [files, setFiles] = useState<File[]>([]);
-    const [showTable, setShowTable] = useState(false);
+    const [tableData, setTableData] = useState<TableData | null>(null);
+    const [emailColumnIndex, setEmailColumnIndex] = useState<number | null>(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const { toast } = useToast();
+
+    const processFile = (file: File) => {
+        setIsLoading(true);
+        const reader = new FileReader();
+
+        reader.onload = (e) => {
+            try {
+                const data = e.target?.result;
+                const workbook = XLSX.read(data, { type: 'binary' });
+                const sheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[sheetName];
+                const json: any[][] = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
+                if (json.length === 0) {
+                    throw new Error("The file is empty.");
+                }
+
+                const headers = json[0].map(header => header ? String(header) : '');
+                const rows = json.slice(1, PREVIEW_ROW_COUNT + 1).map(row => 
+                    row.map(cell => cell ? String(cell) : '')
+                );
+                
+                setTableData({ headers, rows });
+
+                // Auto-detect email column
+                let bestCandidate = -1;
+                let maxEmailCount = 0;
+                
+                headers.forEach((_, colIndex) => {
+                    let emailCount = 0;
+                    for(let i = 1; i < json.length; i++) {
+                        if (json[i] && EMAIL_REGEX.test(String(json[i][colIndex]))) {
+                            emailCount++;
+                        }
+                    }
+                    if (emailCount > maxEmailCount) {
+                        maxEmailCount = emailCount;
+                        bestCandidate = colIndex;
+                    }
+                });
+
+                setEmailColumnIndex(bestCandidate);
+
+            } catch (error) {
+                console.error("File processing error:", error);
+                toast({
+                    variant: 'destructive',
+                    title: 'Error processing file',
+                    description: error instanceof Error ? error.message : 'Could not read the uploaded file.',
+                });
+                handleReset();
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        reader.onerror = () => {
+            toast({
+                variant: 'destructive',
+                title: 'Error reading file',
+                description: 'Something went wrong while trying to read your file.',
+            });
+            handleReset();
+        };
+
+        reader.readAsArrayBuffer(file);
+    };
 
     const handleFileUpload = (uploadedFiles: File[]) => {
         setFiles(uploadedFiles);
-        // This is where you would parse the file and set the data
-        // For now, we'll just switch to the table view with mock data
         if (uploadedFiles.length > 0) {
-            setShowTable(true);
+            processFile(uploadedFiles[0]);
         }
     };
 
     const handleReset = () => {
         setFiles([]);
-        setShowTable(false);
+        setTableData(null);
+        setEmailColumnIndex(null);
+        setIsLoading(false);
     };
 
     const renderTable = () => (
@@ -67,7 +133,7 @@ export default function BulkValidatePage() {
                 <div className="space-y-6">
                     <div>
                         <h3 className="font-semibold">Email Column</h3>
-                        <p className="text-sm text-muted-foreground">Select the column containing email addresses. The highlighted column indicates your selection.</p>
+                        <p className="text-sm text-muted-foreground">Select the column containing email addresses. We've highlighted our best guess.</p>
                     </div>
 
                     <div>
@@ -91,21 +157,21 @@ export default function BulkValidatePage() {
                         <Table>
                             <TableHeader>
                                 <TableRow>
-                                    {mockData.headers.map((header, index) => (
-                                        <TableHead key={index} className={index === mockData.emailColumnIndex ? "bg-muted" : ""}>
+                                    {tableData?.headers.map((header, index) => (
+                                        <TableHead key={index} className={index === emailColumnIndex ? "bg-muted" : ""}>
                                             <div className="flex items-center gap-1">
                                                 {header}
-                                                {index === mockData.emailColumnIndex && <CheckCircle className="h-4 w-4 text-primary" />}
+                                                {index === emailColumnIndex && <CheckCircle className="h-4 w-4 text-primary" />}
                                             </div>
                                         </TableHead>
                                     ))}
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {mockData.rows.map((row, rowIndex) => (
+                                {tableData?.rows.map((row, rowIndex) => (
                                     <TableRow key={rowIndex}>
                                         {row.map((cell, cellIndex) => (
-                                            <TableCell key={cellIndex} className={cellIndex === mockData.emailColumnIndex ? "bg-muted" : ""}>
+                                            <TableCell key={cellIndex} className={cellIndex === emailColumnIndex ? "bg-muted" : ""}>
                                                 {cell}
                                             </TableCell>
                                         ))}
@@ -209,11 +275,20 @@ export default function BulkValidatePage() {
             </div>
         </>
     );
+    
+    const renderLoading = () => (
+        <Card className="flex items-center justify-center p-20">
+            <div className="flex flex-col items-center gap-4">
+                <Loader2 className="h-12 w-12 animate-spin text-primary" />
+                <p className="text-muted-foreground">Analyzing your file...</p>
+            </div>
+        </Card>
+    );
 
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
     <div className="grid gap-4 md:gap-8">
-        {!showTable && (
+        {!tableData && !isLoading && (
             <div>
                 <h1 className="text-3xl font-bold tracking-tight">
                     Verify Emails by Uploading a File
@@ -224,7 +299,7 @@ export default function BulkValidatePage() {
             </div>
         )}
         
-        {showTable ? renderTable() : renderFileUpload()}
+        {isLoading ? renderLoading() : (tableData ? renderTable() : renderFileUpload())}
     </div>
   </main>
   );
