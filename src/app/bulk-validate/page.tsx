@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useToast } from '@/hooks/use-toast';
 import * as XLSX from 'xlsx';
+import { cn } from '@/lib/utils';
 
 const PREVIEW_ROW_COUNT = 8;
 const PREVIEW_COLUMN_COUNT = 4;
@@ -52,7 +53,7 @@ export default function BulkValidatePage() {
                 }
 
                 const headers = json[0].map(header => header ? String(header) : '');
-                const rows = json.slice(1, PREVIEW_ROW_COUNT + 1).map(row => 
+                const rows = json.slice(1).map(row => 
                     headers.map((_, index) => row[index] ? String(row[index]) : '')
                 );
                 
@@ -117,14 +118,14 @@ export default function BulkValidatePage() {
             columnOrder.push(emailIndex);
         }
 
-        for (let i = 0; i < data.headers.length && previewHeaders.length < PREVIEW_COLUMN_COUNT; i++) {
+        for (let i = 0; i < data.headers.length && previewHeaders.length < data.headers.length; i++) {
             if (i !== emailIndex) {
                 previewHeaders.push(data.headers[i]);
                 columnOrder.push(i);
             }
         }
         
-        const previewRows = data.rows.map(row => {
+        const previewRows = data.rows.slice(0, PREVIEW_ROW_COUNT).map(row => {
             return columnOrder.map(colIndex => row[colIndex]);
         });
 
@@ -178,7 +179,7 @@ export default function BulkValidatePage() {
                             <TableHeader>
                                 <TableRow>
                                     {previewData?.headers.map((header, index) => (
-                                        <TableHead key={index} className={index === 0 && emailColumnIndex !== null ? "bg-muted sticky top-0" : "sticky top-0 bg-background"}>
+                                        <TableHead key={index} className={cn("sticky top-0 bg-background", index === 0 && emailColumnIndex !== null && "bg-muted")}>
                                             <div className="flex items-center gap-1">
                                                 {header}
                                                 {index === 0 && emailColumnIndex !== null && <CheckCircle className="h-4 w-4 text-primary" />}
@@ -191,7 +192,11 @@ export default function BulkValidatePage() {
                                 {previewData?.rows.map((row, rowIndex) => (
                                     <TableRow key={rowIndex}>
                                         {row.map((cell, cellIndex) => (
-                                            <TableCell key={cellIndex} className={cellIndex === 0 && emailColumnIndex !== null ? "bg-muted" : ""}>
+                                            <TableCell 
+                                                key={cellIndex} 
+                                                className={cn("max-w-xs truncate", cellIndex === 0 && emailColumnIndex !== null && "bg-muted")}
+                                                title={cell}
+                                            >
                                                 {cell}
                                             </TableCell>
                                         ))}
@@ -320,5 +325,3 @@ export default function BulkValidatePage() {
   </main>
   );
 }
-
-    
