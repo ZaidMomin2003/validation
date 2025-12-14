@@ -3,7 +3,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Check } from "lucide-react";
+import { Check, ShieldCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const plans = [
@@ -76,7 +76,7 @@ export default function PricingPage() {
                   ))}
                 </ul>
               </CardContent>
-              <CardFooter>
+              <CardFooter className="flex-col items-center">
                 <Button 
                   className="w-full" 
                   disabled={plan.isCurrent}
@@ -84,6 +84,12 @@ export default function PricingPage() {
                 >
                   {plan.cta}
                 </Button>
+                {plan.name === "Lifetime" && (
+                    <div className="flex items-center text-xs text-muted-foreground mt-4">
+                        <ShieldCheck className="h-4 w-4 mr-1.5" />
+                        <span>Guaranteed safe and secure checkout. Powered by Razorpay.</span>
+                    </div>
+                )}
               </CardFooter>
             </Card>
           ))}
