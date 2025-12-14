@@ -1,7 +1,8 @@
+
 "use client";
 
 import React, { useState, useCallback, useRef } from "react";
-import { UploadCloud, X, File as FileIcon } from "lucide-react";
+import { Upload, X, File as FileIcon } from "lucide-react";
 import { Button } from "./button";
 import { cn } from "@/lib/utils";
 
@@ -69,25 +70,25 @@ export function FileUpload({
     <div className="flex flex-col items-center justify-center w-full h-full p-4">
       {files.length === 0 ? (
         <div
+          onClick={onBrowseClick}
           onDragEnter={onDragEnter}
           onDragLeave={onDragLeave}
           onDragOver={onDragOver}
           onDrop={onDrop}
           className={cn(
-            "flex flex-col items-center justify-center w-full h-64 border-2 border-dashed rounded-lg cursor-pointer transition-colors",
+            "flex flex-col items-center justify-center w-full h-96 border-2 border-dashed rounded-lg cursor-pointer transition-colors bg-card",
             isDragging
-              ? "border-primary bg-primary/10"
-              : "border-border hover:border-primary/50 bg-background"
+              ? "border-primary"
+              : "border-border hover:border-primary/50"
           )}
         >
-          <div className="flex flex-col items-center justify-center pt-5 pb-6">
-            <UploadCloud className="w-10 h-10 mb-4 text-muted-foreground" />
-            <p className="mb-2 text-sm text-muted-foreground">
-              <span className="font-semibold text-primary">Click to upload</span> or drag and
-              drop
-            </p>
-            <p className="text-xs text-muted-foreground">
-              CSV or XLSX (MAX. 1000 rows)
+          <div className="flex flex-col items-center justify-center text-center p-8">
+            <div className="flex items-center justify-center w-16 h-16 rounded-lg bg-muted border mb-4">
+              <Upload className="w-8 h-8 text-muted-foreground" />
+            </div>
+            <h3 className="text-lg font-semibold">Upload file</h3>
+            <p className="text-sm text-muted-foreground mt-1">
+              Drag or drop your files here or click to upload
             </p>
           </div>
           <input
@@ -98,9 +99,6 @@ export function FileUpload({
             className="hidden"
             onChange={onFileChange}
           />
-           <Button type="button" variant="outline" onClick={onBrowseClick} className="mt-4">
-                Select File
-            </Button>
         </div>
       ) : (
         <div className="w-full">
@@ -125,7 +123,8 @@ export function FileUpload({
                 </li>
             ))}
             </ul>
-            <div className="flex justify-center mt-4">
+            <div className="flex justify-center mt-4 gap-2">
+                <Button variant="outline" onClick={() => setFiles([])}>Upload another file</Button>
                 <Button>Start Verification</Button>
             </div>
         </div>
