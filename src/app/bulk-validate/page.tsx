@@ -166,11 +166,7 @@ export default function BulkValidatePage() {
 
                 </div>
             </CardContent>
-            <div className="border-t p-6 flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                    <Switch id="save-list" />
-                    <Label htmlFor="save-list">Save list to Recent Lists</Label>
-                </div>
+            <div className="border-t p-6 flex items-center justify-end">
                 <div className="flex items-center gap-2">
                     <Button variant="outline" onClick={handleReset}>Reset</Button>
                     <Button>Validate</Button>
