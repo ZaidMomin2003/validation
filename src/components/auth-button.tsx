@@ -14,9 +14,16 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Skeleton } from "./ui/skeleton";
+import { useRouter } from "next/navigation";
 
 export default function AuthButton() {
-  const { user, loading, signOut } = useAuth();
+  const { user, loading, signOut: contextSignOut } = useAuth();
+  const router = useRouter();
+
+  const handleSignOut = () => {
+    contextSignOut();
+    router.push('/auth');
+  }
 
   if (loading) {
     return <Skeleton className="h-10 w-20" />;
@@ -68,7 +75,7 @@ export default function AuthButton() {
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={signOut}>
+        <DropdownMenuItem onClick={handleSignOut}>
           <LogOut className="mr-2 h-4 w-4" />
           <span>Log out</span>
         </DropdownMenuItem>

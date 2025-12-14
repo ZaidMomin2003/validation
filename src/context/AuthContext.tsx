@@ -1,46 +1,36 @@
 "use client";
 
-import { createContext, useEffect, useState, ReactNode } from "react";
-import { onAuthStateChanged, User as FirebaseUser, signOut as firebaseSignOut } from "firebase/auth";
-import { auth } from "@/firebase/firebaseClient";
+import { createContext, useState, ReactNode, useEffect } from "react";
 import type { User } from '@/types';
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
-  signOut: () => Promise<void>;
+  signOut: () => void;
 }
 
 export const AuthContext = createContext<AuthContextType>({
   user: null,
   loading: true,
-  signOut: async () => {},
+  signOut: () => {},
 });
 
+const demoUser: User = {
+  uid: 'demouser',
+  email: 'demo@example.com',
+  displayName: 'Demo User',
+  photoURL: 'https://i.pravatar.cc/150?u=demouser',
+};
+
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<User | null>(demoUser);
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser: FirebaseUser | null) => {
-      if (firebaseUser) {
-        const { uid, email, displayName, photoURL } = firebaseUser;
-        setUser({ uid, email, displayName, photoURL });
-      } else {
-        setUser(null);
-      }
-      setLoading(false);
-    });
-
-    return () => unsubscribe();
-  }, []);
-
-  const signOut = async () => {
-    try {
-      await firebaseSignOut(auth);
-    } catch (error) {
-      console.error("Error signing out: ", error);
-    }
+  const signOut = () => {
+    setUser(null);
+    // In a real app, you'd redirect to the login page.
+    // For this demo, we'll just log them back in after a short delay.
+    setTimeout(() => setUser(demoUser), 1000);
   };
 
   return (
