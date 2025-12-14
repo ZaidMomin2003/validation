@@ -77,7 +77,7 @@ export default function BulkValidatePage() {
                 });
                 
                 setEmailColumnIndex(bestCandidate);
-                generatePreviewData(fullTableData, bestCandidate);
+                generatePreviewData(fullTableData);
 
             } catch (error) {
                 console.error("File processing error:", error);
@@ -104,36 +104,15 @@ export default function BulkValidatePage() {
         reader.readAsArrayBuffer(file);
     };
 
-    const generatePreviewData = (data: TableData, emailIndex: number | null) => {
+    const generatePreviewData = (data: TableData) => {
         if (!data) {
             setPreviewData(null);
             return;
         }
-    
-        const previewHeaders: string[] = [];
-        const columnOrder: number[] = [];
-    
-        if (emailIndex !== null && emailIndex !== -1) {
-            previewHeaders.push(data.headers[emailIndex]);
-            columnOrder.push(emailIndex);
-        }
-    
-        for (let i = 0; i < data.headers.length && previewHeaders.length < PREVIEW_COLUMN_COUNT; i++) {
-            if (i !== emailIndex) {
-                previewHeaders.push(data.headers[i]);
-                columnOrder.push(i);
-            }
-        }
         
-        const previewRows = data.rows.slice(0, PREVIEW_ROW_COUNT).map(row => {
-            return columnOrder.map(colIndex => row[colIndex]);
-        });
-    
-        const fullPreviewHeaders = data.headers.slice();
-        const fullPreviewRows = data.rows.slice(0, PREVIEW_ROW_COUNT).map(row => row.slice());
+        const previewRows = data.rows.slice(0, PREVIEW_ROW_COUNT).map(row => row.slice());
 
-
-        setPreviewData({ headers: fullPreviewHeaders, rows: fullPreviewRows });
+        setPreviewData({ headers: data.headers.slice(), rows: previewRows });
     };
 
 
@@ -155,15 +134,16 @@ export default function BulkValidatePage() {
     const renderTable = () => {
         if (!previewData) return null;
 
-        const displayHeaders = [];
-        const displayRows: string[][] = [];
+        const displayHeaders: string[] = [];
         const columnMap: number[] = [];
 
+        // Always add the email column first if it exists
         if (emailColumnIndex !== null && emailColumnIndex !== -1) {
             displayHeaders.push(previewData.headers[emailColumnIndex]);
             columnMap.push(emailColumnIndex);
         }
 
+        // Add other columns until we have PREVIEW_COLUMN_COUNT total columns
         for (let i = 0; i < previewData.headers.length && displayHeaders.length < PREVIEW_COLUMN_COUNT; i++) {
             if (i !== emailColumnIndex) {
                 displayHeaders.push(previewData.headers[i]);
@@ -171,13 +151,10 @@ export default function BulkValidatePage() {
             }
         }
 
-        previewData.rows.forEach(row => {
-            const newRow = columnMap.map(colIndex => row[colIndex]);
-            displayRows.push(newRow);
+        const displayRows = previewData.rows.map(row => {
+            return columnMap.map(colIndex => row[colIndex]);
         });
 
-        const originalHeaders = previewData.headers;
-        const originalRows = previewData.rows;
 
         return (
             <Card>
@@ -209,23 +186,23 @@ export default function BulkValidatePage() {
                             <Table>
                                 <TableHeader>
                                     <TableRow>
-                                        {originalHeaders.map((header, index) => (
-                                            <TableHead key={index} className={cn("sticky top-0 bg-background", index === emailColumnIndex && "bg-muted")}>
+                                        {displayHeaders.map((header, index) => (
+                                            <TableHead key={index} className={cn("sticky top-0 bg-background", columnMap[index] === emailColumnIndex && "bg-muted")}>
                                                 <div className="flex items-center gap-1">
                                                     {header}
-                                                    {index === emailColumnIndex && <CheckCircle className="h-4 w-4 text-primary" />}
+                                                    {columnMap[index] === emailColumnIndex && <CheckCircle className="h-4 w-4 text-primary" />}
                                                 </div>
                                             </TableHead>
                                         ))}
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                    {originalRows.map((row, rowIndex) => (
+                                    {displayRows.map((row, rowIndex) => (
                                         <TableRow key={rowIndex}>
                                             {row.map((cell, cellIndex) => (
                                                 <TableCell 
                                                     key={cellIndex} 
-                                                    className={cn("max-w-xs truncate", cellIndex === emailColumnIndex && "bg-muted")}
+                                                    className={cn("max-w-xs truncate", columnMap[cellIndex] === emailColumnIndex && "bg-muted")}
                                                     title={cell}
                                                 >
                                                     {cell}
@@ -357,3 +334,5 @@ export default function BulkValidatePage() {
   </main>
   );
 }
+
+    
