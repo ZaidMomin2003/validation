@@ -2,15 +2,10 @@
 'use client';
 
 import {
-  FileText,
   FileUp,
-  History,
   Mail,
-  MessageSquare,
-  Package,
-  Rocket,
-  Settings,
-  User,
+  History,
+  ListFilter,
 } from 'lucide-react';
 
 import {
@@ -21,8 +16,6 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
-  SidebarGroup,
-  SidebarGroupLabel,
   SidebarInset,
 } from '@/components/ui/sidebar';
 import Logo from '@/components/logo';
@@ -46,7 +39,7 @@ export default function DashboardLayout({
             <SidebarMenuItem>
               <SidebarMenuButton href="/dashboard" isActive>
                 <FileUp />
-                Bulk Upload
+                Bulk validate
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
@@ -58,55 +51,19 @@ export default function DashboardLayout({
             <SidebarMenuItem>
               <SidebarMenuButton href="#">
                 <History />
-                Recent Lists
+                Lists
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
               <SidebarMenuButton href="#">
-                <Package />
-                Catch-all
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton href="#">
-                <Rocket />
-                Upgrade
+                <ListFilter />
+                Sort the list
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarContent>
         <SidebarFooter>
-          <SidebarGroup>
-            <SidebarGroupLabel>Quick Links</SidebarGroupLabel>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton href="#">
-                  <FileText />
-                  Changelog
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton href="#">
-                  <MessageSquare />
-                  Feedback
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroup>
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <SidebarMenuButton href="#">
-                <User />
-                My Account
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton variant="outline">
-                <Settings />
-                Upgrade to Pro
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          </SidebarMenu>
+          {/* Footer can be used for other links or user info */}
         </SidebarFooter>
       </Sidebar>
       <SidebarInset>
