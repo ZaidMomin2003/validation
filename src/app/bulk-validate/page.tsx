@@ -1,20 +1,18 @@
 
 'use client';
 
-import React, { useState } from 'react';
-import { FileUp, MousePointerClick, Download, CheckCircle, Lock, Info, Loader2 } from 'lucide-react';
+import React, 'react';
+import { FileUp, MousePointerClick, Download, CheckCircle, Info, Loader2 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { FileUpload } from "@/components/ui/file-upload";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import * as XLSX from 'xlsx';
 
-const PREVIEW_ROW_COUNT = 5;
+const PREVIEW_ROW_COUNT = 8;
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 interface TableData {
@@ -23,10 +21,10 @@ interface TableData {
 }
 
 export default function BulkValidatePage() {
-    const [files, setFiles] = useState<File[]>([]);
-    const [tableData, setTableData] = useState<TableData | null>(null);
-    const [emailColumnIndex, setEmailColumnIndex] = useState<number | null>(null);
-    const [isLoading, setIsLoading] = useState(false);
+    const [files, setFiles] = React.useState<File[]>([]);
+    const [tableData, setTableData] = React.useState<TableData | null>(null);
+    const [emailColumnIndex, setEmailColumnIndex] = React.useState<number | null>(null);
+    const [isLoading, setIsLoading] = React.useState(false);
     const { toast } = useToast();
 
     const processFile = (file: File) => {
@@ -47,12 +45,11 @@ export default function BulkValidatePage() {
 
                 const headers = json[0].map(header => header ? String(header) : '');
                 const rows = json.slice(1, PREVIEW_ROW_COUNT + 1).map(row => 
-                    row.map(cell => cell ? String(cell) : '')
+                    headers.map((_, index) => row[index] ? String(row[index]) : '')
                 );
                 
                 setTableData({ headers, rows });
 
-                // Auto-detect email column
                 let bestCandidate = -1;
                 let maxEmailCount = 0;
                 
