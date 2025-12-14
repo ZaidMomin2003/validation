@@ -133,12 +133,12 @@ export default function BulkValidatePage() {
                         <p className="text-sm text-muted-foreground">Select the column containing email addresses. We've highlighted our best guess.</p>
                     </div>
 
-                    <div className="overflow-x-auto">
+                    <div className="relative max-h-[400px] overflow-auto">
                         <Table>
                             <TableHeader>
                                 <TableRow>
                                     {tableData?.headers.map((header, index) => (
-                                        <TableHead key={index} className={index === emailColumnIndex ? "bg-muted" : ""}>
+                                        <TableHead key={index} className={index === emailColumnIndex ? "bg-muted sticky top-0" : "sticky top-0 bg-background"}>
                                             <div className="flex items-center gap-1">
                                                 {header}
                                                 {index === emailColumnIndex && <CheckCircle className="h-4 w-4 text-primary" />}
