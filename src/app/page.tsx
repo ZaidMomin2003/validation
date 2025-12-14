@@ -5,6 +5,7 @@ import { BentoGridThirdDemo } from '@/components/layout/feature-section';
 import { FaqSection } from '@/components/layout/faq-section';
 import PricingSection from '@/components/layout/pricing-section';
 import { LinkPreviewDemo } from '@/components/layout/link-preview-demo';
+import Footer from '@/components/layout/footer';
 
 export default function Home() {
   return (
@@ -17,6 +18,7 @@ export default function Home() {
       </div>
       <PricingSection />
       <FaqSection />
+      <Footer />
     </div>
   );
 }
