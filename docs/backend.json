@@ -62,6 +62,10 @@
         "userId": {
           "type": "string",
           "description": "The ID of the user who owns the list."
+        },
+        "data": {
+          "type": "array",
+          "description": "The full dataset of the list, with each object being a row."
         }
       },
       "required": ["name", "createdAt", "emailCount", "userId"]
@@ -75,7 +79,7 @@
       "schema": {
         "$ref": "#/entities/List"
       },
-      "description": "Stores the email lists for each user."
+      "description": "Stores the email lists for each user, including the full data."
     }
   }
 }

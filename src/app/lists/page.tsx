@@ -1,4 +1,3 @@
-
 'use client';
 
 import {
@@ -29,11 +28,12 @@ import {
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/useAuth';
 import { useCollection } from '@/firebase/hooks';
-import { collection, query } from 'firebase/firestore';
+import { collection, query, getDoc, doc } from 'firebase/firestore';
 import { db } from '@/firebase/firebaseClient';
 import React from 'react';
 import { List } from '@/types';
 import { Skeleton } from '@/components/ui/skeleton';
+import * as XLSX from 'xlsx';
 
 const stats = [
   {
@@ -111,28 +111,35 @@ export default function ListsPage() {
 
   const { data: lists, loading } = useCollection<List>(listsQuery);
 
-  const handleDownload = (list: List) => {
-    if(!list.id) return;
+  const handleDownload = async (list: List) => {
+    if (!list.id || !user) return;
     setDownloadingId(list.id);
 
-    // This is a placeholder for a more complex download logic.
-    // For now, we download a summary.
-    const csvContent = "data:text/csv;charset=utf-8," 
-      + "list_name,total_emails,good,risky,bad\n"
-      + `${list.name},${list.emailCount},${list.good},${list.risky},${list.bad}`;
-      
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", `${list.name.replace(/[^a-z0-9_]/gi, '-')}_summary.csv`);
-    document.body.appendChild(link);
+    try {
+        const listDocRef = doc(db, `users/${user.uid}/lists`, list.id);
+        const listDoc = await getDoc(listDocRef);
 
-    // Simulate a delay for feedback, then click the link
-    setTimeout(() => {
-      link.click();
-      document.body.removeChild(link);
-      setDownloadingId(null);
-    }, 500);
+        if (listDoc.exists()) {
+            const listData = listDoc.data() as List;
+            const dataToExport = listData.data || [];
+            
+            // Create a new workbook and a worksheet
+            const ws = XLSX.utils.json_to_sheet(dataToExport);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Validated List");
+
+            // Generate CSV file and trigger download
+            const fileName = `${list.name.replace(/[^a-z0-9_]/gi, '-')}.csv`;
+            XLSX.writeFile(wb, fileName, { bookType: "csv" });
+
+        } else {
+            console.error("List document not found");
+        }
+    } catch (error) {
+        console.error("Error downloading list:", error);
+    } finally {
+        setDownloadingId(null);
+    }
   };
 
   return (

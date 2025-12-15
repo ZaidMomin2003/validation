@@ -16,4 +16,5 @@ export interface List {
   risky: number;
   bad: number;
   userId: string;
+  data?: Record<string, any>[]; // To store the full dataset
 }

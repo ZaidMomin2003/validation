@@ -1,9 +1,8 @@
-
 'use client';
 
 import React from 'react';
-import { FileUp, MousePointerClick, Download, CheckCircle, Info, Loader2, Settings, Columns, Milestone } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
+import { FileUp, Download, CheckCircle, Info, Loader2, Settings, Columns, Milestone } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { FileUpload } from "@/components/ui/file-upload";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
@@ -26,13 +25,13 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 interface TableData {
     headers: string[];
-    rows: (string | number)[][];
+    rows: any[][];
     fileName: string;
 }
 
 interface CleanedData {
     headers: string[];
-    rows: (string | number)[][];
+    rows: any[][];
 }
 
 export default function BulkValidatePage() {
@@ -145,7 +144,7 @@ export default function BulkValidatePage() {
 
         const finalDelimiter = delimiter.replace(/\\n/g, '\n').replace(/\\t/g, '\t');
 
-        const newRows: (string|number)[][] = [];
+        const newRows: any[][] = [];
         const originalHeaders = tableData.headers.filter(h => h !== emailColumn);
         const newHeaders = [...originalHeaders, 'Email'];
 
@@ -164,6 +163,16 @@ export default function BulkValidatePage() {
         setCleanedData({ headers: newHeaders, rows: newRows });
     }
 
+    const convertDataToObjects = (data: { headers: string[], rows: any[][] }) => {
+        return data.rows.map(row => {
+            const obj: Record<string, any> = {};
+            data.headers.forEach((header, index) => {
+                obj[header] = row[index];
+            });
+            return obj;
+        });
+    };
+    
     const handleSaveCleanedList = async () => {
         if (!user || !cleanedData || !tableData) return;
         
@@ -178,6 +187,7 @@ export default function BulkValidatePage() {
             risky: 0,
             bad: 0,
             userId: user.uid,
+            data: convertDataToObjects(cleanedData),
         };
 
         try {
@@ -203,6 +213,8 @@ export default function BulkValidatePage() {
         
         setIsProcessing(true);
 
+        const dataObjects = convertDataToObjects(tableData);
+
         const listData = {
             name: tableData.fileName,
             createdAt: Date.now(),
@@ -212,6 +224,7 @@ export default function BulkValidatePage() {
             risky: 0,
             bad: 0,
             userId: user.uid,
+            data: dataObjects,
         };
 
         try {
@@ -232,7 +245,7 @@ export default function BulkValidatePage() {
         }
     };
 
-    const renderTablePreview = (data: {headers: string[], rows: (string|number)[][]}, selectedColumn: string | null) => {
+    const renderTablePreview = (data: {headers: string[], rows: any[][]}, selectedColumn: string | null) => {
         if (!data) return null;
 
         const displayHeaders: string[] = [];
@@ -529,7 +542,3 @@ export default function BulkValidatePage() {
   </main>
   );
 }
-
-    
-
-    
