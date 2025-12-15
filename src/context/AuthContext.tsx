@@ -33,6 +33,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             email: firebaseUser.email,
             displayName: firebaseUser.displayName,
             photoURL: firebaseUser.photoURL,
+            providerId: firebaseUser.providerData[0]?.providerId || 'password',
           };
           setUser(formattedUser);
         } else {
