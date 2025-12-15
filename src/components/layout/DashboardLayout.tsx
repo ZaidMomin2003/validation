@@ -54,6 +54,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ClientOnly } from '@/components/ClientOnly';
 import { Badge } from '@/components/ui/badge';
+import { Skeleton } from '../ui/skeleton';
 
 export default function DashboardLayout({
   children,
@@ -61,7 +62,7 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const { user, signOut } = useAuth();
+  const { user, signOut, loading } = useAuth();
   const { setTheme } = useTheme();
 
   const getInitials = (name?: string | null) => {
@@ -131,70 +132,99 @@ export default function DashboardLayout({
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <div className="p-2 cursor-pointer">
-                    <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-sidebar-accent transition-colors">
-                        {user && (
-                             <Avatar className="h-9 w-9">
+                    {loading ? (
+                        <div className="flex items-center gap-3 p-2 rounded-lg">
+                            <Skeleton className="h-9 w-9 rounded-full" />
+                            <div className="flex flex-col gap-1">
+                                <Skeleton className="h-4 w-20" />
+                                <Skeleton className="h-3 w-12" />
+                            </div>
+                        </div>
+                    ) : user ? (
+                        <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-sidebar-accent transition-colors">
+                            <Avatar className="h-9 w-9">
                                 <AvatarImage src={user.photoURL ?? ""} alt={user.displayName ?? "User"} />
                                 <AvatarFallback>{getInitials(user.displayName)}</AvatarFallback>
                             </Avatar>
-                        )}
-                        <div className="flex flex-col text-left">
-                            <span className="text-sm font-medium">{user?.displayName}</span>
-                            <span className="text-xs text-muted-foreground">Free Plan</span>
+                            <div className="flex flex-col text-left">
+                                <span className="text-sm font-medium">{user?.displayName}</span>
+                                <span className="text-xs text-muted-foreground">Free Plan</span>
+                            </div>
+                            <ChevronsUpDown className="ml-auto h-4 w-4 text-muted-foreground" />
                         </div>
-                        <ChevronsUpDown className="ml-auto h-4 w-4 text-muted-foreground" />
-                    </div>
+                    ) : (
+                        <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-sidebar-accent transition-colors">
+                             <Avatar className="h-9 w-9">
+                                <AvatarFallback>??</AvatarFallback>
+                            </Avatar>
+                            <div className="flex flex-col text-left">
+                                <span className="text-sm font-medium">Not Signed In</span>
+                            </div>
+                        </div>
+                    )}
                 </div>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-64 mb-2" side="top" align="start">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Link href="/profile">
-                    <UserCog className="mr-2 h-4 w-4" />
-                    <span>Profile</span>
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/subscription" className='flex items-center justify-between w-full'>
-                    <div className='flex items-center'>
-                      <CreditCard className="mr-2 h-4 w-4" />
-                      <span>Subscription</span>
-                    </div>
-                    <Badge variant="secondary">Free</Badge>
-                  </Link>
-                </DropdownMenuItem>
-                 <DropdownMenuItem asChild>
-                  <Link href="/changelog">
-                    <FileClock className="mr-2 h-4 w-4" />
-                    <span>Changelog</span>
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuSub>
-                  <DropdownMenuSubTrigger>
-                    <Sun className="h-4 w-4 mr-2 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-                    <Moon className="absolute h-4 w-4 mr-2 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-                    <span>Toggle theme</span>
-                  </DropdownMenuSubTrigger>
-                  <DropdownMenuPortal>
-                    <DropdownMenuSubContent>
-                      <DropdownMenuItem onClick={() => setTheme('light')}>
-                        Light
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => setTheme('dark')}>
-                        Dark
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => setTheme('system')}>
-                        System
-                      </DropdownMenuItem>
-                    </DropdownMenuSubContent>
-                  </DropdownMenuPortal>
-                </DropdownMenuSub>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={signOut} className="text-destructive focus:bg-destructive focus:text-destructive-foreground">
-                  <LogOut className="mr-2 h-4 w-4" />
-                  <span>Log out</span>
-                </DropdownMenuItem>
+                {user ? (
+                    <>
+                        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem asChild>
+                          <Link href="/profile">
+                            <UserCog className="mr-2 h-4 w-4" />
+                            <span>Profile</span>
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Link href="/subscription" className='flex items-center justify-between w-full'>
+                            <div className='flex items-center'>
+                              <CreditCard className="mr-2 h-4 w-4" />
+                              <span>Subscription</span>
+                            </div>
+                            <Badge variant="secondary">Free</Badge>
+                          </Link>
+                        </DropdownMenuItem>
+                         <DropdownMenuItem asChild>
+                          <Link href="/changelog">
+                            <FileClock className="mr-2 h-4 w-4" />
+                            <span>Changelog</span>
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuSub>
+                          <DropdownMenuSubTrigger>
+                            <Sun className="h-4 w-4 mr-2 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+                            <Moon className="absolute h-4 w-4 mr-2 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+                            <span>Toggle theme</span>
+                          </DropdownMenuSubTrigger>
+                          <DropdownMenuPortal>
+                            <DropdownMenuSubContent>
+                              <DropdownMenuItem onClick={() => setTheme('light')}>
+                                Light
+                              </DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => setTheme('dark')}>
+                                Dark
+                              </DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => setTheme('system')}>
+                                System
+                              </DropdownMenuItem>
+                            </DropdownMenuSubContent>
+                          </DropdownMenuPortal>
+                        </DropdownMenuSub>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem onClick={signOut} className="text-destructive focus:bg-destructive focus:text-destructive-foreground">
+                          <LogOut className="mr-2 h-4 w-4" />
+                          <span>Log out</span>
+                        </DropdownMenuItem>
+                    </>
+                ) : (
+                    <DropdownMenuItem asChild>
+                        <Link href="/auth">
+                            <LogOut className="mr-2 h-4 w-4" />
+                            <span>Sign In</span>
+                        </Link>
+                    </DropdownMenuItem>
+                )}
+
               </DropdownMenuContent>
             </DropdownMenu>
             </ClientOnly>

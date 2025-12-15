@@ -1,7 +1,11 @@
+
 "use client";
 
 import { createContext, useState, ReactNode, useEffect } from "react";
+import { onAuthStateChanged, User as FirebaseUser, signOut as firebaseSignOut } from 'firebase/auth';
+import { auth } from '@/firebase/firebaseClient';
 import type { User } from '@/types';
+import { useRouter } from 'next/navigation';
 
 interface AuthContextType {
   user: User | null;
@@ -15,22 +19,41 @@ export const AuthContext = createContext<AuthContextType>({
   signOut: () => {},
 });
 
-const demoUser: User = {
-  uid: 'demouser',
-  email: 'demo@example.com',
-  displayName: 'Demo User',
-  photoURL: 'https://i.pravatar.cc/150?u=demouser',
-};
-
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | null>(demoUser);
-  const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
-  const signOut = () => {
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser: FirebaseUser | null) => {
+      if (firebaseUser) {
+        if(firebaseUser.emailVerified) {
+          const formattedUser: User = {
+            uid: firebaseUser.uid,
+            email: firebaseUser.email,
+            displayName: firebaseUser.displayName,
+            photoURL: firebaseUser.photoURL,
+          };
+          setUser(formattedUser);
+        } else {
+          // If the user's email is not verified, we sign them out.
+          // You could also redirect them to a "please verify your email" page.
+          firebaseSignOut(auth);
+          setUser(null);
+        }
+      } else {
+        setUser(null);
+      }
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  const signOut = async () => {
+    await firebaseSignOut(auth);
     setUser(null);
-    // In a real app, you'd redirect to the login page.
-    // For this demo, we'll just log them back in after a short delay.
-    setTimeout(() => setUser(demoUser), 1000);
+    router.push('/auth');
   };
 
   return (

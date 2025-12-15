@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -17,16 +18,16 @@ import { Skeleton } from "./ui/skeleton";
 import { useRouter } from "next/navigation";
 
 export default function AuthButton() {
-  const { user, loading, signOut: contextSignOut } = useAuth();
+  const { user, loading, signOut } = useAuth();
   const router = useRouter();
 
   const handleSignOut = () => {
-    contextSignOut();
-    router.push('/auth');
+    signOut();
+    // The redirect is handled in the AuthContext signOut function
   }
 
   if (loading) {
-    return <Skeleton className="h-10 w-20" />;
+    return <Skeleton className="h-10 w-10 rounded-full" />;
   }
 
   if (!user) {

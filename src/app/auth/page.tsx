@@ -9,22 +9,89 @@ import { Label } from '@/components/ui/label';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { auth } from '@/firebase/firebaseClient';
+import { 
+    createUserWithEmailAndPassword, 
+    signInWithEmailAndPassword, 
+    GoogleAuthProvider, 
+    signInWithPopup,
+    sendEmailVerification
+} from 'firebase/auth';
+import { useToast } from '@/hooks/use-toast';
 
 export default function LoginPage() {
     const router = useRouter();
     const [activeTab, setActiveTab] = useState('signin');
+    const { toast } = useToast();
 
-    const handleAuthAction = () => {
-        router.push('/bulk-validate');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [fullName, setFullName] = useState('');
+
+    const handleEmailPasswordSignUp = async () => {
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            await sendEmailVerification(userCredential.user);
+            toast({
+                title: 'Verification Email Sent',
+                description: 'Please check your inbox to verify your email address.',
+            });
+            // You might want to redirect the user to a page that tells them to check their email
+            // For now, we'll just stay here.
+            setActiveTab('signin');
+        } catch (error: any) {
+            toast({
+                variant: 'destructive',
+                title: 'Sign Up Failed',
+                description: error.message,
+            });
+        }
     };
+
+    const handleEmailPasswordSignIn = async () => {
+        try {
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            if (userCredential.user.emailVerified) {
+                router.push('/bulk-validate');
+            } else {
+                toast({
+                    variant: 'destructive',
+                    title: 'Email Not Verified',
+                    description: 'Please verify your email before signing in.',
+                });
+                await auth.signOut();
+            }
+        } catch (error: any) {
+            toast({
+                variant: 'destructive',
+                title: 'Sign In Failed',
+                description: error.message,
+            });
+        }
+    };
+
+    const handleGoogleSignIn = async () => {
+        const provider = new GoogleAuthProvider();
+        try {
+            await signInWithPopup(auth, provider);
+            router.push('/bulk-validate');
+        } catch (error: any) {
+            toast({
+                variant: 'destructive',
+                title: 'Google Sign-In Failed',
+                description: error.message,
+            });
+        }
+    };
+
 
     const SignInForm = () => (
         <div className="space-y-6">
             <div className="space-y-2">
                 <Label htmlFor="email-signin" className="block text-sm">
-                    Username
+                    Email
                 </Label>
-                <Input type="email" required name="email" id="email-signin" />
+                <Input type="email" required name="email" id="email-signin" value={email} onChange={(e) => setEmail(e.target.value)} />
             </div>
 
             <div className="space-y-0.5">
@@ -38,10 +105,10 @@ export default function LoginPage() {
                         </Link>
                     </Button>
                 </div>
-                <Input type="password" required name="pwd" id="pwd-signin" />
+                <Input type="password" required name="pwd" id="pwd-signin" value={password} onChange={(e) => setPassword(e.target.value)} />
             </div>
 
-            <Button className="w-full" onClick={handleAuthAction}>
+            <Button className="w-full" onClick={handleEmailPasswordSignIn}>
                 Sign In
             </Button>
         </div>
@@ -53,23 +120,23 @@ export default function LoginPage() {
                 <Label htmlFor="name-signup" className="block text-sm">
                     Full Name
                 </Label>
-                <Input type="text" required name="name" id="name-signup" />
+                <Input type="text" required name="name" id="name-signup" value={fullName} onChange={(e) => setFullName(e.target.value)} />
             </div>
             <div className="space-y-2">
                 <Label htmlFor="email-signup" className="block text-sm">
                     Email
                 </Label>
-                <Input type="email" required name="email" id="email-signup" />
+                <Input type="email" required name="email" id="email-signup" value={email} onChange={(e) => setEmail(e.target.value)} />
             </div>
 
             <div className="space-y-2">
                 <Label htmlFor="pwd-signup" className="text-sm">
                     Password
                 </Label>
-                <Input type="password" required name="pwd" id="pwd-signup" />
+                <Input type="password" required name="pwd" id="pwd-signup" value={password} onChange={(e) => setPassword(e.target.value)} />
             </div>
 
-            <Button className="w-full" onClick={handleAuthAction}>
+            <Button className="w-full" onClick={handleEmailPasswordSignUp}>
                 Create Account
             </Button>
         </div>
@@ -92,7 +159,12 @@ export default function LoginPage() {
                             : 'Get started with your new account'}
                     </p>
                 </div>
-                <Tabs defaultValue="signin" className="w-full" onValueChange={setActiveTab}>
+                <Tabs defaultValue="signin" className="w-full" onValueChange={(tab) => {
+                    setActiveTab(tab);
+                    setEmail('');
+                    setPassword('');
+                    setFullName('');
+                }}>
                     <TabsList className="grid w-full grid-cols-2">
                         <TabsTrigger value="signin">Sign In</TabsTrigger>
                         <TabsTrigger value="signup">Create Account</TabsTrigger>
@@ -100,7 +172,7 @@ export default function LoginPage() {
                     <TabsContent value="signin">
                         <div className="bg-card rounded-b-lg border p-6 shadow-md">
                             <div className="mt-6 grid grid-cols-1 gap-3">
-                                <Button type="button" variant="outline" onClick={handleAuthAction}>
+                                <Button type="button" variant="outline" onClick={handleGoogleSignIn}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="0.98em" height="1em" viewBox="0 0 256 262">
                                         <path fill="#4285f4" d="M255.878 133.451c0-10.734-.871-18.567-2.756-26.69H130.55v48.448h71.947c-1.45 12.04-9.283 30.172-26.69 42.356l-.244 1.622l38.755 30.023l2.685.268c24.659-22.774 38.875-56.282 38.875-96.027"></path>
                                         <path fill="#34a853" d="M130.55 261.1c35.248 0 64.839-11.605 86.453-31.622l-41.196-31.913c-11.024 7.688-25.82 13.055-45.257 13.055c-34.523 0-63.824-22.773-74.269-54.25l-1.531.13l-40.298 31.187l-.527 1.465C35.393 231.798 79.49 261.1 130.55 261.1"></path>
@@ -117,7 +189,7 @@ export default function LoginPage() {
                      <TabsContent value="signup">
                         <div className="bg-card rounded-b-lg border p-6 shadow-md">
                            <div className="mt-6 grid grid-cols-1 gap-3">
-                                <Button type="button" variant="outline" onClick={handleAuthAction}>
+                                <Button type="button" variant="outline" onClick={handleGoogleSignIn}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="0.98em" height="1em" viewBox="0 0 256 262">
                                         <path fill="#4285f4" d="M255.878 133.451c0-10.734-.871-18.567-2.756-26.69H130.55v48.448h71.947c-1.45 12.04-9.283 30.172-26.69 42.356l-.244 1.622l38.755 30.023l2.685.268c24.659-22.774 38.875-56.282 38.875-96.027"></path>
                                         <path fill="#34a853" d="M130.55 261.1c35.248 0 64.839-11.605 86.453-31.622l-41.196-31.913c-11.024 7.688-25.82 13.055-45.257 13.055c-34.523 0-63.824-22.773-74.269-54.25l-1.531.13l-40.298 31.187l-.527 1.465C35.393 231.798 79.49 261.1 130.55 261.1"></path>
@@ -136,6 +208,3 @@ export default function LoginPage() {
         </section>
     );
 }
-
-
-
