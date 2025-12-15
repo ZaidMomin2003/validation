@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { FileUp, Download, CheckCircle, Info, Loader2, Settings, Columns, Milestone } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { FileUpload } from "@/components/ui/file-upload";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
@@ -542,3 +542,5 @@ export default function BulkValidatePage() {
   </main>
   );
 }
+
+    
