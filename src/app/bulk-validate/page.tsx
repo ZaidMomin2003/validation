@@ -172,6 +172,15 @@ export default function BulkValidatePage() {
             return obj;
         });
     };
+
+    const handleDownloadCleaned = () => {
+        if (!cleanedData) return;
+        const dataObjects = convertDataToObjects(cleanedData);
+        const ws = XLSX.utils.json_to_sheet(dataObjects);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Cleaned Data");
+        XLSX.writeFile(wb, `Cleaned-${tableData?.fileName || 'data'}.csv`, { bookType: 'csv' });
+    };
     
     const handleSaveCleanedList = async () => {
         if (!user || !cleanedData || !tableData) return;
@@ -318,8 +327,13 @@ export default function BulkValidatePage() {
                            {renderTablePreview(cleanedData, 'Email')}
                            <p className="text-sm text-muted-foreground">Found {cleanedData.rows.length.toLocaleString()} total emails.</p>
                         </CardContent>
-                        <CardFooter className="flex items-center justify-end gap-2">
+                        <CardFooter className="flex flex-wrap items-center justify-end gap-2">
                              <Button variant="outline" onClick={() => setCleanedData(null)}>Back</Button>
+                             <Button variant="outline" onClick={handleDownloadCleaned}>
+                                <Download className="mr-2 h-4 w-4" />
+                                Download CSV
+                             </Button>
+                             <Button variant="outline" disabled>Validate</Button>
                              <Button onClick={handleSaveCleanedList} disabled={isProcessing}>
                                 {isProcessing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                                 Save Cleaned List
@@ -542,5 +556,3 @@ export default function BulkValidatePage() {
   </main>
   );
 }
-
-    
