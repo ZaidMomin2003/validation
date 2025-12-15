@@ -21,8 +21,43 @@ import {
   Lock,
   ChevronLeft,
   ChevronRight,
+  MailCheck,
+  CheckCircle,
+  AlertTriangle,
+  Sparkles,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+
+const stats = [
+  {
+    title: 'Total Validated',
+    value: '12,435',
+    icon: MailCheck,
+    description: 'Total emails processed across all lists.',
+    color: 'text-blue-500',
+  },
+  {
+    title: 'Valid Emails',
+    value: '11,890',
+    icon: CheckCircle,
+    description: 'Deliverable and safe-to-send emails.',
+    color: 'text-green-500',
+  },
+  {
+    title: 'Risky Emails',
+    value: '545',
+    icon: AlertTriangle,
+    description: 'Catch-all or unknown status emails.',
+    color: 'text-yellow-500',
+  },
+  {
+    title: 'Cleaned Emails',
+    value: '2,130',
+    icon: Sparkles,
+    description: 'Duplicates and invalid formats removed.',
+    color: 'text-indigo-500',
+  },
+]
 
 const lists = [
   {
@@ -98,7 +133,27 @@ const ProgressMultiple = ({
 export default function ListsPage() {
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
-      <div className="grid gap-4 md:gap-8">
+      <div className="grid gap-8">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            {stats.map((stat) => (
+              <Card key={stat.title}>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">
+                    {stat.title}
+                  </CardTitle>
+                  <stat.icon className={cn("h-4 w-4 text-muted-foreground", stat.color)} />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">{stat.value}</div>
+                  <p className="text-xs text-muted-foreground">
+                    {stat.description}
+                  </p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+
         <div className="flex items-center justify-between">
           <h1 className="text-3xl font-bold tracking-tight">Recent Lists</h1>
           <div className="relative w-full max-w-sm">
