@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -37,8 +37,9 @@ export default function ProfilePage() {
   const { toast } = useToast();
   const router = useRouter();
 
-  const [displayName, setDisplayName] = useState(user?.displayName || '');
+  const [displayName, setDisplayName] = useState('');
   const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [currentPassword, setCurrentPassword] = useState('');
   
   const [isUpdatingName, setIsUpdatingName] = useState(false);
@@ -49,6 +50,11 @@ export default function ProfilePage() {
   const [reauthPassword, setReauthPassword] = useState('');
   const [pendingAction, setPendingAction] = useState<(() => Promise<void>) | null>(null);
 
+  useEffect(() => {
+    if (user) {
+      setDisplayName(user.displayName || '');
+    }
+  }, [user]);
 
   const handleUpdateName = async () => {
     if (!user) return;
@@ -71,24 +77,46 @@ export default function ProfilePage() {
   };
 
   const performPasswordChange = async () => {
-    if (!user) return;
+    if (!user || !user.email) return;
+    if (newPassword !== confirmPassword) {
+      toast({
+        variant: 'destructive',
+        title: 'Passwords do not match',
+        description: 'Please ensure your new passwords match.',
+      });
+      return;
+    }
+    
     setIsUpdatingPassword(true);
+
     try {
+      const credential = EmailAuthProvider.credential(user.email, currentPassword);
+      await reauthenticateWithCredential(user, credential);
       await updatePassword(user, newPassword);
+
       toast({
         title: 'Success',
         description: 'Your password has been changed.',
       });
       setNewPassword('');
+      setConfirmPassword('');
+      setCurrentPassword('');
+
     } catch (error: any) {
-       if (error.code === 'auth/requires-recent-login') {
+       if (error.code === 'auth/wrong-password') {
+          toast({
+              variant: 'destructive',
+              title: 'Incorrect Password',
+              description: 'The current password you entered is incorrect.',
+          });
+       } else if (error.code === 'auth/requires-recent-login') {
             toast({
                 variant: 'destructive',
                 title: 'Action requires recent login',
-                description: 'Please re-authenticate to change your password.',
+                description: 'Please enter your current password again to confirm your identity.',
             });
-            setPendingAction(() => performPasswordChange);
-            setShowReauthDialog(true);
+             setPendingAction(() => performPasswordChange);
+             setShowReauthDialog(true);
         } else {
             toast({
                 variant: 'destructive',
@@ -164,6 +192,8 @@ export default function ProfilePage() {
     );
   }
 
+  const isPasswordChangeDisabled = isUpdatingPassword || !currentPassword || !newPassword || newPassword !== confirmPassword;
+
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
       <div className="grid gap-8">
@@ -202,9 +232,19 @@ export default function ProfilePage() {
         <Card>
           <CardHeader>
             <CardTitle>Change Password</CardTitle>
-            <CardDescription>Enter a new password to update your account.</CardDescription>
+            <CardDescription>Enter your current and new password to update your account.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="currentPassword">Current Password</Label>
+              <Input
+                id="currentPassword"
+                type="password"
+                value={currentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
+                placeholder="••••••••••••"
+              />
+            </div>
             <div className="space-y-2">
               <Label htmlFor="newPassword">New Password</Label>
               <Input
@@ -215,9 +255,22 @@ export default function ProfilePage() {
                 placeholder="••••••••••••"
               />
             </div>
+             <div className="space-y-2">
+              <Label htmlFor="confirmPassword">Confirm New Password</Label>
+              <Input
+                id="confirmPassword"
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="••••••••••••"
+              />
+            </div>
+            {newPassword && confirmPassword && newPassword !== confirmPassword && (
+                <p className="text-sm text-destructive">New passwords do not match.</p>
+            )}
           </CardContent>
           <div className="border-t p-6 flex justify-end">
-            <Button onClick={performPasswordChange} disabled={isUpdatingPassword || !newPassword}>
+            <Button onClick={performPasswordChange} disabled={isPasswordChangeDisabled}>
               {isUpdatingPassword && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Update Password
             </Button>
@@ -290,3 +343,5 @@ export default function ProfilePage() {
     </main>
   );
 }
+
+    
