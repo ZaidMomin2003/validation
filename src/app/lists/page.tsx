@@ -1,3 +1,4 @@
+
 'use client';
 
 import {
@@ -32,6 +33,7 @@ import { collection, query } from 'firebase/firestore';
 import { db } from '@/firebase/firebaseClient';
 import React from 'react';
 import { List } from '@/types';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const stats = [
   {
