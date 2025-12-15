@@ -157,7 +157,7 @@ export const ROLE_BASED_PREFIXES = new Set([
   'customerservice', 'customersupport', 'data', 'database', 'deals', 'dean', 'dev',
   'developer', 'developers', 'development', 'devnull', 'devops', 'digital', 'direct',
   'director', 'directors', 'directory', 'discuss', 'dispatch', 'dns', 'docs', 'doctor',
-  'domain', 'domains', a'download', 'downloads', 'dreamteam', 'ecommerce', 'editor',
+  'domain', 'domains', 'download', 'downloads', 'dreamteam', 'ecommerce', 'editor',
   'editorial', 'editors', 'education', 'email', 'emergency', 'employee', 'employees', 'employment',
  'engineering', 'enquiries', 'enquiry', 'enterprise', 'env', 'errors', 'estate', 'event',
   'events', 'everyone', 'exec', 'executive', 'expert', 'experts', 'export', 'facebook',
@@ -328,4 +328,5 @@ export const validate = async (
     return { good, risky: 0, bad, total, data: validatedData };
 };
 
+    
     
