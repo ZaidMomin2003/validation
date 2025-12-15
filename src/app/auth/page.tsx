@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { auth } from '@/firebase/firebaseClient';
+import { useAuthContext } from '@/firebase/provider';
 import { 
     createUserWithEmailAndPassword, 
     signInWithEmailAndPassword, 
@@ -103,6 +103,7 @@ const SignUpForm = ({ fullName, setFullName, email, setEmail, password, setPassw
 
 export default function LoginPage() {
     const router = useRouter();
+    const auth = useAuthContext();
     const [activeTab, setActiveTab] = useState('signin');
     const { toast } = useToast();
 
@@ -112,6 +113,7 @@ export default function LoginPage() {
     const [showPassword, setShowPassword] = useState(false);
 
     const handleEmailPasswordSignUp = async () => {
+        if (!auth) return;
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             await updateProfile(userCredential.user, {
@@ -135,6 +137,7 @@ export default function LoginPage() {
     };
 
     const handleEmailPasswordSignIn = async () => {
+        if (!auth) return;
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             if (userCredential.user.emailVerified) {
@@ -145,7 +148,9 @@ export default function LoginPage() {
                     title: 'Email Not Verified',
                     description: 'Please verify your email before signing in.',
                 });
-                await auth.signOut();
+                if (auth) {
+                    await auth.signOut();
+                }
             }
         } catch (error: any) {
             toast({
@@ -157,6 +162,7 @@ export default function LoginPage() {
     };
 
     const handleGoogleSignIn = async () => {
+        if (!auth) return;
         const provider = new GoogleAuthProvider();
         try {
             await signInWithPopup(auth, provider);
@@ -253,5 +259,3 @@ export default function LoginPage() {
         </section>
     );
 }
-
-    

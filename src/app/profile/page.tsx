@@ -28,13 +28,14 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog';
 import { updateProfile, updatePassword, deleteUser, reauthenticateWithCredential, EmailAuthProvider } from 'firebase/auth';
-import { auth } from '@/firebase/firebaseClient';
+import { useAuthContext } from '@/firebase/provider';
 import { useRouter } from 'next/navigation';
 import { Loader2, Eye, EyeOff, ShieldAlert } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 export default function ProfilePage() {
   const { user, loading: authLoading } = useAuth();
+  const auth = useAuthContext();
   const { toast } = useToast();
   const router = useRouter();
 
@@ -63,10 +64,13 @@ export default function ProfilePage() {
   }, [user]);
 
   const handleUpdateName = async () => {
-    if (!user) return;
+    if (!user || !auth) return;
+    const currentUser = auth.currentUser;
+    if (!currentUser) return;
+
     setIsUpdatingName(true);
     try {
-      await updateProfile(user, { displayName });
+      await updateProfile(currentUser, { displayName });
       toast({
         title: 'Success',
         description: 'Your name has been updated.',
@@ -83,7 +87,10 @@ export default function ProfilePage() {
   };
 
   const performPasswordChange = async () => {
-    if (!user || !user.email) return;
+    if (!user || !user.email || !auth) return;
+    const currentUser = auth.currentUser;
+    if (!currentUser) return;
+
     if (newPassword !== confirmPassword) {
       toast({
         variant: 'destructive',
@@ -97,8 +104,8 @@ export default function ProfilePage() {
 
     try {
       const credential = EmailAuthProvider.credential(user.email, currentPassword);
-      await reauthenticateWithCredential(user, credential);
-      await updatePassword(user, newPassword);
+      await reauthenticateWithCredential(currentUser, credential);
+      await updatePassword(currentUser, newPassword);
 
       toast({
         title: 'Success',
@@ -136,10 +143,12 @@ export default function ProfilePage() {
   };
 
   const performDeleteAccount = async () => {
-    if (!user) return;
+    if (!user || !auth) return;
+    const currentUser = auth.currentUser;
+    if (!currentUser) return;
     setIsDeleting(true);
     try {
-      await deleteUser(user);
+      await deleteUser(currentUser);
       toast({
         title: 'Account Deleted',
         description: 'Your account has been successfully deleted.',
@@ -167,11 +176,13 @@ export default function ProfilePage() {
   };
 
   const handleReauthenticate = async () => {
-    if (!user || !user.email || !pendingAction) return;
+    if (!user || !user.email || !pendingAction || !auth) return;
+    const currentUser = auth.currentUser;
+    if (!currentUser) return;
 
     try {
         const credential = EmailAuthProvider.credential(user.email, reauthPassword);
-        await reauthenticateWithCredential(user, credential);
+        await reauthenticateWithCredential(currentUser, credential);
         setShowReauthDialog(false);
         setReauthPassword('');
         await pendingAction();

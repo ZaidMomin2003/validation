@@ -7,18 +7,20 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Link from 'next/link';
-import { auth } from '@/firebase/firebaseClient';
+import { useAuthContext } from '@/firebase/provider';
 import { sendPasswordResetEmail } from 'firebase/auth';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, ArrowLeft } from 'lucide-react';
 
 export default function ForgotPasswordPage() {
+    const auth = useAuthContext();
     const { toast } = useToast();
     const [email, setEmail] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [emailSent, setEmailSent] = useState(false);
 
     const handlePasswordReset = async () => {
+        if (!auth) return;
         if (!email) {
             toast({
                 variant: 'destructive',
@@ -34,7 +36,7 @@ export default function ForgotPasswordPage() {
             setEmailSent(true);
             toast({
                 title: 'Password Reset Email Sent',
-                description: `A reset link has been sent to ${email}. Please check your inbox and spam folder.`,
+                description: `A reset link has been sent to ${email}. Be sure to check your spam folder as well.`,
             });
         } catch (error: any) {
             toast({
