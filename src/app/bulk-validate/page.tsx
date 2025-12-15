@@ -12,12 +12,14 @@ import { useToast } from '@/hooks/use-toast';
 import * as XLSX from 'xlsx';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/useAuth';
-import { addDoc, collection } from 'firebase/firestore';
+import { addDoc, collection, doc, updateDoc } from 'firebase/firestore';
 import { db } from '@/firebase/firebaseClient';
 import { useRouter } from 'next/navigation';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { validate } from '@/lib/email-validator';
+import type { List } from '@/types';
 
 const PREVIEW_ROW_COUNT = 8;
 const PREVIEW_COLUMN_COUNT = 4;
@@ -73,27 +75,22 @@ export default function BulkValidatePage() {
                 const fullTableData = { headers, rows, fileName: file.name };
                 setTableData(fullTableData);
                 
-                // Auto-select email column for validation tab
-                if(activeTab === 'validate') {
-                    let bestCandidate = -1;
-                    let maxEmailCount = 0;
-                    
-                    headers.forEach((h, colIndex) => {
-                        let emailCount = 0;
-                        for(let i = 0; i < rows.length; i++) {
-                            if (rows[i] && EMAIL_REGEX.test(String(rows[i][colIndex]))) {
-                                emailCount++;
-                            }
+                let bestCandidate = -1;
+                let maxEmailCount = 0;
+                
+                headers.forEach((h, colIndex) => {
+                    let emailCount = 0;
+                    for(let i = 0; i < rows.length; i++) {
+                        if (rows[i] && String(rows[i][colIndex]).includes('@')) {
+                            emailCount++;
                         }
-                        if (emailCount > maxEmailCount) {
-                            maxEmailCount = emailCount;
-                            bestCandidate = colIndex;
-                        }
-                    });
-                    setEmailColumn(bestCandidate !== -1 ? headers[bestCandidate] : headers[0]);
-                } else {
-                    setEmailColumn(headers[0]);
-                }
+                    }
+                    if (emailCount > maxEmailCount) {
+                        maxEmailCount = emailCount;
+                        bestCandidate = colIndex;
+                    }
+                });
+                setEmailColumn(bestCandidate !== -1 ? headers[bestCandidate] : (headers.length > 0 ? headers[0] : null));
 
             } catch (error) {
                 console.error("File processing error:", error);
@@ -134,6 +131,7 @@ export default function BulkValidatePage() {
         setEmailColumn(null);
         setDelimiter(',');
         setIsLoading(false);
+        setIsProcessing(false);
     };
 
     const handleCleanAction = () => {
@@ -153,7 +151,7 @@ export default function BulkValidatePage() {
             const otherData = originalRow.filter((_, i) => i !== columnIndex);
 
             if(typeof emailCell === 'string' && emailCell) {
-                const emails = emailCell.split(finalDelimiter).map(e => e.trim()).filter(e => e);
+                const emails = emailCell.split(finalDelimiter).map(e => e.trim()).filter(e => e && e.includes('@'));
                 emails.forEach(email => {
                     newRows.push([...otherData, email]);
                 });
@@ -187,16 +185,17 @@ export default function BulkValidatePage() {
         
         setIsProcessing(true);
 
-        const listData = {
+        const listData: List = {
             name: `Cleaned - ${tableData.fileName}`,
             createdAt: Date.now(),
-            progress: 100, // Cleaning is a one-time process
+            progress: 100, 
             emailCount: cleanedData.rows.length,
-            good: cleanedData.rows.length,
+            good: cleanedData.rows.length, // All are considered 'good' post-cleaning, pre-validation
             risky: 0,
             bad: 0,
             userId: user.uid,
             data: convertDataToObjects(cleanedData),
+            status: 'Completed'
         };
 
         try {
@@ -218,38 +217,60 @@ export default function BulkValidatePage() {
     };
     
     const handleValidateAction = async () => {
-        if (!user || !tableData || emailColumn === null) return;
-        
+        if (!user || !tableData || !emailColumn) return;
+    
         setIsProcessing(true);
+        toast({
+            title: 'Starting Validation...',
+            description: 'Your list is being prepared for validation. You can track progress on the Lists page.',
+        });
 
+        // 1. Create initial list document in Firestore
         const dataObjects = convertDataToObjects(tableData);
-
-        const listData = {
+        const listData: List = {
             name: tableData.fileName,
             createdAt: Date.now(),
             progress: 0,
             emailCount: tableData.rows.length,
-            good: 0,
-            risky: 0,
-            bad: 0,
+            good: 0, risky: 0, bad: 0,
             userId: user.uid,
-            data: dataObjects,
+            status: 'Processing'
         };
 
         try {
-            await addDoc(collection(db, `users/${user.uid}/lists`), listData);
-            toast({
-                title: 'List created!',
-                description: `${tableData.fileName} has been added for validation.`,
-            });
+            const docRef = await addDoc(collection(db, `users/${user.uid}/lists`), listData);
+            
+            // Redirect immediately so the user can see the progress
             router.push('/lists');
+    
+            // 2. Perform validation asynchronously
+            validate(dataObjects, emailColumn, async ({ good, risky, bad, total, data }) => {
+                const progress = Math.round(((good + risky + bad) / total) * 100);
+                const isCompleted = progress === 100;
+                
+                const updateData: Partial<List> = { good, risky, bad, progress };
+
+                if (isCompleted) {
+                    updateData.data = data;
+                    updateData.status = 'Completed';
+                }
+                
+                // Update Firestore document with progress
+                await updateDoc(doc(db, `users/${user.uid}/lists`, docRef.id), updateData);
+            }).catch(async (error) => {
+                console.error("Validation process failed:", error);
+                 await updateDoc(doc(db, `users/${user.uid}/lists`, docRef.id), {
+                    status: 'Failed',
+                    progress: 100
+                });
+            });
+
         } catch (error: any) {
             toast({
                 variant: 'destructive',
-                title: 'Error creating list',
-                description: error.message || 'Could not save the list to your account.',
+                title: 'Error starting validation',
+                description: error.message || 'Could not create the list for validation.',
             });
-        } finally {
             setIsProcessing(false);
         }
     };
@@ -283,7 +304,7 @@ export default function BulkValidatePage() {
                     <TableHeader>
                         <TableRow>
                             {displayHeaders.map((header, index) => (
-                                <TableHead key={index} className={cn("sticky top-0 bg-background", columnMap[index] === selectedColIndex && "bg-muted")}>
+                                <TableHead key={index} className={cn("sticky top-0 bg-background z-10", columnMap[index] === selectedColIndex && "bg-muted")}>
                                     <div className="flex items-center gap-1">
                                         {header}
                                         {columnMap[index] === selectedColIndex && <CheckCircle className="h-4 w-4 text-primary" />}
@@ -381,7 +402,6 @@ export default function BulkValidatePage() {
 
     const renderValidateFlow = () => {
         if (!tableData) return null;
-        const emailColumnIndex = emailColumn ? tableData.headers.indexOf(emailColumn) : -1;
 
         return (
              <Card>

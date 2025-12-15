@@ -24,6 +24,8 @@ import {
   AlertTriangle,
   Sparkles,
   Loader2,
+  XCircle,
+  FileQuestion,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/useAuth';
@@ -78,7 +80,7 @@ const ProgressMultiple = ({
 
 
   return (
-    <div className={cn('h-2 w-full rounded-full bg-muted', className)}>
+    <div className={cn('relative h-2 w-full overflow-hidden rounded-full bg-muted', className)}>
       <div className="flex h-full">
         {values.map((item, index) => (
           <div
@@ -86,12 +88,6 @@ const ProgressMultiple = ({
             className={`h-full ${item.color}`}
             style={{
               width: `${(item.value / total) * 100}%`,
-              borderTopLeftRadius: index === 0 ? '9999px' : '0',
-              borderBottomLeftRadius: index === 0 ? '9999px' : '0',
-              borderTopRightRadius:
-                index === values.length - 1 ? '9999px' : '0',
-              borderBottomRightRadius:
-                index === values.length - 1 ? '9999px' : '0',
             }}
           />
         ))}
@@ -121,26 +117,60 @@ export default function ListsPage() {
 
         if (listDoc.exists()) {
             const listData = listDoc.data() as List;
-            const dataToExport = listData.data || [];
+            if (!listData.data) {
+                throw new Error("Full list data is not available for download. It might still be processing or was created with a previous version.");
+            }
             
-            // Create a new workbook and a worksheet
-            const ws = XLSX.utils.json_to_sheet(dataToExport);
+            const ws = XLSX.utils.json_to_sheet(listData.data);
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, "Validated List");
 
-            // Generate CSV file and trigger download
             const fileName = `${list.name.replace(/[^a-z0-9_]/gi, '-')}.csv`;
             XLSX.writeFile(wb, fileName, { bookType: "csv" });
 
         } else {
             console.error("List document not found");
         }
-    } catch (error) {
+    } catch (error: any) {
         console.error("Error downloading list:", error);
     } finally {
         setDownloadingId(null);
     }
   };
+
+  const renderStatusBadge = (list: List) => {
+      let icon, text, className;
+
+      switch(list.status) {
+          case 'Processing':
+              icon = <Loader2 className="mr-1 h-3 w-3 animate-spin" />;
+              text = `${list.progress}%`;
+              className = 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300 border-blue-200 dark:border-blue-800'
+              break;
+          case 'Completed':
+              icon = <CheckCircle className="mr-1 h-3 w-3" />;
+              text = 'Completed';
+              className = 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300 border-green-200 dark:border-green-800'
+              break;
+          case 'Failed':
+              icon = <XCircle className="mr-1 h-3 w-3" />;
+              text = 'Failed';
+              className = 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300 border-red-200 dark:border-red-800'
+              break;
+          default:
+              icon = <FileQuestion className="mr-1 h-3 w-3" />;
+              text = 'Queued';
+              className = 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-300 border-gray-200 dark:border-gray-800'
+              break;
+      }
+
+      return (
+          <Badge variant="outline" className={cn('font-mono', className)}>
+              {icon}
+              {text}
+          </Badge>
+      )
+  }
 
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
@@ -174,7 +204,7 @@ export default function ListsPage() {
         </div>
 
         {loading ? (
-           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {Array(4).fill(0).map((_, index) => (
                  <Card key={index}>
                     <CardHeader>
@@ -184,7 +214,7 @@ export default function ListsPage() {
                     <CardContent className="space-y-4">
                       <Skeleton className="h-2 w-full rounded-full" />
                       <div className="flex items-center justify-between">
-                        <Skeleton className="h-6 w-12 rounded-full" />
+                        <Skeleton className="h-6 w-20 rounded-md" />
                         <Skeleton className="h-4 w-20 rounded-md" />
                       </div>
                     </CardContent>
@@ -195,22 +225,22 @@ export default function ListsPage() {
               ))}
            </div>
         ) : (
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {lists && lists.map((list) => (
-              <Card key={list.id}>
+              <Card key={list.id} className="flex flex-col">
                 <CardHeader>
                   <div className="flex items-center justify-between">
-                    <CardTitle className="truncate text-lg font-medium">
+                    <CardTitle className="truncate text-lg font-medium pr-2">
                       {list.name}
                     </CardTitle>
-                    <Info className="h-4 w-4 text-muted-foreground" />
+                    <Info className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                   </div>
                   <CardDescription className="flex items-center gap-2 text-xs">
                     <Clock className="h-3 w-3" />
                     <span>{new Date(list.createdAt).toLocaleString()}</span>
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="space-y-4 flex-1">
                   <ProgressMultiple
                     values={[
                       { value: list.good, color: 'bg-green-500' },
@@ -219,16 +249,7 @@ export default function ListsPage() {
                     ]}
                   />
                   <div className="flex items-center justify-between text-sm">
-                    <Badge
-                      variant="outline"
-                      className={cn(
-                        list.progress > 20
-                          ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300 border-green-200 dark:border-green-800'
-                          : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300 border-yellow-200 dark:border-yellow-800'
-                      )}
-                    >
-                      {list.progress}%
-                    </Badge>
+                    {renderStatusBadge(list)}
                     <span className="text-muted-foreground">
                       {list.emailCount.toLocaleString()} Emails
                     </span>
@@ -239,20 +260,20 @@ export default function ListsPage() {
                     variant="outline" 
                     className="w-full"
                     onClick={() => handleDownload(list)}
-                    disabled={downloadingId === list.id}
+                    disabled={downloadingId === list.id || list.status !== 'Completed'}
                   >
                     {downloadingId === list.id ? (
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     ) : (
                       <Download className="mr-2 h-4 w-4" />
                     )}
-                    {downloadingId === list.id ? 'Preparing...' : 'Download'}
+                    {downloadingId === list.id ? 'Preparing...' : 'Download Report'}
                   </Button>
                 </CardFooter>
               </Card>
             ))}
 
-            {Array(8 - (lists?.length || 0))
+            {Array(Math.max(0, 8 - (lists?.length || 0)))
               .fill(0)
               .map((_, index) => (
                 <Card
@@ -298,5 +319,4 @@ export default function ListsPage() {
       </div>
     </main>
   );
-
-    
+}
