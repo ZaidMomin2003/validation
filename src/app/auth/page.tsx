@@ -15,7 +15,8 @@ import {
     signInWithEmailAndPassword, 
     GoogleAuthProvider, 
     signInWithPopup,
-    sendEmailVerification
+    sendEmailVerification,
+    updateProfile
 } from 'firebase/auth';
 import { useToast } from '@/hooks/use-toast';
 import { Eye, EyeOff } from 'lucide-react';
@@ -113,6 +114,9 @@ export default function LoginPage() {
     const handleEmailPasswordSignUp = async () => {
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            await updateProfile(userCredential.user, {
+                displayName: fullName,
+            });
             await sendEmailVerification(userCredential.user);
             toast({
                 title: 'Verification Email Sent',
@@ -249,3 +253,5 @@ export default function LoginPage() {
         </section>
     );
 }
+
+    
