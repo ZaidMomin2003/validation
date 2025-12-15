@@ -102,13 +102,38 @@ const ProgressMultiple = ({
 
 export default function ListsPage() {
   const { user } = useAuth();
-  
+  const [downloadingId, setDownloadingId] = React.useState<string | null>(null);
+
   const listsQuery = React.useMemo(() => {
     if (!user) return null;
     return query(collection(db, `users/${user.uid}/lists`));
   }, [user]);
 
   const { data: lists, loading } = useCollection<List>(listsQuery);
+
+  const handleDownload = (list: List) => {
+    if(!list.id) return;
+    setDownloadingId(list.id);
+
+    // This is a placeholder for a more complex download logic.
+    // For now, we download a summary.
+    const csvContent = "data:text/csv;charset=utf-8," 
+      + "list_name,total_emails,good,risky,bad\n"
+      + `${list.name},${list.emailCount},${list.good},${list.risky},${list.bad}`;
+      
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `${list.name.replace(/[^a-z0-9_]/gi, '-')}_summary.csv`);
+    document.body.appendChild(link);
+
+    // Simulate a delay for feedback, then click the link
+    setTimeout(() => {
+      link.click();
+      document.body.removeChild(link);
+      setDownloadingId(null);
+    }, 500);
+  };
 
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
@@ -203,9 +228,18 @@ export default function ListsPage() {
                   </div>
                 </CardContent>
                 <CardFooter>
-                  <Button variant="outline" className="w-full">
-                    <Download className="mr-2 h-4 w-4" />
-                    Download
+                  <Button 
+                    variant="outline" 
+                    className="w-full"
+                    onClick={() => handleDownload(list)}
+                    disabled={downloadingId === list.id}
+                  >
+                    {downloadingId === list.id ? (
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    ) : (
+                      <Download className="mr-2 h-4 w-4" />
+                    )}
+                    {downloadingId === list.id ? 'Preparing...' : 'Download'}
                   </Button>
                 </CardFooter>
               </Card>
@@ -257,4 +291,5 @@ export default function ListsPage() {
       </div>
     </main>
   );
-}
+
+    
