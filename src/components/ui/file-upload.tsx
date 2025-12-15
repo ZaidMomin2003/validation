@@ -10,24 +10,20 @@ interface FileUploadProps {
   onChange: (files: File[]) => void;
   accept?: string;
   multiple?: boolean;
-  actionLabel?: string;
 }
 
 export function FileUpload({
   onChange,
   accept = ".csv, .xlsx",
   multiple = false,
-  actionLabel = "Start Verification",
 }: FileUploadProps) {
-  const [files, setFiles] = useState<File[]>([]);
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFiles = useCallback(
     (newFiles: FileList | null) => {
-      if (newFiles) {
+      if (newFiles && newFiles.length > 0) {
         const fileArray = Array.from(newFiles);
-        setFiles(fileArray);
         onChange(fileArray);
       }
     },
@@ -62,20 +58,8 @@ export function FileUpload({
     fileInputRef.current?.click();
   };
 
-  const onRemoveFile = (index: number) => {
-    const newFiles = files.filter((_, i) => i !== index);
-    setFiles(newFiles);
-    onChange(newFiles);
-  };
-
-  const handleReset = () => {
-    setFiles([]);
-    onChange([]);
-  };
-
   return (
     <div className="flex flex-col items-center justify-center w-full h-full p-4">
-      {files.length === 0 ? (
         <div
           onClick={onBrowseClick}
           onDragEnter={onDragEnter}
@@ -107,35 +91,8 @@ export function FileUpload({
             onChange={onFileChange}
           />
         </div>
-      ) : (
-        <div className="w-full">
-            <ul className="space-y-2">
-            {files.map((file, index) => (
-                <li
-                key={index}
-                className="flex items-center justify-between p-2 border rounded-md"
-                >
-                <div className="flex items-center gap-2">
-                    <FileIcon className="w-5 h-5 text-muted-foreground" />
-                    <span className="text-sm font-medium">{file.name}</span>
-                </div>
-                <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => onRemoveFile(index)}
-                    className="w-6 h-6"
-                >
-                    <X className="w-4 h-4" />
-                </Button>
-                </li>
-            ))}
-            </ul>
-            <div className="flex justify-center mt-4 gap-2">
-                <Button variant="outline" onClick={handleReset}>Upload another file</Button>
-                <Button>{actionLabel}</Button>
-            </div>
-        </div>
-      )}
     </div>
   );
 }
+
+    
