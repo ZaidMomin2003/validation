@@ -17,9 +17,10 @@ import {
   CreditCard,
   LifeBuoy,
 } from 'lucide-react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useTheme } from 'next-themes';
+import React from 'react';
 
 import {
   Sidebar,
@@ -64,6 +65,22 @@ export default function DashboardLayout({
   const pathname = usePathname();
   const { user, signOut, loading } = useAuth();
   const { setTheme } = useTheme();
+  const router = useRouter();
+
+  React.useEffect(() => {
+    if (!loading && !user) {
+      router.push('/auth');
+    }
+  }, [loading, user, router]);
+
+  if (loading || !user) {
+    return (
+        <div className="flex min-h-screen items-center justify-center">
+            <Skeleton className="h-20 w-20 rounded-full" />
+        </div>
+    );
+  }
+
 
   const getInitials = (name?: string | null) => {
     if (!name) return 'U';
