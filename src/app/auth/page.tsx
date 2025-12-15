@@ -20,6 +20,86 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import { Eye, EyeOff } from 'lucide-react';
 
+const SignInForm = ({ email, setEmail, password, setPassword, showPassword, setShowPassword, handleEmailPasswordSignIn }: any) => (
+    <div className="space-y-6">
+        <div className="space-y-2">
+            <Label htmlFor="email-signin" className="block text-sm">
+                Email
+            </Label>
+            <Input type="email" required name="email" id="email-signin" value={email} onChange={(e) => setEmail(e.target.value)} />
+        </div>
+
+        <div className="space-y-2">
+            <div className="flex items-center justify-between">
+                <Label htmlFor="pwd-signin" className="text-sm">
+                    Password
+                </Label>
+                <Button asChild variant="link" size="sm">
+                    <Link href="#" className="text-sm">
+                        Forgot your Password ?
+                    </Link>
+                </Button>
+            </div>
+            <div className="relative">
+                <Input type={showPassword ? 'text' : 'password'} required name="pwd" id="pwd-signin" value={password} onChange={(e) => setPassword(e.target.value)} />
+                <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 text-muted-foreground"
+                    onClick={() => setShowPassword(!showPassword)}
+                >
+                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </Button>
+            </div>
+        </div>
+
+        <Button className="w-full" onClick={handleEmailPasswordSignIn}>
+            Sign In
+        </Button>
+    </div>
+);
+
+const SignUpForm = ({ fullName, setFullName, email, setEmail, password, setPassword, showPassword, setShowPassword, handleEmailPasswordSignUp }: any) => (
+    <div className="space-y-6">
+         <div className="space-y-2">
+            <Label htmlFor="name-signup" className="block text-sm">
+                Full Name
+            </Label>
+            <Input type="text" required name="name" id="name-signup" value={fullName} onChange={(e) => setFullName(e.target.value)} />
+        </div>
+        <div className="space-y-2">
+            <Label htmlFor="email-signup" className="block text-sm">
+                Email
+            </Label>
+            <Input type="email" required name="email" id="email-signup" value={email} onChange={(e) => setEmail(e.target.value)} />
+        </div>
+
+        <div className="space-y-2">
+            <Label htmlFor="pwd-signup" className="text-sm">
+                Password
+            </Label>
+            <div className="relative">
+                <Input type={showPassword ? 'text' : 'password'} required name="pwd" id="pwd-signup" value={password} onChange={(e) => setPassword(e.target.value)} />
+                <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 text-muted-foreground"
+                    onClick={() => setShowPassword(!showPassword)}
+                >
+                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </Button>
+            </div>
+        </div>
+
+        <Button className="w-full" onClick={handleEmailPasswordSignUp}>
+            Create Account
+        </Button>
+    </div>
+);
+
+
 export default function LoginPage() {
     const router = useRouter();
     const [activeTab, setActiveTab] = useState('signin');
@@ -86,87 +166,6 @@ export default function LoginPage() {
         }
     };
 
-
-    const SignInForm = () => (
-        <div className="space-y-6">
-            <div className="space-y-2">
-                <Label htmlFor="email-signin" className="block text-sm">
-                    Email
-                </Label>
-                <Input type="email" required name="email" id="email-signin" value={email} onChange={(e) => setEmail(e.target.value)} />
-            </div>
-
-            <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                    <Label htmlFor="pwd-signin" className="text-sm">
-                        Password
-                    </Label>
-                    <Button asChild variant="link" size="sm">
-                        <Link href="#" className="text-sm">
-                            Forgot your Password ?
-                        </Link>
-                    </Button>
-                </div>
-                <div className="relative">
-                    <Input type={showPassword ? 'text' : 'password'} required name="pwd" id="pwd-signin" value={password} onChange={(e) => setPassword(e.target.value)} />
-                    <Button
-                        type="button"
-                        variant="ghost"
-                        size="icon"
-                        className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 text-muted-foreground"
-                        onClick={() => setShowPassword(!showPassword)}
-                    >
-                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                    </Button>
-                </div>
-            </div>
-
-            <Button className="w-full" onClick={handleEmailPasswordSignIn}>
-                Sign In
-            </Button>
-        </div>
-    );
-
-    const SignUpForm = () => (
-        <div className="space-y-6">
-             <div className="space-y-2">
-                <Label htmlFor="name-signup" className="block text-sm">
-                    Full Name
-                </Label>
-                <Input type="text" required name="name" id="name-signup" value={fullName} onChange={(e) => setFullName(e.target.value)} />
-            </div>
-            <div className="space-y-2">
-                <Label htmlFor="email-signup" className="block text-sm">
-                    Email
-                </Label>
-                <Input type="email" required name="email" id="email-signup" value={email} onChange={(e) => setEmail(e.target.value)} />
-            </div>
-
-            <div className="space-y-2">
-                <Label htmlFor="pwd-signup" className="text-sm">
-                    Password
-                </Label>
-                <div className="relative">
-                    <Input type={showPassword ? 'text' : 'password'} required name="pwd" id="pwd-signup" value={password} onChange={(e) => setPassword(e.target.value)} />
-                    <Button
-                        type="button"
-                        variant="ghost"
-                        size="icon"
-                        className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 text-muted-foreground"
-                        onClick={() => setShowPassword(!showPassword)}
-                    >
-                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                    </Button>
-                </div>
-            </div>
-
-            <Button className="w-full" onClick={handleEmailPasswordSignUp}>
-                Create Account
-            </Button>
-        </div>
-    );
-
-
     return (
         <section className="flex min-h-screen bg-zinc-50 px-4 py-16 md:py-32 dark:bg-transparent">
             <div className="m-auto h-fit w-full max-w-sm">
@@ -207,7 +206,15 @@ export default function LoginPage() {
                                 </Button>
                             </div>
                             <hr className="my-4 border-dashed" />
-                            <SignInForm />
+                            <SignInForm 
+                                email={email}
+                                setEmail={setEmail}
+                                password={password}
+                                setPassword={setPassword}
+                                showPassword={showPassword}
+                                setShowPassword={setShowPassword}
+                                handleEmailPasswordSignIn={handleEmailPasswordSignIn}
+                            />
                         </div>
                     </TabsContent>
                      <TabsContent value="signup">
@@ -224,12 +231,21 @@ export default function LoginPage() {
                                 </Button>
                             </div>
                             <hr className="my-4 border-dashed" />
-                           <SignUpForm />
+                           <SignUpForm 
+                                fullName={fullName}
+                                setFullName={setFullName}
+                                email={email}
+                                setEmail={setEmail}
+                                password={password}
+                                setPassword={setPassword}
+                                showPassword={showPassword}
+                                setShowPassword={setShowPassword}
+                                handleEmailPasswordSignUp={handleEmailPasswordSignUp}
+                           />
                         </div>
                     </TabsContent>
                 </Tabs>
             </div>
         </section>
     );
-
-    
+}
