@@ -18,6 +18,7 @@ import {
     sendEmailVerification
 } from 'firebase/auth';
 import { useToast } from '@/hooks/use-toast';
+import { Eye, EyeOff } from 'lucide-react';
 
 export default function LoginPage() {
     const router = useRouter();
@@ -27,6 +28,7 @@ export default function LoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [fullName, setFullName] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleEmailPasswordSignUp = async () => {
         try {
@@ -94,7 +96,7 @@ export default function LoginPage() {
                 <Input type="email" required name="email" id="email-signin" value={email} onChange={(e) => setEmail(e.target.value)} />
             </div>
 
-            <div className="space-y-0.5">
+            <div className="space-y-2">
                 <div className="flex items-center justify-between">
                     <Label htmlFor="pwd-signin" className="text-sm">
                         Password
@@ -105,7 +107,18 @@ export default function LoginPage() {
                         </Link>
                     </Button>
                 </div>
-                <Input type="password" required name="pwd" id="pwd-signin" value={password} onChange={(e) => setPassword(e.target.value)} />
+                <div className="relative">
+                    <Input type={showPassword ? 'text' : 'password'} required name="pwd" id="pwd-signin" value={password} onChange={(e) => setPassword(e.target.value)} />
+                    <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 text-muted-foreground"
+                        onClick={() => setShowPassword(!showPassword)}
+                    >
+                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </Button>
+                </div>
             </div>
 
             <Button className="w-full" onClick={handleEmailPasswordSignIn}>
@@ -133,7 +146,18 @@ export default function LoginPage() {
                 <Label htmlFor="pwd-signup" className="text-sm">
                     Password
                 </Label>
-                <Input type="password" required name="pwd" id="pwd-signup" value={password} onChange={(e) => setPassword(e.target.value)} />
+                <div className="relative">
+                    <Input type={showPassword ? 'text' : 'password'} required name="pwd" id="pwd-signup" value={password} onChange={(e) => setPassword(e.target.value)} />
+                    <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 text-muted-foreground"
+                        onClick={() => setShowPassword(!showPassword)}
+                    >
+                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </Button>
+                </div>
             </div>
 
             <Button className="w-full" onClick={handleEmailPasswordSignUp}>
@@ -151,7 +175,7 @@ export default function LoginPage() {
                         <LogoIcon />
                     </Link>
                     <h1 className="mb-1 mt-4 text-xl font-semibold">
-                        {activeTab === 'signin' ? 'Sign In to Verilist' : 'Create an Account'}
+                        {activeTab === 'signin' ? 'Sign In to Veriflow' : 'Create an Account'}
                     </h1>
                     <p className="text-sm text-muted-foreground">
                         {activeTab === 'signin'
@@ -207,4 +231,5 @@ export default function LoginPage() {
             </div>
         </section>
     );
-}
+
+    
