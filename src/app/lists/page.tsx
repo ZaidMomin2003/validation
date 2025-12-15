@@ -1,4 +1,3 @@
-
 'use client';
 
 import {
@@ -10,7 +9,6 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -25,8 +23,15 @@ import {
   CheckCircle,
   AlertTriangle,
   Sparkles,
+  Loader2,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useAuth } from '@/hooks/useAuth';
+import { useCollection } from '@/firebase/hooks';
+import { collection, query } from 'firebase/firestore';
+import { db } from '@/firebase/firebaseClient';
+import React from 'react';
+import { List } from '@/types';
 
 const stats = [
   {
@@ -59,45 +64,6 @@ const stats = [
   },
 ]
 
-const lists = [
-  {
-    name: 'Instagram Parents....',
-    date: 'Dec 5, 2025, 06:20 PM',
-    progress: 10,
-    emails: 1001,
-    good: 80,
-    risky: 15,
-    bad: 5,
-  },
-  {
-    name: 'Fortune500leads.csv',
-    date: 'Dec 1, 2025, 10:38 PM',
-    progress: 2,
-    emails: 90,
-    good: 90,
-    risky: 8,
-    bad: 2,
-  },
-  {
-    name: 'Book1.xlsx',
-    date: 'Nov 30, 2025, 07:06 PM',
-    progress: 1,
-    emails: 237,
-    good: 50,
-    risky: 30,
-    bad: 20,
-  },
-  {
-    name: 'school #1.xlsx',
-    date: 'Nov 20, 2025, 05:38 PM',
-    progress: 22,
-    emails: 999,
-    good: 95,
-    risky: 5,
-    bad: 0,
-  },
-];
-
 const ProgressMultiple = ({
   values,
   className,
@@ -106,6 +72,8 @@ const ProgressMultiple = ({
   className?: string;
 }) => {
   const total = values.reduce((acc, curr) => acc + curr.value, 0);
+  if (total === 0) return <div className={cn('h-2 w-full rounded-full bg-muted', className)}></div>;
+
 
   return (
     <div className={cn('h-2 w-full rounded-full bg-muted', className)}>
@@ -131,6 +99,15 @@ const ProgressMultiple = ({
 };
 
 export default function ListsPage() {
+  const { user } = useAuth();
+  
+  const listsQuery = React.useMemo(() => {
+    if (!user) return null;
+    return query(collection(db, `users/${user.uid}/lists`));
+  }, [user]);
+
+  const { data: lists, loading } = useCollection<List>(listsQuery);
+
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
       <div className="grid gap-8">
@@ -162,80 +139,103 @@ export default function ListsPage() {
           </div>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-          {lists.map((list, index) => (
-            <Card key={index}>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle className="truncate text-lg font-medium">
-                    {list.name}
-                  </CardTitle>
-                  <Info className="h-4 w-4 text-muted-foreground" />
-                </div>
-                <CardDescription className="flex items-center gap-2 text-xs">
-                  <Clock className="h-3 w-3" />
-                  <span>{list.date}</span>
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <ProgressMultiple
-                  values={[
-                    { value: list.good, color: 'bg-green-500' },
-                    { value: list.risky, color: 'bg-yellow-500' },
-                    { value: list.bad, color: 'bg-red-500' },
-                  ]}
-                />
-                <div className="flex items-center justify-between text-sm">
-                  <Badge
-                    variant="outline"
-                    className={cn(
-                      list.progress > 20
-                        ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300 border-green-200 dark:border-green-800'
-                        : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300 border-yellow-200 dark:border-yellow-800'
-                    )}
-                  >
-                    {list.progress}%
-                  </Badge>
-                  <span className="text-muted-foreground">
-                    {list.emails.toLocaleString()} Emails
-                  </span>
-                </div>
-              </CardContent>
-              <CardFooter>
-                <Button variant="outline" className="w-full">
-                  <Download className="mr-2 h-4 w-4" />
-                  Download
-                </Button>
-              </CardFooter>
-            </Card>
-          ))}
-
-          {Array(4)
-            .fill(0)
-            .map((_, index) => (
-              <Card
-                key={`locked-${index}`}
-                className="relative flex flex-col items-center justify-center bg-muted/50"
-              >
-                <div className="absolute right-4 top-4">
-                  <Lock className="h-5 w-5 text-muted-foreground" />
-                </div>
-                <div className="w-full p-6 space-y-4 animate-pulse">
-                  <div className="h-5 w-3/4 rounded-md bg-muted-foreground/20" />
-                  <div className="h-3 w-1/2 rounded-md bg-muted-foreground/20" />
-                  <div className="h-2 w-full rounded-full bg-muted-foreground/20 mt-4" />
-                  <div className="flex justify-between items-center">
-                    <div className="h-6 w-12 rounded-full bg-muted-foreground/20" />
-                    <div className="h-4 w-20 rounded-md bg-muted-foreground/20" />
+        {loading ? (
+           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+              {Array(4).fill(0).map((_, index) => (
+                 <Card key={index}>
+                    <CardHeader>
+                      <Skeleton className="h-5 w-3/4 rounded-md" />
+                      <Skeleton className="h-3 w-1/2 rounded-md" />
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <Skeleton className="h-2 w-full rounded-full" />
+                      <div className="flex items-center justify-between">
+                        <Skeleton className="h-6 w-12 rounded-full" />
+                        <Skeleton className="h-4 w-20 rounded-md" />
+                      </div>
+                    </CardContent>
+                    <CardFooter>
+                       <Skeleton className="h-10 w-full rounded-md" />
+                    </CardFooter>
+                  </Card>
+              ))}
+           </div>
+        ) : (
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            {lists && lists.map((list) => (
+              <Card key={list.id}>
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="truncate text-lg font-medium">
+                      {list.name}
+                    </CardTitle>
+                    <Info className="h-4 w-4 text-muted-foreground" />
                   </div>
-                  <div className="h-10 w-full rounded-md bg-muted-foreground/20 mt-4" />
-                </div>
+                  <CardDescription className="flex items-center gap-2 text-xs">
+                    <Clock className="h-3 w-3" />
+                    <span>{new Date(list.createdAt).toLocaleString()}</span>
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <ProgressMultiple
+                    values={[
+                      { value: list.good, color: 'bg-green-500' },
+                      { value: list.risky, color: 'bg-yellow-500' },
+                      { value: list.bad, color: 'bg-red-500' },
+                    ]}
+                  />
+                  <div className="flex items-center justify-between text-sm">
+                    <Badge
+                      variant="outline"
+                      className={cn(
+                        list.progress > 20
+                          ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300 border-green-200 dark:border-green-800'
+                          : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300 border-yellow-200 dark:border-yellow-800'
+                      )}
+                    >
+                      {list.progress}%
+                    </Badge>
+                    <span className="text-muted-foreground">
+                      {list.emailCount.toLocaleString()} Emails
+                    </span>
+                  </div>
+                </CardContent>
+                <CardFooter>
+                  <Button variant="outline" className="w-full">
+                    <Download className="mr-2 h-4 w-4" />
+                    Download
+                  </Button>
+                </CardFooter>
               </Card>
             ))}
-        </div>
+
+            {Array(8 - (lists?.length || 0))
+              .fill(0)
+              .map((_, index) => (
+                <Card
+                  key={`locked-${index}`}
+                  className="relative flex flex-col items-center justify-center bg-muted/50"
+                >
+                  <div className="absolute right-4 top-4">
+                    <Lock className="h-5 w-5 text-muted-foreground" />
+                  </div>
+                  <div className="w-full p-6 space-y-4 animate-pulse">
+                    <div className="h-5 w-3/4 rounded-md bg-muted-foreground/20" />
+                    <div className="h-3 w-1/2 rounded-md bg-muted-foreground/20" />
+                    <div className="h-2 w-full rounded-full bg-muted-foreground/20 mt-4" />
+                    <div className="flex justify-between items-center">
+                      <div className="h-6 w-12 rounded-full bg-muted-foreground/20" />
+                      <div className="h-4 w-20 rounded-md bg-muted-foreground/20" />
+                    </div>
+                    <div className="h-10 w-full rounded-md bg-muted-foreground/20 mt-4" />
+                  </div>
+                </Card>
+              ))}
+          </div>
+        )}
 
         <div className="flex items-center justify-between text-sm text-muted-foreground">
-          <p>Showing 1 to {lists.length} of {lists.length} results</p>
+          <p>Showing 1 to {lists?.length || 0} of {lists?.length || 0} results</p>
           <div className="flex items-center gap-2">
             <Button variant="outline" size="icon" className="h-8 w-8" disabled>
               <ChevronLeft className="h-4 w-4" />

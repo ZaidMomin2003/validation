@@ -12,6 +12,10 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { useToast } from '@/hooks/use-toast';
 import * as XLSX from 'xlsx';
 import { cn } from '@/lib/utils';
+import { useAuth } from '@/hooks/useAuth';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { db } from '@/firebase/firebaseClient';
+import { useRouter } from 'next/navigation';
 
 const PREVIEW_ROW_COUNT = 8;
 const PREVIEW_COLUMN_COUNT = 4;
@@ -20,6 +24,7 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 interface TableData {
     headers: string[];
     rows: string[][];
+    fileName: string;
 }
 
 interface PreviewTableData {
@@ -28,10 +33,13 @@ interface PreviewTableData {
 }
 
 export default function BulkValidatePage() {
+    const { user } = useAuth();
+    const router = useRouter();
     const [files, setFiles] = React.useState<File[]>([]);
     const [tableData, setTableData] = React.useState<TableData | null>(null);
     const [emailColumnIndex, setEmailColumnIndex] = React.useState<number | null>(null);
     const [isLoading, setIsLoading] = React.useState(false);
+    const [isProcessing, setIsProcessing] = React.useState(false);
     const [activeTab, setActiveTab] = React.useState('clean');
     const [previewData, setPreviewData] = React.useState<PreviewTableData | null>(null);
     const { toast } = useToast();
@@ -57,7 +65,7 @@ export default function BulkValidatePage() {
                     headers.map((_, index) => row[index] ? String(row[index]) : '')
                 );
                 
-                const fullTableData = { headers, rows };
+                const fullTableData = { headers, rows, fileName: file.name };
                 setTableData(fullTableData);
 
                 let bestCandidate = -1;
@@ -129,6 +137,40 @@ export default function BulkValidatePage() {
         setPreviewData(null);
         setEmailColumnIndex(null);
         setIsLoading(false);
+    };
+
+    const handleAction = async () => {
+        if (!user || !tableData) return;
+        
+        setIsProcessing(true);
+
+        const listData = {
+            name: tableData.fileName,
+            createdAt: Date.now(),
+            progress: 0,
+            emailCount: tableData.rows.length,
+            good: 0,
+            risky: 0,
+            bad: 0,
+            userId: user.uid,
+        };
+
+        try {
+            await addDoc(collection(db, `users/${user.uid}/lists`), listData);
+            toast({
+                title: 'List created!',
+                description: `${tableData.fileName} has been added to your lists.`,
+            });
+            router.push('/lists');
+        } catch (error: any) {
+            toast({
+                variant: 'destructive',
+                title: 'Error creating list',
+                description: error.message || 'Could not save the list to your account.',
+            });
+        } finally {
+            setIsProcessing(false);
+        }
     };
 
     const renderTable = () => {
@@ -219,7 +261,10 @@ export default function BulkValidatePage() {
                 <div className="border-t p-6 flex items-center justify-end">
                     <div className="flex items-center gap-2">
                         <Button variant="outline" onClick={handleReset}>Reset</Button>
-                        <Button>{activeTab === 'clean' ? 'Clean' : 'Validate'}</Button>
+                        <Button onClick={handleAction} disabled={isProcessing}>
+                            {isProcessing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                            {activeTab === 'clean' ? 'Clean' : 'Validate'}
+                        </Button>
                     </div>
                 </div>
             </Card>
@@ -245,7 +290,7 @@ export default function BulkValidatePage() {
                 <TabsContent value="validate">
                 <Card>
                     <CardContent className="w-full max-w-4xl mx-auto p-0">
-                        <FileUpload onChange={handleFileUpload} accept=".csv, .xlsx" actionLabel={activeTab === 'clean' ? 'Start Cleaning' : 'Start Validation'}/>
+                        <FileUpload onChange={handleFileUpload} accept=".csv, .xlsx" actionLabel={active-tab === 'clean' ? 'Start Cleaning' : 'Start Validation'}/>
                     </CardContent>
                 </Card>
                 </TabsContent>
@@ -334,5 +379,3 @@ export default function BulkValidatePage() {
   </main>
   );
 }
-
-    

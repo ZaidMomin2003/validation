@@ -19,6 +19,7 @@ export const AuthContext = createContext<AuthContextType>({
   signOut: () => {},
 });
 
+// This is a temporary AuthProvider that will be replaced by the FirebaseProvider
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
@@ -37,8 +38,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           };
           setUser(formattedUser);
         } else {
-          // If the user's email is not verified, we sign them out.
-          // You could also redirect them to a "please verify your email" page.
           firebaseSignOut(auth);
           setUser(null);
         }
