@@ -290,7 +290,7 @@ export default function BulkValidatePage() {
                 <TabsContent value="validate">
                 <Card>
                     <CardContent className="w-full max-w-4xl mx-auto p-0">
-                        <FileUpload onChange={handleFileUpload} accept=".csv, .xlsx" actionLabel={active-tab === 'clean' ? 'Start Cleaning' : 'Start Validation'}/>
+                        <FileUpload onChange={handleFileUpload} accept=".csv, .xlsx" actionLabel={activeTab === 'clean' ? 'Start Cleaning' : 'Start Validation'}/>
                     </CardContent>
                 </Card>
                 </TabsContent>
