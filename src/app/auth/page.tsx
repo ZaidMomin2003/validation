@@ -36,7 +36,7 @@ const SignInForm = ({ email, setEmail, password, setPassword, showPassword, setS
                     Password
                 </Label>
                 <Button asChild variant="link" size="sm">
-                    <Link href="#" className="text-sm">
+                    <Link href="/auth/forgot-password" className="text-sm">
                         Forgot your Password ?
                     </Link>
                 </Button>
