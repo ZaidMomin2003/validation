@@ -17,11 +17,13 @@ export default function HeroSection() {
 
         <div className="z-10 mx-auto max-w-screen-xl gap-12 px-4 py-28 text-gray-600 md:px-8">
           <div className="mx-auto max-w-3xl space-y-5 text-center leading-0 lg:leading-5">
-            <h1 className="group mx-auto inline-flex cursor-pointer items-center justify-center rounded-full bg-gradient-to-r from-blue-500/80 to-purple-500/80 px-4 py-2 text-sm font-medium text-white shadow-lg shadow-black/20 ring-1 ring-white/10 ring-inset backdrop-blur-md">
-              <Sparkles className="mr-2 h-4 w-4" />
-              Clean lists, better deliverability
-              <ArrowRight className="ml-2 inline h-4 w-4 duration-300 group-hover:translate-x-1" />
-            </h1>
+            <a href="#" className="group inline-flex items-center justify-center gap-x-2 rounded-full border border-white/20 bg-white/5 px-2.5 py-1.5 text-sm text-white/80 transition-colors hover:bg-white/10">
+              <span className="mr-1.5 inline-block rounded-full bg-emerald-400/30 px-2 py-0.5 text-xs font-medium text-emerald-300 ring-1 ring-inset ring-emerald-400/40">
+                NEW
+              </span>
+              <span className="text-white">Clean lists, better deliverability</span>
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </a>
 
             <h2 className="font-geist mx-auto bg-[linear-gradient(180deg,_#FFF_0%,_rgba(255,_255,_255,_0.00)_202.08%)] bg-clip-text text-4xl tracking-tighter text-transparent md:text-6xl">
               Never send to a bad email again.
