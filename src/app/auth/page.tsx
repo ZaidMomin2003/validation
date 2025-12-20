@@ -1,13 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { LogoIcon } from '@/components/logo-icon';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useAuthContext } from '@/firebase/provider';
 import { 
     signInWithEmailAndPassword, 
     GoogleAuthProvider, 
@@ -15,7 +12,8 @@ import {
 } from 'firebase/auth';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
-import Logo from '@/components/logo';
+import { useAuthContext } from '@/firebase/provider';
+import { LogoIcon } from '@/components/logo-icon';
 
 export default function AuthPage() {
     const router = useRouter();
@@ -78,20 +76,15 @@ export default function AuthPage() {
     };
 
     return (
-        <div className="flex min-h-screen w-full flex-col bg-black text-white">
-            <header className="flex h-14 shrink-0 items-center justify-between px-4">
-                <div></div>
-                <Button variant="ghost" size="sm" asChild>
-                    <Link href="/">Skip</Link>
-                </Button>
-            </header>
-
+        <div className="flex min-h-screen w-full flex-col bg-background text-foreground">
             <main className="flex flex-1 flex-col items-center justify-center px-6 pb-20">
                 <div className="w-full max-w-sm">
                     <div className="text-center">
-                        <h1 className='text-3xl font-medium'>Verilist</h1>
+                         <div className="inline-block">
+                            <LogoIcon className="h-16 w-16" />
+                        </div>
                         <h2 className="mt-8 text-2xl font-semibold">Welcome back</h2>
-                        <p className="mt-2 text-neutral-400">Let's get you in to Verilist</p>
+                        <p className="mt-2 text-muted-foreground">Let's get you in to Verilist</p>
                     </div>
 
                     <form onSubmit={handleEmailPasswordSignIn} className="mt-10 space-y-5">
@@ -101,7 +94,7 @@ export default function AuthPage() {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
-                            className="h-12 rounded-xl border-neutral-700 bg-neutral-900 px-4 text-base placeholder:text-neutral-500"
+                            className="h-12 rounded-xl border-border bg-background px-4 text-base placeholder:text-muted-foreground"
                         />
                         <Input 
                             type="password" 
@@ -109,17 +102,17 @@ export default function AuthPage() {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
-                            className="h-12 rounded-xl border-neutral-700 bg-neutral-900 px-4 text-base placeholder:text-neutral-500"
+                            className="h-12 rounded-xl border-border bg-background px-4 text-base placeholder:text-muted-foreground"
                         />
                         <div className="pt-1 text-center">
-                            <Button variant="link" size="sm" asChild className="p-0 text-white hover:text-neutral-300">
+                            <Button variant="link" size="sm" asChild className="p-0 text-foreground hover:text-foreground/80">
                                 <Link href="/auth/forgot-password">
                                     Forgot password?
                                 </Link>
                             </Button>
                         </div>
                         
-                        <Button type="submit" className="h-12 w-full rounded-full bg-white text-black font-semibold hover:bg-neutral-200 active:bg-neutral-300" disabled={isLoading}>
+                        <Button type="submit" className="h-12 w-full rounded-full bg-primary text-primary-foreground font-semibold hover:bg-primary/90 active:bg-primary/80" disabled={isLoading}>
                              {isSigningIn && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                             Sign in
                         </Button>
@@ -127,17 +120,17 @@ export default function AuthPage() {
                     
                     <div className="relative my-6">
                         <div className="absolute inset-0 flex items-center">
-                            <span className="w-full border-t border-neutral-700" />
+                            <span className="w-full border-t border-border" />
                         </div>
                         <div className="relative flex justify-center text-xs">
-                            <span className="bg-black px-2 text-neutral-500">
+                            <span className="bg-background px-2 text-muted-foreground">
                             or
                             </span>
                         </div>
                     </div>
 
                     <div className="space-y-4">
-                        <Button onClick={handleGoogleSignIn} className="h-12 w-full rounded-full bg-neutral-900 border border-neutral-700 font-semibold text-white hover:bg-neutral-800" disabled={isLoading}>
+                        <Button onClick={handleGoogleSignIn} variant="outline" className="h-12 w-full rounded-full font-semibold" disabled={isLoading}>
                             {isGoogleLoading ? (
                                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                             ) : (
@@ -153,8 +146,8 @@ export default function AuthPage() {
                     </div>
 
                     <div className="mt-12 text-center">
-                        <Button variant="link" size="sm" asChild className="p-0 text-white hover:text-neutral-300">
-                             <Link href="/auth">
+                        <Button variant="link" size="sm" asChild className="p-0 text-foreground hover:text-foreground/80">
+                             <Link href="/auth#">
                                 Don't have an account?
                             </Link>
                         </Button>
