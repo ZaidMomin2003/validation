@@ -18,7 +18,7 @@ export default function HeroSection() {
         <div className="z-10 mx-auto max-w-screen-xl gap-12 px-4 py-28 text-gray-600 md:px-8">
           <div className="mx-auto max-w-3xl space-y-5 text-center leading-0 lg:leading-5">
             <a href="#" className="group inline-flex items-center justify-center gap-x-2 rounded-full border border-white/20 bg-white/5 px-2.5 py-1.5 text-sm text-white/80 transition-colors hover:bg-white/10">
-              <span className="mr-1.5 inline-block rounded-full bg-emerald-400/30 px-2 py-0.5 text-xs font-medium text-emerald-300 ring-1 ring-inset ring-emerald-400/40">
+              <span className="mr-1.5 inline-block rounded-full bg-red-500/30 px-2 py-0.5 text-xs font-medium text-red-300 ring-1 ring-inset ring-red-500/40">
                 NEW
               </span>
               <span className="text-white">Clean lists, better deliverability</span>
