@@ -4,8 +4,11 @@ import { Check } from 'lucide-react'
 import Link from 'next/link'
 import { Cover } from '@/components/ui/cover';
 import Image from 'next/image';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React from 'react';
 
 export default function PricingSection() {
+    const [plan, setPlan] = React.useState('lifetime');
     return (
         <div className="relative py-16 md:py-32">
             <div className="mx-auto max-w-5xl px-6">
@@ -16,11 +19,23 @@ export default function PricingSection() {
                     <div className="bg-card relative rounded-3xl border shadow-2xl shadow-zinc-950/5">
                         <div className="grid items-center gap-12 divide-y p-12 md:grid-cols-2 md:divide-x md:divide-y-0">
                             <div className="pb-12 text-center md:pb-0 md:pr-12">
-                                <h3 className="text-2xl font-semibold">Lifetime Plan</h3>
-                                <p className="mt-2 text-lg">For power users and businesses</p>
-                                <span className="mb-6 mt-12 inline-block text-6xl font-bold">
-                                    <span className="text-4xl">$</span>49
-                                </span>
+
+                                <Tabs defaultValue="lifetime" onValueChange={setPlan} className="w-full max-w-xs mx-auto">
+                                    <TabsList className="grid w-full grid-cols-2">
+                                        <TabsTrigger value="monthly">Monthly</TabsTrigger>
+                                        <TabsTrigger value="lifetime">Lifetime</TabsTrigger>
+                                    </TabsList>
+                                </Tabs>
+                                
+                                <div className='mt-8'>
+                                    <h3 className="text-2xl font-semibold">{plan === 'lifetime' ? 'Lifetime Plan' : 'Pro Plan'}</h3>
+                                    <p className="mt-2 text-lg">{plan === 'lifetime' ? 'For power users and businesses' : 'For continuous validation needs'}</p>
+                                    <span className="mb-6 mt-4 inline-block text-6xl font-bold">
+                                        <span className="text-4xl">$</span>{plan === 'lifetime' ? '49' : '9'}
+                                        {plan === 'monthly' && <span className="text-lg font-normal text-muted-foreground">/month</span>}
+                                    </span>
+                                </div>
+
                                  <div className="flex justify-center">
                                     <Button
                                         asChild
@@ -28,7 +43,7 @@ export default function PricingSection() {
                                         <Link href="/pricing">Get started</Link>
                                     </Button>
                                 </div>
-                                 <p className="text-muted-foreground mt-12 text-sm">Includes : Unlimited validations, unlimited list cleaning, and lifetime updates.</p>
+                                 <p className="text-muted-foreground mt-12 text-sm">{plan === 'lifetime' ? 'Includes: Unlimited validations, unlimited list cleaning, and lifetime updates.' : 'Includes: All pro features, billed monthly. Cancel anytime.'}</p>
                             </div>
                             <div className="relative pt-12 md:pt-0 md:pl-12">
                                 <ul
