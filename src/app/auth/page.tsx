@@ -109,7 +109,7 @@ export default function AuthPage() {
             <main className="flex flex-1 flex-col items-center justify-center px-6 pb-20">
                 <div className="w-full max-w-sm">
                     <div className="text-center mb-8">
-                        <LogoIcon className="h-16 w-16 mx-auto" />
+                        <LogoIcon containerSize={80} iconSize={48} />
                     </div>
                     <div className="text-center">
                         <h2 className="text-2xl font-semibold">
