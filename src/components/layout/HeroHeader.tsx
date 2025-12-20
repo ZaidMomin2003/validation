@@ -25,7 +25,7 @@ export const HeroHeader = () => {
         <header className="fixed z-20 w-full">
              <div className="bg-primary text-primary-foreground">
                 <Link href="/pricing" className="group">
-                    <div className="mx-auto flex max-w-7xl items-center justify-center px-4 py-2.5 text-sm">
+                    <div className="mx-auto flex max-w-7xl items-center justify-center px-4 py-1 text-sm">
                         <PartyPopper className="mr-2 h-4 w-4" />
                         <span className="font-semibold md:hidden">$49 for lifetime. Limited time offer.</span>
                         <span className="hidden font-semibold md:inline">$49 for lifetime. Limited time offer.</span>
