@@ -10,7 +10,7 @@ import Footer from '@/components/layout/footer';
 
 export default function Home() {
   return (
-    <div className="bg-neutral-950">
+    <div className="bg-neutral-950 pt-[42px]">
       <HeroHeader />
       <HeroSection />
       <LinkPreviewDemo />

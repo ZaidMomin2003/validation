@@ -6,6 +6,7 @@ import React from 'react'
 import { cn } from '@/lib/utils'
 import { useScroll } from 'framer-motion'
 import { useAuth } from '@/hooks/useAuth'
+import { ArrowRight, PartyPopper } from 'lucide-react'
 
 export const HeroHeader = () => {
     const [scrolled, setScrolled] = React.useState(false)
@@ -21,9 +22,19 @@ export const HeroHeader = () => {
     }, [scrollYProgress])
 
     return (
-        <header>
+        <header className="fixed z-20 w-full">
+             <div className="bg-primary text-primary-foreground">
+                <Link href="/pricing" className="group">
+                    <div className="mx-auto flex max-w-7xl items-center justify-center px-4 py-2.5 text-sm">
+                        <PartyPopper className="mr-2 h-4 w-4" />
+                        <span className="font-semibold md:hidden">$49 for lifetime. Limited time offer.</span>
+                        <span className="hidden font-semibold md:inline">$49 for lifetime. Limited time offer.</span>
+                        <ArrowRight className="ml-2 h-4 w-4 transform transition-transform duration-300 group-hover:translate-x-1" />
+                    </div>
+                </Link>
+            </div>
             <nav
-                className={cn('fixed z-20 w-full border-b transition-colors duration-150', scrolled ? 'border-border bg-background/50 backdrop-blur-3xl' : 'border-transparent')}>
+                className={cn('w-full border-b transition-colors duration-150', scrolled ? 'border-border bg-background/50 backdrop-blur-3xl' : 'border-transparent')}>
                 <div className="mx-auto max-w-5xl px-6 transition-all duration-300">
                     <div className="relative flex h-16 items-center justify-between">
                         <div className="flex-1 flex items-center justify-start">
