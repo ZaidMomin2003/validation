@@ -152,7 +152,7 @@ export default function LoginPage() {
                     await auth.signOut();
                 }
             }
-        } catch (error: any) => {
+        } catch (error: any) {
             toast({
                 variant: 'destructive',
                 title: 'Sign In Failed',
@@ -167,7 +167,7 @@ export default function LoginPage() {
         try {
             await signInWithPopup(auth, provider);
             router.push('/bulk-validate');
-        } catch (error: any) => {
+        } catch (error: any) {
             toast({
                 variant: 'destructive',
                 title: 'Google Sign-In Failed',
@@ -259,5 +259,7 @@ export default function LoginPage() {
         </section>
     );
 }
+
+    
 
     
