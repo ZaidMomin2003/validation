@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Check } from 'lucide-react'
 import Link from 'next/link'
 import { Cover } from '@/components/ui/cover';
+import Image from 'next/image';
 
 export default function PricingSection() {
     return (
@@ -42,36 +43,22 @@ export default function PricingSection() {
                                         </li>
                                     ))}
                                 </ul>
-                                <p className="text-muted-foreground mt-6 text-sm">Stop worrying about credits. Get unlimited access to all features, forever. Companies using our platform include:</p>
-                                <div className="mt-12 flex flex-wrap items-center justify-between gap-6">
-                                    <img
-                                        className="h-5 w-fit dark:invert"
-                                        src="https://html.tailus.io/blocks/customers/nvidia.svg"
-                                        alt="Nvidia Logo"
-                                        height="20"
-                                        width="100"
-                                    />
-                                    <img
-                                        className="h-4 w-fit dark:invert"
-                                        src="https://html.tailus.io/blocks/customers/column.svg"
-                                        alt="Column Logo"
-                                        height="16"
-                                        width="100"
-                                    />
-                                    <img
-                                        className="h-4 w-fit dark:invert"
-                                        src="https://html.tailus.io/blocks/customers/github.svg"
-                                        alt="GitHub Logo"
-                                        height="16"
-                                        width="100"
-                                    />
-                                    <img
-                                        className="h-5 w-fit dark:invert"
-                                        src="https://html.tailus.io/blocks/customers/nike.svg"
-                                        alt="Nike Logo"
-                                        height="20"
-                                        width="100"
-                                    />
+                                <p className="text-muted-foreground mt-6 text-sm">Stop worrying about credits. Get unlimited access to all features, forever.</p>
+                                <div className="mt-12 space-y-4">
+                                    <div className="flex items-center gap-4">
+                                        <Image
+                                            src="https://picsum.photos/seed/testimonial/100/100"
+                                            alt="User testimonial"
+                                            width={48}
+                                            height={48}
+                                            className="h-12 w-12 rounded-full object-cover"
+                                            data-ai-hint="person photo"
+                                        />
+                                        <div>
+                                            <p className="font-semibold text-foreground">"An absolute game-changer. The lifetime deal is unbeatable for the value you get. Cleaned my lists in minutes!"</p>
+                                            <p className="text-sm text-muted-foreground">- Sarah K., Marketing Manager</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
