@@ -109,10 +109,7 @@ export default function AuthPage() {
             <main className="flex flex-1 flex-col items-center justify-center px-6 pb-20">
                 <div className="w-full max-w-sm">
                     <div className="text-center">
-                         <div className="inline-block">
-                            <LogoIcon className="h-16 w-16" />
-                        </div>
-                        <h2 className="mt-8 text-2xl font-semibold">
+                        <h2 className="text-2xl font-semibold">
                             {isSignUp ? 'Create an account' : 'Welcome back'}
                         </h2>
                         <p className="mt-2 text-muted-foreground">
