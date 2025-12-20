@@ -1,10 +1,11 @@
+
 "use client";
 import { cn } from "@/lib/utils";
 import React from "react";
 import { BentoGrid, BentoGridItem } from "../ui/bento-grid";
 import {
   IconMailbox,
-  IconDns,
+  IconDatabase,
   IconFilter,
   IconReport,
   IconUsers,
@@ -322,7 +323,7 @@ const items = [
     ),
     header: <SkeletonTwo />,
     className: "md:col-span-1",
-    icon: <IconDns className="h-4 w-4 text-neutral-500" />,
+    icon: <IconDatabase className="h-4 w-4 text-neutral-500" />,
   },
   {
     title: "Disposable Email Blocker",
