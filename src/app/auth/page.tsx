@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -7,6 +8,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { 
     signInWithEmailAndPassword, 
+    createUserWithEmailAndPassword,
+    sendEmailVerification,
     GoogleAuthProvider, 
     signInWithPopup
 } from 'firebase/auth';
@@ -20,32 +23,24 @@ export default function AuthPage() {
     const auth = useAuthContext();
     const { toast } = useToast();
 
+    const [isSignUp, setIsSignUp] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     
     const [isSigningIn, setIsSigningIn] = useState(false);
+    const [isSigningUp, setIsSigningUp] = useState(false);
     const [isGoogleLoading, setIsGoogleLoading] = useState(false);
     
-    const isLoading = isSigningIn || isGoogleLoading;
+    const isLoading = isSigningIn || isSigningUp || isGoogleLoading;
 
     const handleEmailPasswordSignIn = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!auth) return;
         setIsSigningIn(true);
         try {
-            const userCredential = await signInWithEmailAndPassword(auth, email, password);
-            if (userCredential.user.emailVerified) {
-                router.push('/bulk-validate');
-            } else {
-                toast({
-                    variant: 'destructive',
-                    title: 'Email Not Verified',
-                    description: 'Please verify your email before signing in.',
-                });
-                if (auth) {
-                    await auth.signOut();
-                }
-            }
+            await signInWithEmailAndPassword(auth, email, password);
+            router.push('/bulk-validate');
         } catch (error: any) {
             toast({
                 variant: 'destructive',
@@ -56,6 +51,40 @@ export default function AuthPage() {
             setIsSigningIn(false);
         }
     };
+
+    const handleEmailPasswordSignUp = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!auth) return;
+        if (password !== confirmPassword) {
+            toast({
+                variant: 'destructive',
+                title: 'Passwords do not match',
+                description: 'Please make sure your passwords match.',
+            });
+            return;
+        }
+        setIsSigningUp(true);
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            await sendEmailVerification(userCredential.user);
+            toast({
+                title: 'Verification Email Sent',
+                description: 'A verification link has been sent to your email. Please verify before signing in.',
+            });
+            setIsSignUp(false); // Switch to sign-in view after successful sign-up
+            setEmail('');
+            setPassword('');
+            setConfirmPassword('');
+        } catch (error: any) {
+             toast({
+                variant: 'destructive',
+                title: 'Sign Up Failed',
+                description: error.message,
+            });
+        } finally {
+            setIsSigningUp(false);
+        }
+    }
 
     const handleGoogleSignIn = async () => {
         if (!auth) return;
@@ -83,11 +112,15 @@ export default function AuthPage() {
                          <div className="inline-block">
                             <LogoIcon className="h-16 w-16" />
                         </div>
-                        <h2 className="mt-8 text-2xl font-semibold">Welcome back</h2>
-                        <p className="mt-2 text-muted-foreground">Let's get you in to Verilist</p>
+                        <h2 className="mt-8 text-2xl font-semibold">
+                            {isSignUp ? 'Create an account' : 'Welcome back'}
+                        </h2>
+                        <p className="mt-2 text-muted-foreground">
+                            {isSignUp ? "Let's get you started with Verilist" : "Let's get you in to Verilist"}
+                        </p>
                     </div>
 
-                    <form onSubmit={handleEmailPasswordSignIn} className="mt-10 space-y-5">
+                    <form onSubmit={isSignUp ? handleEmailPasswordSignUp : handleEmailPasswordSignIn} className="mt-10 space-y-5">
                         <Input 
                             type="email" 
                             placeholder="Your Email" 
@@ -104,17 +137,30 @@ export default function AuthPage() {
                             required
                             className="h-12 rounded-xl border-border bg-background px-4 text-base placeholder:text-muted-foreground"
                         />
-                        <div className="pt-1 text-center">
-                            <Button variant="link" size="sm" asChild className="p-0 text-foreground hover:text-foreground/80">
-                                <Link href="/auth/forgot-password">
-                                    Forgot password?
-                                </Link>
-                            </Button>
-                        </div>
+                        {isSignUp && (
+                             <Input 
+                                type="password" 
+                                placeholder="Confirm Password" 
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                required
+                                className="h-12 rounded-xl border-border bg-background px-4 text-base placeholder:text-muted-foreground"
+                            />
+                        )}
+                        
+                        {!isSignUp && (
+                             <div className="pt-1 text-center">
+                                <Button variant="link" size="sm" asChild className="p-0 text-foreground hover:text-foreground/80">
+                                    <Link href="/auth/forgot-password">
+                                        Forgot password?
+                                    </Link>
+                                </Button>
+                            </div>
+                        )}
                         
                         <Button type="submit" className="h-12 w-full rounded-full bg-primary text-primary-foreground font-semibold hover:bg-primary/90 active:bg-primary/80" disabled={isLoading}>
-                             {isSigningIn && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                            Sign in
+                             {(isSigningIn || isSigningUp) && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                             {isSignUp ? 'Sign up' : 'Sign in'}
                         </Button>
                     </form>
                     
@@ -146,10 +192,8 @@ export default function AuthPage() {
                     </div>
 
                     <div className="mt-12 text-center">
-                        <Button variant="link" size="sm" asChild className="p-0 text-foreground hover:text-foreground/80">
-                             <Link href="/auth#">
-                                Don't have an account?
-                            </Link>
+                        <Button variant="link" size="sm" onClick={() => setIsSignUp(!isSignUp)} className="p-0 text-foreground hover:text-foreground/80">
+                             {isSignUp ? 'Already have an account? Sign in' : "Don't have an account? Sign up"}
                         </Button>
                     </div>
                 </div>
