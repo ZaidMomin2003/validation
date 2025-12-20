@@ -9,7 +9,7 @@ export default function HowItWorksSection() {
       <div className="mx-auto max-w-5xl px-4 md:px-6">
         <div className="mx-auto max-w-xl text-center">
           <h2 className="text-balance text-3xl font-bold md:text-4xl lg:text-5xl">
-            How It Works
+            Get Started in Seconds
           </h2>
           <p className="text-muted-foreground mt-4 text-balance">
             Verify your email lists in three simple steps.
@@ -22,7 +22,7 @@ export default function HowItWorksSection() {
                 <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
                   <FileUp className="h-6 w-6 text-primary" />
                 </div>
-                <CardTitle className="text-white">1. Upload the List</CardTitle>
+                <CardTitle className="text-white">1. Upload Your List</CardTitle>
               </div>
             </CardHeader>
             <CardContent>
@@ -38,13 +38,12 @@ export default function HowItWorksSection() {
                 <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
                   <MousePointerClick className="h-6 w-6 text-primary" />
                 </div>
-                <CardTitle className="text-white">2. Choose Action</CardTitle>
+                <CardTitle className="text-white">2. Start Validation</CardTitle>
               </div>
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground">
-                Select whether you want to clean your list of duplicates or
-                validate the email addresses.
+                Confirm the email column and let our engine perform deep checks, from syntax to server verification.
               </p>
             </CardContent>
           </Card>
@@ -54,13 +53,12 @@ export default function HowItWorksSection() {
                 <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
                   <Download className="h-6 w-6 text-primary" />
                 </div>
-                <CardTitle className="text-white">3. Download the List</CardTitle>
+                <CardTitle className="text-white">3. Download Results</CardTitle>
               </div>
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground">
-                Once the process is complete, download your clean and
-                validated email list.
+                Once processing is complete, download your clean list with detailed status for every email.
               </p>
             </CardContent>
           </Card>

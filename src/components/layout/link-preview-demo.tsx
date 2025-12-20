@@ -6,24 +6,24 @@ export function LinkPreviewDemo() {
   return (
     <div className="flex justify-center items-center h-[20rem] flex-col px-4">
       <div className="text-neutral-500 dark:text-neutral-400 text-xl md:text-3xl max-w-3xl mx-auto mb-10">
-        <LinkPreview url="https://tailwindcss.com" className="font-bold">
-          Tailwind CSS
+        <LinkPreview url="https://nextjs.org" className="font-bold">
+          Next.js
         </LinkPreview>{" "}
         and{" "}
-        <LinkPreview url="https://framer.com/motion" className="font-bold">
-          Framer Motion
+        <LinkPreview url="https://firebase.google.com" className="font-bold">
+          Firebase
         </LinkPreview>{" "}
-        are a great way to build modern websites.
+        power our fast and reliable platform.
       </div>
       <div className="text-neutral-500 dark:text-neutral-400 text-xl md:text-3xl max-w-3xl mx-auto">
-        Visit{" "}
+        Styled with{" "}
         <LinkPreview
-          url="https://ui.aceternity.com"
+          url="https://ui.shadcn.com/"
           className="font-bold bg-clip-text text-transparent bg-gradient-to-br from-purple-500 to-pink-500"
         >
-          Aceternity UI
+          ShadCN UI
         </LinkPreview>{" "}
-        for amazing Tailwind and Framer Motion components.
+        for a clean and modern user experience.
       </div>
     </div>
   );

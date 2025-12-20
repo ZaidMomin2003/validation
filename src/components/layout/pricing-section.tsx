@@ -15,25 +15,25 @@ export default function PricingSection() {
                     <div className="bg-card relative rounded-3xl border shadow-2xl shadow-zinc-950/5">
                         <div className="grid items-center gap-12 divide-y p-12 md:grid-cols-2 md:divide-x md:divide-y-0">
                             <div className="pb-12 text-center md:pb-0 md:pr-12">
-                                <h3 className="text-2xl font-semibold">Suite Enterprise</h3>
-                                <p className="mt-2 text-lg">For your company of any size</p>
+                                <h3 className="text-2xl font-semibold">Lifetime Plan</h3>
+                                <p className="mt-2 text-lg">For power users and businesses</p>
                                 <span className="mb-6 mt-12 inline-block text-6xl font-bold">
-                                    <span className="text-4xl">$</span>234
+                                    <span className="text-4xl">$</span>49
                                 </span>
                                  <div className="flex justify-center">
                                     <Button
                                         asChild
                                         size="lg">
-                                        <Link href="#">Get started</Link>
+                                        <Link href="/pricing">Get started</Link>
                                     </Button>
                                 </div>
-                                 <p className="text-muted-foreground mt-12 text-sm">Includes : Security, Unlimited Storage, Payment, Search engine, and all features</p>
+                                 <p className="text-muted-foreground mt-12 text-sm">Includes : Unlimited validations, unlimited list cleaning, and lifetime updates.</p>
                             </div>
                             <div className="relative pt-12 md:pt-0 md:pl-12">
                                 <ul
                                     role="list"
                                     className="space-y-4">
-                                    {['First premium advantage', 'Second advantage weekly', 'Third advantage donate to project', 'Fourth, access to all components weekly'].map((item, index) => (
+                                    {['Unlimited Email Verifications', 'Unlimited List Cleaning', 'Bulk CSV Processing', 'Priority Support'].map((item, index) => (
                                         <li
                                             key={index}
                                             className="flex items-center gap-2">
@@ -42,7 +42,7 @@ export default function PricingSection() {
                                         </li>
                                     ))}
                                 </ul>
-                                <p className="text-muted-foreground mt-6 text-sm">Team can be any size, and you can add or switch members as needed. Companies using our platform include:</p>
+                                <p className="text-muted-foreground mt-6 text-sm">Stop worrying about credits. Get unlimited access to all features, forever. Companies using our platform include:</p>
                                 <div className="mt-12 flex flex-wrap items-center justify-between gap-6">
                                     <img
                                         className="h-5 w-fit dark:invert"

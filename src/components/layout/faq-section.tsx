@@ -12,33 +12,33 @@ export function FaqSection() {
   const faqItems = [
     {
       id: 'item-1',
-      question: 'How long does shipping take?',
+      question: 'How accurate is the email validation?',
       answer:
-        'Standard shipping takes 3-5 business days, depending on your location. Express shipping options are available at checkout for 1-2 business day delivery.',
+        'Our service uses a multi-layered approach, including syntax checks, domain/MX record verification, and disposable email detection. This ensures a high level of accuracy for identifying valid and deliverable email addresses.',
     },
     {
       id: 'item-2',
-      question: 'What payment methods do you accept?',
+      question: 'What types of emails are marked as "Bad"?',
       answer:
-        'We accept all major credit cards (Visa, Mastercard, American Express), PayPal, Apple Pay, and Google Pay. For enterprise customers, we also offer invoicing options.',
+        'We mark emails as "Bad" if they have invalid syntax, belong to a non-existent or misconfigured domain (no MX records), or are from a known disposable email provider. We also flag role-based emails (e.g., support@, admin@).',
     },
     {
       id: 'item-3',
-      question: 'Can I change or cancel my order?',
+      question: 'Is it safe to upload my email lists?',
       answer:
-        'You can modify or cancel your order within 1 hour of placing it. After this window, please contact our customer support team who will assist you with any changes.',
+        'Absolutely. Your data is processed securely and is never shared. All uploaded lists are stored privately in your account using Firestore\'s robust security rules, and you can delete them at any time.',
     },
     {
       id: 'item-4',
-      question: 'Do you ship internationally?',
+      question: 'What is the "Lifetime" deal?',
       answer:
-        "Yes, we ship to over 50 countries worldwide. International shipping typically takes 7-14 business days. Additional customs fees may apply depending on your country's import regulations.",
+        "The Lifetime deal is a one-time payment of $49 that gives you unlimited access to all current and future features of Verilist, including unlimited email validations and list cleaning, forever.",
     },
     {
       id: 'item-5',
-      question: 'What is your return policy?',
+      question: 'Do you offer an API for developers?',
       answer:
-        'We offer a 30-day return policy for most items. Products must be in original condition with tags attached. Some specialty items may have different return terms, which will be noted on the product page.',
+        'A public API is on our roadmap! We plan to allow developers to integrate our validation service directly into their own applications. Stay tuned for updates in our changelog.',
     },
   ]
 
@@ -50,8 +50,7 @@ export function FaqSection() {
             Frequently Asked Questions
           </h2>
           <p className="text-muted-foreground mt-4 text-balance">
-            Discover quick and comprehensive answers to common questions about
-            our platform, services, and features.
+            Find quick answers to common questions about our email validation service, features, and pricing.
           </p>
         </div>
 
@@ -80,7 +79,7 @@ export function FaqSection() {
           <p className="text-muted-foreground mt-6 px-8 text-center">
             Can't find what you're looking for? Contact our{' '}
             <Link
-              href="#"
+              href="/support"
               className="text-primary font-medium hover:underline"
             >
               customer support team

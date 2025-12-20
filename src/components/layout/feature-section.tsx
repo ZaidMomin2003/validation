@@ -3,11 +3,11 @@ import { cn } from "@/lib/utils";
 import React from "react";
 import { BentoGrid, BentoGridItem } from "../ui/bento-grid";
 import {
-  IconBoxAlignRightFilled,
-  IconClipboardCopy,
-  IconFileBroken,
-  IconSignature,
-  IconTableColumn,
+  IconMailbox,
+  IconDns,
+  IconFilter,
+  IconReport,
+  IconUsers,
 } from "@tabler/icons-react";
 import { motion } from "framer-motion";
 
@@ -303,61 +303,59 @@ const SkeletonFive = () => {
 };
 const items = [
   {
-    title: "AI Content Generation",
+    title: "Syntax & Format Check",
     description: (
       <span className="text-sm">
-        Experience the power of AI in generating unique content.
+        Instantly flags emails that don't conform to RFC 5322 standards, ensuring basic validity.
       </span>
     ),
     header: <SkeletonOne />,
     className: "md:col-span-1",
-    icon: <IconClipboardCopy className="h-4 w-4 text-neutral-500" />,
+    icon: <IconMailbox className="h-4 w-4 text-neutral-500" />,
   },
   {
-    title: "Automated Proofreading",
+    title: "Domain & MX Record Validation",
     description: (
       <span className="text-sm">
-        Let AI handle the proofreading of your documents.
+        Verifies that the domain exists and is properly configured to accept emails.
       </span>
     ),
     header: <SkeletonTwo />,
     className: "md:col-span-1",
-    icon: <IconFileBroken className="h-4 w-4 text-neutral-500" />,
+    icon: <IconDns className="h-4 w-4 text-neutral-500" />,
   },
   {
-    title: "Contextual Suggestions",
+    title: "Disposable Email Blocker",
     description: (
       <span className="text-sm">
-        Get AI-powered suggestions based on your writing context.
+        Detects and removes temporary "burner" email addresses to improve list quality.
       </span>
     ),
     header: <SkeletonThree />,
     className: "md:col-span-1",
-    icon: <IconSignature className="h-4 w-4 text-neutral-500" />,
+    icon: <IconFilter className="h-4 w-4 text-neutral-500" />,
   },
   {
-    title: "Sentiment Analysis",
+    title: "Role-Based Account Detection",
     description: (
       <span className="text-sm">
-        Understand the sentiment of your text with AI analysis.
+        Identifies role-based emails like 'admin@' or 'support@' to help you target individuals.
       </span>
     ),
     header: <SkeletonFour />,
     className: "md:col-span-2",
-    icon: <IconTableColumn className="h-4 w-4 text-neutral-500" />,
+    icon: <IconUsers className="h-4 w-4 text-neutral-500" />,
   },
 
   {
-    title: "Text Summarization",
+    title: "Simple & Clear Reporting",
     description: (
       <span className="text-sm">
-        Summarize your lengthy documents with AI technology.
+        Download a clean CSV with a clear 'Good' or 'Bad' status for every email.
       </span>
     ),
     header: <SkeletonFive />,
     className: "md:col-span-1",
-    icon: <IconBoxAlignRightFilled className="h-4 w-4 text-neutral-500" />,
+    icon: <IconReport className="h-4 w-4 text-neutral-500" />,
   },
 ];
-
-    
