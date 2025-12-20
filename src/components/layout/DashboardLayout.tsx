@@ -109,13 +109,6 @@ export default function DashboardLayout({
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <SidebarMenuButton href="/single-email" isActive={pathname === '/single-email'}>
-                <Mail />
-                Single Email
-                {pathname === '/single-email' && <ChevronRight className="ml-auto h-4 w-4" />}
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
               <SidebarMenuButton href="/lists" isActive={pathname === '/lists'}>
                 <History />
                 Lists
