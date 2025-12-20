@@ -5,7 +5,7 @@ import { FileUp, MousePointerClick, Download } from 'lucide-react';
 
 export default function HowItWorksSection() {
   return (
-    <section className="py-16 md:py-24 bg-neutral-950 text-white">
+    <section className="py-16 md:py-24 text-white">
       <div className="mx-auto max-w-5xl px-4 md:px-6">
         <div className="mx-auto max-w-xl text-center">
           <h2 className="text-balance text-3xl font-bold md:text-4xl lg:text-5xl">
@@ -16,7 +16,7 @@ export default function HowItWorksSection() {
           </p>
         </div>
         <div className="mt-12 grid gap-8 md:grid-cols-3">
-          <Card className="bg-card/5 border-white/10">
+          <Card className="bg-card/5 border-white/10 backdrop-blur-sm">
             <CardHeader>
               <div className="flex items-center gap-4">
                 <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
@@ -32,7 +32,7 @@ export default function HowItWorksSection() {
               </p>
             </CardContent>
           </Card>
-          <Card className="bg-card/5 border-white/10">
+          <Card className="bg-card/5 border-white/10 backdrop-blur-sm">
             <CardHeader>
               <div className="flex items-center gap-4">
                 <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
@@ -47,7 +47,7 @@ export default function HowItWorksSection() {
               </p>
             </CardContent>
           </Card>
-          <Card className="bg-card/5 border-white/10">
+          <Card className="bg-card/5 border-white/10 backdrop-blur-sm">
             <CardHeader>
               <div className="flex items-center gap-4">
                 <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">

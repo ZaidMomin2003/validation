@@ -37,21 +37,9 @@ export default function ContactUsSection() {
     }
   };
   return (
-    <section className="bg-background relative w-full overflow-hidden py-16 md:py-24">
-      <div
-        className="absolute top-0 left-0 h-[500px] w-[500px] rounded-full opacity-20 blur-[120px]"
-        style={{
-          background: `radial-gradient(circle at center, #e60a64, transparent 70%)`,
-        }}
-      />
-      <div
-        className="absolute right-0 bottom-0 h-[300px] w-[300px] rounded-full opacity-10 blur-[100px]"
-        style={{
-          background: `radial-gradient(circle at center, #e60a64, transparent 70%)`,
-        }}
-      />
+    <section className="relative w-full overflow-hidden py-16 md:py-24">
       <div className="relative z-10 container mx-auto px-4 md:px-6">
-        <div className="border-border/40 bg-secondary/20 mx-auto max-w-5xl overflow-hidden rounded-[28px] border shadow-xl backdrop-blur-sm">
+        <div className="border-border/40 bg-card/5 mx-auto max-w-5xl overflow-hidden rounded-[28px] border shadow-xl backdrop-blur-sm">
           <div className="grid md:grid-cols-2">
             <div className="relative p-6 md:p-10" ref={formRef}>
               <motion.div

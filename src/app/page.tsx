@@ -22,15 +22,41 @@ export default function Home() {
     <div className="bg-neutral-950">
       <HeroHeader />
       <HeroSection />
-      <LinkPreviewDemo />
-      <HowItWorksSection />
-      <div className="py-20">
-        <BentoGridThirdDemo />
+      <div className="relative overflow-hidden">
+        <div
+          className="absolute top-0 left-0 h-[500px] w-[500px] rounded-full opacity-20 blur-[120px]"
+          style={{
+            background: `radial-gradient(circle at center, #e60a64, transparent 70%)`,
+          }}
+        />
+        <div
+          className="absolute right-0 bottom-0 h-[300px] w-[300px] rounded-full opacity-10 blur-[100px]"
+          style={{
+            background: `radial-gradient(circle at center, #e60a64, transparent 70%)`,
+          }}
+        />
+        <div
+            className="absolute -bottom-1/2 left-1/3 h-[500px] w-[500px] rounded-full opacity-10 blur-[120px]"
+            style={{
+                background: `radial-gradient(circle at center, #38BDF8, transparent 70%)`,
+            }}
+        />
+         <div
+            className="absolute top-1/2 right-1/4 h-[400px] w-[600px] rounded-full opacity-10 blur-[100px]"
+            style={{
+                background: `radial-gradient(circle at center, #4F46E5, transparent 70%)`,
+            }}
+        />
+        <LinkPreviewDemo />
+        <HowItWorksSection />
+        <div className="py-20">
+          <BentoGridThirdDemo />
+        </div>
+        <PricingSection />
+        <FaqSection />
+        <ContactUsSection />
+        <Footer />
       </div>
-      <PricingSection />
-      <FaqSection />
-      <ContactUsSection />
-      <Footer />
     </div>
   );
 }
