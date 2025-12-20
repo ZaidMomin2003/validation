@@ -1,6 +1,7 @@
+
 'use client'
 import React from 'react';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Sparkles } from 'lucide-react';
 
 export default function HeroSection() {
   return (
@@ -16,7 +17,8 @@ export default function HeroSection() {
 
         <div className="z-10 mx-auto max-w-screen-xl gap-12 px-4 py-28 text-gray-600 md:px-8">
           <div className="mx-auto max-w-3xl space-y-5 text-center leading-0 lg:leading-5">
-            <h1 className="font-geist group mx-auto w-fit rounded-3xl border-[2px] border-white/5 bg-gradient-to-tr from-zinc-300/5 via-gray-400/5 to-transparent px-5 py-2 text-sm text-gray-400">
+            <h1 className="group mx-auto inline-flex cursor-pointer items-center justify-center rounded-full bg-gradient-to-r from-blue-500/80 to-purple-500/80 px-4 py-2 text-sm font-medium text-white shadow-lg shadow-black/20 ring-1 ring-white/10 ring-inset backdrop-blur-md">
+              <Sparkles className="mr-2 h-4 w-4" />
               Clean lists, better deliverability
               <ArrowRight className="ml-2 inline h-4 w-4 duration-300 group-hover:translate-x-1" />
             </h1>
