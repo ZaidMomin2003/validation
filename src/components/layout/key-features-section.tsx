@@ -46,11 +46,11 @@ export function KeyFeaturesSection() {
                 <h2 className="text-white mt-4 text-lg font-semibold">
                   {feature.title}
                 </h2>
-                <p className="text-sm border font-light border-white/[0.2] rounded-full mt-4 text-white px-2 py-0.5">
-                  {feature.badge}
-                </p>
                 <p className="text-sm font-light text-muted-foreground mt-4">
                   {feature.description}
+                </p>
+                <p className="text-sm border font-light border-white/[0.2] rounded-full mt-4 text-white px-2 py-0.5">
+                  {feature.badge}
                 </p>
             </div>
           ))}
