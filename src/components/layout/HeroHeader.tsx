@@ -22,7 +22,7 @@ export const HeroHeader = () => {
     }, [scrollYProgress])
 
     return (
-        <header className="fixed z-20 w-full">
+        <header className="fixed z-50 w-full">
              <div className="bg-primary text-primary-foreground">
                 <Link href="/pricing" className="group">
                     <div className="mx-auto flex max-w-7xl items-center justify-center px-4 py-1 text-sm">
