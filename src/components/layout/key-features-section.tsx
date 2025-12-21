@@ -1,25 +1,24 @@
 
 'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ClipboardPaste, ShieldCheck, CloudDownload } from 'lucide-react';
+import { EvervaultCard, Icon } from "../ui/evervault-card";
 
 export function KeyFeaturesSection() {
   const features = [
     {
-      icon: <ClipboardPaste className="h-6 w-6 text-primary" />,
       title: "Extract Emails from Text",
-      description: "Simply paste any block of text—a document, an article, or raw data. Our smart parser instantly finds and extracts all email addresses for you."
+      description: "Simply paste any block of text—a document, an article, or raw data. Our smart parser instantly finds and extracts all email addresses for you.",
+      badge: "Extract"
     },
     {
-      icon: <ShieldCheck className="h-6 w-6 text-primary" />,
       title: "Validate with Precision",
-      description: "Our multi-layered validation process checks syntax, verifies domains, and flags disposable or role-based addresses to ensure your list is clean and effective."
+      description: "Our multi-layered validation process checks syntax, verifies domains, and flags disposable or role-based addresses to ensure your list is clean and effective.",
+      badge: "Validate"
     },
     {
-      icon: <CloudDownload className="h-6 w-6 text-primary" />,
       title: "Store & Download Anytime",
-      description: "Your cleaned and validated lists are securely stored in your account. Access and download your data as a clean CSV file whenever you need it."
+      description: "Your cleaned and validated lists are securely stored in your account. Access and download your data as a clean CSV file whenever you need it.",
+      badge: "Store"
     }
   ];
 
@@ -36,21 +35,24 @@ export function KeyFeaturesSection() {
         </div>
         <div className="mt-12 grid gap-8 md:grid-cols-3">
           {features.map((feature, index) => (
-            <Card key={index} className="bg-card/5 border-white/10 backdrop-blur-sm">
-              <CardHeader>
-                <div className="flex items-center gap-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                    {feature.icon}
-                  </div>
-                  <CardTitle className="text-white">{feature.title}</CardTitle>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground">
+             <div key={index} className="border border-white/[0.2] flex flex-col items-start max-w-sm mx-auto p-4 relative h-[30rem]">
+                <Icon className="absolute h-6 w-6 -top-3 -left-3 text-white" />
+                <Icon className="absolute h-6 w-6 -bottom-3 -left-3 text-white" />
+                <Icon className="absolute h-6 w-6 -top-3 -right-3 text-white" />
+                <Icon className="absolute h-6 w-6 -bottom-3 -right-3 text-white" />
+        
+                <EvervaultCard text={feature.title} />
+        
+                <h2 className="text-white mt-4 text-lg font-semibold">
+                  {feature.title}
+                </h2>
+                <p className="text-sm border font-light border-white/[0.2] rounded-full mt-4 text-white px-2 py-0.5">
+                  {feature.badge}
+                </p>
+                <p className="text-sm font-light text-muted-foreground mt-4">
                   {feature.description}
                 </p>
-              </CardContent>
-            </Card>
+            </div>
           ))}
         </div>
       </div>
