@@ -13,7 +13,6 @@ import {useEffect} from 'react';
 import {initParticlesEngine} from '@tsparticles/react';
 import {loadSlim} from '@tsparticles/slim';
 import ParallaxScrollDemo from '@/components/layout/parallax-scroll-demo';
-import KeyFeaturesSection from '@/components/layout/key-features-section';
 import StatsSection from '@/components/layout/stats-section';
 
 export default function Home() {
@@ -54,7 +53,6 @@ export default function Home() {
         <LinkPreviewDemo />
         <HowItWorksSection />
         <StatsSection />
-        <KeyFeaturesSection />
         <div className="py-20">
           <BentoGridThirdDemo />
         </div>
