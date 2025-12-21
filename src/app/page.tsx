@@ -30,13 +30,13 @@ export default function Home() {
         <div
           className="absolute top-0 left-0 h-[500px] w-[500px] rounded-full opacity-20 blur-[120px]"
           style={{
-            background: `radial-gradient(circle at center, #e60a64, transparent 70%)`,
+            background: `radial-gradient(circle at center, #3b82f6, transparent 70%)`,
           }}
         />
         <div
           className="absolute right-0 bottom-0 h-[300px] w-[300px] rounded-full opacity-10 blur-[100px]"
           style={{
-            background: `radial-gradient(circle at center, #e60a64, transparent 70%)`,
+            background: `radial-gradient(circle at center, #3b82f6, transparent 70%)`,
           }}
         />
         <div
