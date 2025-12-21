@@ -37,7 +37,7 @@ export default function KeyFeaturesSection() {
         </div>
         <div className="mt-12 grid gap-36 md:grid-cols-3 justify-center">
             {features.map((feature, index) => (
-                 <div key={index} className="border border-white/[0.2] flex flex-col items-start max-w-sm mx-auto p-4 relative h-[30rem]">
+                 <div key={index} className="border border-white/[0.2] flex flex-col items-center max-w-sm mx-auto p-4 relative h-[30rem]">
                     <Icon className="absolute h-6 w-6 -top-3 -left-3 text-white" />
                     <Icon className="absolute h-6 w-6 -bottom-3 -left-3 text-white" />
                     <Icon className="absolute h-6 w-6 -top-3 -right-3 text-white" />
@@ -45,10 +45,10 @@ export default function KeyFeaturesSection() {
             
                     <EvervaultCard text={feature.cardText} />
             
-                    <h2 className="text-white mt-4 text-lg font-semibold">
+                    <h2 className="text-white mt-4 text-lg font-semibold text-center">
                         {feature.title}
                     </h2>
-                    <p className="text-sm font-light text-muted-foreground mt-2">
+                    <p className="text-sm font-light text-muted-foreground mt-2 text-center">
                         {feature.description}
                     </p>
                  </div>
