@@ -12,7 +12,7 @@ import ContactUsSection from '@/components/layout/contact-us-section';
 import {useEffect} from 'react';
 import {initParticlesEngine} from '@tsparticles/react';
 import {loadSlim} from '@tsparticles/slim';
-import { KeyFeaturesSection } from '@/components/layout/key-features-section';
+import ParallaxScrollDemo from '@/components/layout/parallax-scroll-demo';
 
 export default function Home() {
   useEffect(() => {
@@ -50,8 +50,8 @@ export default function Home() {
             }}
         />
         <LinkPreviewDemo />
-        <KeyFeaturesSection />
         <HowItWorksSection />
+        <ParallaxScrollDemo />
         <div className="py-20">
           <BentoGridThirdDemo />
         </div>
