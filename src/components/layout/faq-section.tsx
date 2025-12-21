@@ -1,3 +1,4 @@
+
 'use client'
 
 import {
@@ -30,9 +31,9 @@ export function FaqSection() {
     },
     {
       id: 'item-4',
-      question: 'What is the "Lifetime" deal?',
+      question: 'How does the pricing work?',
       answer:
-        "The Lifetime deal is a one-time payment of $49 that gives you unlimited access to all current and future features of Verilist, including unlimited email validations and list cleaning, forever.",
+        'We offer two simple plans. The Pro Plan is a yearly subscription for $69 that gives you 500,000 verification credits annually. The Pay-as-you-go plan is a one-time purchase of $9 for 50,000 credits that never expire.',
     },
     {
       id: 'item-5',
