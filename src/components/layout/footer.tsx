@@ -1,3 +1,4 @@
+
 'use client';
 
 import Logo from '@/components/logo'
@@ -5,28 +6,28 @@ import Link from 'next/link'
 
 const links = [
     {
-        title: 'Features',
-        href: '#',
-    },
-    {
-        title: 'Solution',
-        href: '#',
-    },
-    {
-        title: 'Customers',
-        href: '#',
-    },
-    {
         title: 'Pricing',
-        href: '#',
+        href: '/pricing',
     },
     {
-        title: 'Help',
-        href: '#',
+        title: 'Terms',
+        href: '/terms',
     },
     {
-        title: 'About',
-        href: '#',
+        title: 'Privacy',
+        href: '/privacy',
+    },
+    {
+        title: 'Delivery',
+        href: '/delivery',
+    },
+    {
+        title: 'Support',
+        href: '/support',
+    },
+    {
+        title: 'Feedback',
+        href: '/feedback',
     },
 ]
 
