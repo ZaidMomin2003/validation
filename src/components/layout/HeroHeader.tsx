@@ -1,3 +1,4 @@
+
 'use client'
 import Link from 'next/link'
 import Logo from '@/components/logo'
@@ -27,8 +28,8 @@ export const HeroHeader = () => {
                 <Link href="/pricing" className="group">
                     <div className="mx-auto flex max-w-7xl items-center justify-center px-4 py-1 text-sm">
                         <PartyPopper className="mr-2 h-4 w-4" />
-                        <span className="font-semibold md:hidden">$49 for lifetime access. Limited time offer.</span>
-                        <span className="hidden font-semibold md:inline">$49 for lifetime access. Limited time offer.</span>
+                        <span className="font-semibold md:hidden">Pro Plan: $69 for 500k credits yearly.</span>
+                        <span className="hidden font-semibold md:inline">Pro Plan: $69 for 500k credits yearly.</span>
                         <ArrowRight className="ml-2 h-4 w-4 transform transition-transform duration-300 group-hover:translate-x-1" />
                     </div>
                 </Link>
