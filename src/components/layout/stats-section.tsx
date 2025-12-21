@@ -20,7 +20,7 @@ export default function StatsSection() {
                         <p className="text-muted-foreground">Leads Validated</p>
                     </div>
                     <div className="space-y-4 pt-12 md:pt-0">
-                        <div className="text-5xl font-bold">99%</div>
+                        <div className="text-5xl font-bold">96%</div>
                         <p className="text-muted-foreground">Accuracy Rate</p>
                     </div>
                 </div>
