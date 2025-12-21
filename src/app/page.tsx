@@ -1,3 +1,4 @@
+
 'use client';
 import { HeroHeader } from '@/components/layout/HeroHeader';
 import HeroSection from '@/components/layout/hero-section';
@@ -11,6 +12,7 @@ import ContactUsSection from '@/components/layout/contact-us-section';
 import {useEffect} from 'react';
 import {initParticlesEngine} from '@tsparticles/react';
 import {loadSlim} from '@tsparticles/slim';
+import { KeyFeaturesSection } from '@/components/layout/key-features-section';
 
 export default function Home() {
   useEffect(() => {
@@ -48,6 +50,7 @@ export default function Home() {
             }}
         />
         <LinkPreviewDemo />
+        <KeyFeaturesSection />
         <HowItWorksSection />
         <div className="py-20">
           <BentoGridThirdDemo />
