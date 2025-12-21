@@ -13,7 +13,7 @@ export default function TermsOfServicePage() {
                 Last updated: December 21, 2025
             </p>
         </div>
-        <Card className="w-full max-w-4xl mx-auto">
+        <Card className="w-full max-w-4xl mx-auto bg-card/5 border-white/10 text-white">
           <CardContent className="p-8 space-y-6 text-sm text-foreground/80">
             <p>
               Welcome to Verilist! These Terms and Conditions ("Terms") govern

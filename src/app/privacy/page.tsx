@@ -13,7 +13,7 @@ export default function PrivacyPolicyPage() {
                 Last updated: December 21, 2025
             </p>
         </div>
-        <Card className="w-full max-w-4xl mx-auto">
+        <Card className="w-full max-w-4xl mx-auto bg-card/5 border-white/10 text-white">
           <CardContent className="p-8 space-y-6 text-sm text-foreground/80">
             <p>
               Talxify ("us", "we", or "our") operates the Verilist website (the "Service"). This page informs you of our policies regarding the collection, use, and disclosure of personal data when you use our Service and the choices you have associated with that data.

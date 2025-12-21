@@ -13,7 +13,7 @@ export default function DeliveryPolicyPage() {
                 Last updated: December 21, 2025
             </p>
         </div>
-        <Card className="w-full max-w-4xl mx-auto">
+        <Card className="w-full max-w-4xl mx-auto bg-card/5 border-white/10 text-white">
           <CardContent className="p-8 space-y-6 text-sm text-foreground/80">
             <p>
               This Delivery Policy outlines how our services are delivered to you upon purchase and use of the Verilist platform.
