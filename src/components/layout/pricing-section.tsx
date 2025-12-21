@@ -8,6 +8,21 @@ import Image from 'next/image';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import React from 'react';
 
+const features = {
+    pro: [
+        '500,000 Verifications/Year',
+        'Bulk List Cleaning',
+        'Bulk CSV Processing',
+        'Priority Support'
+    ],
+    payg: [
+        '50,000 Verifications',
+        'Bulk List Cleaning',
+        'Bulk CSV Processing',
+        'Standard Support'
+    ]
+};
+
 export default function PricingSection() {
     const [plan, setPlan] = React.useState('pro');
     return (
@@ -50,12 +65,7 @@ export default function PricingSection() {
                                 <ul
                                     role="list"
                                     className="space-y-4">
-                                    {[
-                                        '500,000 Verifications/Year', 
-                                        'Bulk List Cleaning', 
-                                        'Bulk CSV Processing', 
-                                        'Priority Support'
-                                    ].map((item, index) => (
+                                    {(features[plan as keyof typeof features] || []).map((item, index) => (
                                         <li
                                             key={index}
                                             className="flex items-center gap-2">
@@ -64,7 +74,7 @@ export default function PricingSection() {
                                         </li>
                                     ))}
                                 </ul>
-                                <p className="text-muted-foreground mt-6 text-sm">Generous credits for all your validation needs, renewed annually.</p>
+                                <p className="text-muted-foreground mt-6 text-sm">{plan === 'pro' ? 'Generous credits for all your validation needs, renewed annually.' : 'A one-time purchase for your immediate validation needs.'}</p>
                                 <div className="mt-12 space-y-4">
                                     <div className="flex items-center gap-4">
                                         <Image
