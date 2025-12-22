@@ -57,7 +57,7 @@ export const LinkPreview = ({
       <HoverCardPrimitive.Trigger asChild>
         <a
           href={url}
-          className={cn("text-black dark:text-white", className)}
+          className={cn("text-white", className)}
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -96,7 +96,6 @@ export const LinkPreview = ({
                   width={width}
                   height={height}
                   quality={quality}
-                  layout={layout}
                   priority={true}
                   className="rounded-lg"
                   alt="preview image"

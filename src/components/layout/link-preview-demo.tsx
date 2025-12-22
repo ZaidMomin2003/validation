@@ -1,4 +1,3 @@
-
 "use client";
 import React from "react";
 import { LinkPreview } from "@/components/ui/link-preview";
@@ -6,7 +5,7 @@ import { LinkPreview } from "@/components/ui/link-preview";
 export function LinkPreviewDemo() {
   return (
     <div className="flex justify-center items-center h-[20rem] flex-col px-4">
-      <div className="text-neutral-500 dark:text-neutral-400 text-xl md:text-3xl max-w-3xl mx-auto mb-10">
+      <div className="text-neutral-400 text-xl md:text-3xl max-w-3xl mx-auto mb-10">
         <LinkPreview url="https://wisdomis.fun" className="font-bold">
           Wisdom is fun
         </LinkPreview>{" "}
@@ -16,15 +15,15 @@ export function LinkPreviewDemo() {
         </LinkPreview>{" "}
         use our fast and reliable platform.
       </div>
-      <div className="text-neutral-500 dark:text-neutral-400 text-xl md:text-3xl max-w-3xl mx-auto">
-        Styled with{" "}
+      <div className="text-neutral-400 text-xl md:text-3xl max-w-3xl mx-auto">
+        Hosted and secured by{" "}
         <LinkPreview
-          url="https://ui.shadcn.com/"
-          className="font-bold bg-clip-text text-transparent bg-gradient-to-br from-purple-500 to-pink-500"
+          url="https://firebase.google.com/"
+          className="font-bold bg-clip-text text-transparent bg-gradient-to-br from-amber-500 to-orange-500"
         >
-          ShadCN UI
+          Firebase
         </LinkPreview>{" "}
-        for a clean and modern user experience.
+        for reliable and fast performance.
       </div>
     </div>
   );
