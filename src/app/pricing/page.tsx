@@ -10,6 +10,8 @@ import Link from "next/link";
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
+import { doc, updateDoc } from 'firebase/firestore';
+import { db } from '@/firebase/firebaseClient';
 
 declare global {
   interface Window {
@@ -21,6 +23,7 @@ const plans = [
   {
     name: "Lifetime Deal",
     price: 69,
+    credits: 500000,
     description: "For power users and businesses. Limited time offer!",
     features: [
       "500,000 Verifications/Year",
@@ -39,6 +42,7 @@ const plans = [
   {
     name: "Pay as you go",
     price: 19,
+    credits: 50000,
     description: "For one-off validation needs.",
     features: [
       "50,000 Verifications",
@@ -127,12 +131,27 @@ export default function PricingPage() {
         name: 'Verilist',
         description: `Payment for ${plan.name}`,
         order_id: order.id,
-        handler: function (response: any) {
-          toast({
-              title: 'Payment Successful!',
-              description: `Thank you for your purchase. Your ${plan.name} is now active.`,
-          });
-          // Here you would typically verify the payment on your backend and provision credits.
+        handler: async function (response: any) {
+          try {
+             // Update user's plan in Firestore
+            const userDocRef = doc(db, 'users', user.uid);
+            await updateDoc(userDocRef, {
+              plan: plan.name,
+              creditsTotal: plan.credits,
+            });
+
+            toast({
+                title: 'Payment Successful!',
+                description: `Thank you for your purchase. Your ${plan.name} is now active.`,
+            });
+            router.push('/lists');
+          } catch (error: any) {
+             toast({
+                variant: 'destructive',
+                title: 'Failed to Update Plan',
+                description: 'Your payment was successful, but we failed to update your plan. Please contact support.',
+            });
+          }
         },
         prefill: {
           name: user.displayName || 'Verilist User',
@@ -144,6 +163,13 @@ export default function PricingPage() {
       };
 
       const paymentObject = new window.Razorpay(options);
+      paymentObject.on('payment.failed', function (response: any) {
+          toast({
+            variant: 'destructive',
+            title: 'Payment Failed',
+            description: response.error.description || 'Something went wrong during payment.',
+          });
+      });
       paymentObject.open();
 
     } catch (error: any) {
