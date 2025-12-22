@@ -17,6 +17,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 import { useAuthContext } from '@/firebase/provider';
 import { LogoIcon } from '@/components/logo-icon';
+import { ThemeToggle } from '@/components/theme-toggle';
 
 export default function AuthPage() {
     const router = useRouter();
@@ -106,6 +107,9 @@ export default function AuthPage() {
 
     return (
         <div className="flex min-h-screen w-full flex-col bg-background text-foreground">
+            <div className="absolute top-4 right-4">
+                <ThemeToggle />
+            </div>
             <main className="flex flex-1 flex-col items-center justify-center px-6 pb-20">
                 <div className="w-full max-w-sm">
                     <div className="text-center mb-8">

@@ -5,6 +5,7 @@ import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { Inter } from 'next/font/google';
 import { FirebaseProvider } from '@/firebase/provider';
+import { ThemeProvider } from '@/components/theme-provider';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -34,10 +35,17 @@ export default function RootLayout({
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
       </head>
       <body className={`${inter.variable} font-body antialiased`}>
-          <FirebaseProvider>
-            {children}
-          </FirebaseProvider>
-          <Toaster />
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <FirebaseProvider>
+              {children}
+            </FirebaseProvider>
+            <Toaster />
+          </ThemeProvider>
       </body>
     </html>
   );

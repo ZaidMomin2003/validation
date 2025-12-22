@@ -57,7 +57,6 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ClientOnly } from '@/components/ClientOnly';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '../ui/skeleton';
-import { ThemeProvider } from '../theme-provider';
 import { Progress } from '../ui/progress';
 
 export default function DashboardLayout({
@@ -99,12 +98,6 @@ export default function DashboardLayout({
   const creditPercentage = (usedCredits / totalCredits) * 100;
 
   return (
-    <ThemeProvider
-      attribute="class"
-      defaultTheme="system"
-      enableSystem
-      disableTransitionOnChange
-    >
       <SidebarProvider>
         <Sidebar>
           <SidebarHeader>
@@ -285,6 +278,5 @@ export default function DashboardLayout({
           {children}
         </SidebarInset>
       </SidebarProvider>
-    </ThemeProvider>
   );
 }
