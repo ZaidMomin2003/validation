@@ -37,37 +37,6 @@ import { List } from '@/types';
 import { Skeleton } from '@/components/ui/skeleton';
 import * as XLSX from 'xlsx';
 
-const stats = [
-  {
-    title: 'Total Validated',
-    value: '12,435',
-    icon: MailCheck,
-    description: 'Total emails processed across all lists.',
-    color: 'text-blue-500',
-  },
-  {
-    title: 'Valid Emails',
-    value: '11,890',
-    icon: CheckCircle,
-    description: 'Deliverable and safe-to-send emails.',
-    color: 'text-green-500',
-  },
-  {
-    title: 'Risky Emails',
-    value: '545',
-    icon: AlertTriangle,
-    description: 'Catch-all or unknown status emails.',
-    color: 'text-yellow-500',
-  },
-  {
-    title: 'Cleaned Emails',
-    value: '2,130',
-    icon: Sparkles,
-    description: 'Duplicates and invalid formats removed.',
-    color: 'text-indigo-500',
-  },
-]
-
 const ProgressMultiple = ({
   values,
   className,
@@ -106,6 +75,69 @@ export default function ListsPage() {
   }, [user]);
 
   const { data: lists, loading } = useCollection<List>(listsQuery);
+  
+  const aggregatedStats = React.useMemo(() => {
+    if (!lists) {
+      return {
+        totalValidated: 0,
+        validEmails: 0,
+        riskyEmails: 0,
+        cleanedEmails: 0,
+      };
+    }
+
+    return lists.reduce(
+      (acc, list) => {
+        if (list.status === 'Completed') {
+          if (list.name.startsWith('Cleaned -')) {
+            acc.cleanedEmails += list.emailCount;
+          } else {
+            acc.totalValidated += list.emailCount;
+            acc.validEmails += list.good;
+            acc.riskyEmails += list.risky;
+          }
+        }
+        return acc;
+      },
+      {
+        totalValidated: 0,
+        validEmails: 0,
+        riskyEmails: 0,
+        cleanedEmails: 0,
+      }
+    );
+  }, [lists]);
+
+  const stats = [
+    {
+      title: 'Total Validated',
+      value: aggregatedStats.totalValidated.toLocaleString(),
+      icon: MailCheck,
+      description: 'Total emails processed across all lists.',
+      color: 'text-blue-500',
+    },
+    {
+      title: 'Valid Emails',
+      value: aggregatedStats.validEmails.toLocaleString(),
+      icon: CheckCircle,
+      description: 'Deliverable and safe-to-send emails.',
+      color: 'text-green-500',
+    },
+    {
+      title: 'Risky Emails',
+      value: aggregatedStats.riskyEmails.toLocaleString(),
+      icon: AlertTriangle,
+      description: 'Catch-all or unknown status emails.',
+      color: 'text-yellow-500',
+    },
+    {
+      title: 'Cleaned Emails',
+      value: aggregatedStats.cleanedEmails.toLocaleString(),
+      icon: Sparkles,
+      description: 'Duplicates and invalid formats removed.',
+      color: 'text-indigo-500',
+    },
+  ]
 
   const handleDownload = async (list: List) => {
     if (!list.id || !user) return;
@@ -185,7 +217,7 @@ export default function ListsPage() {
                   <stat.icon className={cn("h-4 w-4 text-muted-foreground", stat.color)} />
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">{stat.value}</div>
+                  <div className="text-2xl font-bold">{loading ? <Skeleton className='h-8 w-24' /> : stat.value}</div>
                   <p className="text-xs text-muted-foreground">
                     {stat.description}
                   </p>
