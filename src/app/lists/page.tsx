@@ -26,7 +26,15 @@ import {
   Loader2,
   XCircle,
   FileQuestion,
+  TrendingUp,
+  TrendingDown,
+  Mail,
 } from 'lucide-react';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/useAuth';
 import { useCollection } from '@/firebase/hooks';
@@ -203,6 +211,70 @@ export default function ListsPage() {
           </Badge>
       )
   }
+  
+  const ListStatsPopover = ({ list }: { list: List }) => {
+    const isCleanedList = list.name.startsWith('Cleaned -');
+
+    return (
+        <Popover>
+            <PopoverTrigger asChild>
+                <Info className="h-4 w-4 text-muted-foreground flex-shrink-0 cursor-pointer hover:text-foreground" />
+            </PopoverTrigger>
+            <PopoverContent className="w-64 text-sm">
+                <div className="grid gap-4">
+                    <div className="space-y-2">
+                        <h4 className="font-medium leading-none">List Details</h4>
+                        <p className="text-xs text-muted-foreground">
+                            A quick overview of this list's results.
+                        </p>
+                    </div>
+                     <div className="grid gap-2">
+                        <div className="flex items-center justify-between">
+                            <span className="flex items-center text-muted-foreground">
+                                <Mail className="mr-2 h-4 w-4" />
+                                Uploaded
+                            </span>
+                            <span>{list.emailCount.toLocaleString()}</span>
+                        </div>
+                         <div className="flex items-center justify-between">
+                            <span className="flex items-center text-green-500">
+                                <TrendingUp className="mr-2 h-4 w-4" />
+                                Good
+                            </span>
+                            <span>{list.good.toLocaleString()}</span>
+                        </div>
+                        {isCleanedList ? (
+                           <div className="flex items-center justify-between">
+                               <span className="flex items-center text-indigo-500">
+                                   <Sparkles className="mr-2 h-4 w-4" />
+                                   Cleaned
+                               </span>
+                               <span>{list.emailCount.toLocaleString()}</span>
+                           </div>
+                        ) : (
+                            <>
+                                <div className="flex items-center justify-between">
+                                    <span className="flex items-center text-yellow-500">
+                                        <AlertTriangle className="mr-2 h-4 w-4" />
+                                        Risky
+                                    </span>
+                                    <span>{list.risky.toLocaleString()}</span>
+                                </div>
+                                <div className="flex items-center justify-between">
+                                    <span className="flex items-center text-red-500">
+                                        <TrendingDown className="mr-2 h-4 w-4" />
+                                        Bad
+                                    </span>
+                                    <span>{list.bad.toLocaleString()}</span>
+                                </div>
+                            </>
+                        )}
+                    </div>
+                </div>
+            </PopoverContent>
+        </Popover>
+    );
+  };
 
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
@@ -265,7 +337,7 @@ export default function ListsPage() {
                     <CardTitle className="truncate text-lg font-medium pr-2">
                       {list.name}
                     </CardTitle>
-                    <Info className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                    <ListStatsPopover list={list} />
                   </div>
                   <CardDescription className="flex items-center gap-2 text-xs">
                     <Clock className="h-3 w-3" />
