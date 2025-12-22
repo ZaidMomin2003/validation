@@ -1,13 +1,13 @@
 
 'use client';
 
-import React, { useEffect } from 'react';
-import { FileUp, Download, CheckCircle, Info, Loader2, Settings, Columns, Milestone } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { FileUp, Download, CheckCircle, Info, Loader2, Settings, Columns, Milestone, CreditCard } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { FileUpload } from "@/components/ui/file-upload";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useToast } from '@/hooks/use-toast';
 import * as XLSX from 'xlsx';
@@ -21,6 +21,18 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { validate } from '@/lib/email-validator';
 import type { List } from '@/types';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+
 
 const PREVIEW_ROW_COUNT = 8;
 const PREVIEW_COLUMN_COUNT = 4;
@@ -38,7 +50,7 @@ interface CleanedData {
 }
 
 export default function BulkValidatePage() {
-    const { user } = useAuth();
+    const { user, creditsLeft } = useAuth();
     const router = useRouter();
     const [files, setFiles] = React.useState<File[]>([]);
     const [tableData, setTableData] = React.useState<TableData | null>(null);
@@ -241,8 +253,22 @@ export default function BulkValidatePage() {
         }
     };
     
-    const handleValidateAction = async () => {
+    const handleValidateAction = async (bypassCreditCheck = false) => {
         if (!user || !tableData || !emailColumn) return;
+
+        const isFreePlan = user.plan === 'Free';
+        const emailsToProcess = tableData.rows;
+        let finalEmails = emailsToProcess;
+
+        if (isFreePlan && !bypassCreditCheck && emailsToProcess.length > creditsLeft) {
+            // Trigger the alert dialog instead of processing
+            document.getElementById('credit-limit-trigger')?.click();
+            return;
+        }
+
+        if (isFreePlan && emailsToProcess.length > creditsLeft) {
+            finalEmails = emailsToProcess.slice(0, creditsLeft);
+        }
     
         setIsProcessing(true);
         toast({
@@ -250,13 +276,15 @@ export default function BulkValidatePage() {
             description: 'Your list is being prepared for validation. You can track progress on the Lists page.',
         });
 
+        const dataToProcess = { ...tableData, rows: finalEmails };
+
         // 1. Create initial list document in Firestore
-        const dataObjects = convertDataToObjects(tableData);
+        const dataObjects = convertDataToObjects(dataToProcess);
         const listData: List = {
             name: tableData.fileName,
             createdAt: Date.now(),
             progress: 0,
-            emailCount: tableData.rows.length,
+            emailCount: dataToProcess.rows.length,
             good: 0, risky: 0, bad: 0,
             userId: user.uid,
             status: 'Processing'
@@ -265,10 +293,8 @@ export default function BulkValidatePage() {
         try {
             const docRef = await addDoc(collection(db, `users/${user.uid}/lists`), listData);
             
-            // Redirect immediately so the user can see the progress
             router.push('/lists');
     
-            // 2. Perform validation asynchronously
             validate(dataObjects, emailColumn, async ({ good, risky, bad, total, data }) => {
                 const progress = Math.round(((good + risky + bad) / total) * 100);
                 const isCompleted = progress === 100;
@@ -280,7 +306,6 @@ export default function BulkValidatePage() {
                     updateData.status = 'Completed';
                 }
                 
-                // Update Firestore document with progress
                 await updateDoc(doc(db, `users/${user.uid}/lists`, docRef.id), updateData);
             }).catch(async (error) => {
                 console.error("Validation process failed:", error);
@@ -466,10 +491,38 @@ export default function BulkValidatePage() {
                 </CardContent>
                 <CardFooter className="flex items-center justify-end gap-2">
                     <Button variant="outline" onClick={handleReset}>Reset</Button>
-                    <Button onClick={handleValidateAction} disabled={isProcessing}>
-                        {isProcessing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                        Start Validation
-                    </Button>
+                    <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                            <Button id="credit-limit-trigger" className="hidden">Hidden Trigger</Button>
+                        </AlertDialogTrigger>
+                        <Button onClick={() => handleValidateAction(false)} disabled={isProcessing}>
+                            {isProcessing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                            Start Validation
+                        </Button>
+                        <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>Credit Limit Reached</AlertDialogTitle>
+                            <AlertDialogDescription>
+                                Your list of {tableData.rows.length} emails exceeds your remaining {creditsLeft} credits. We will only validate the first {creditsLeft} emails.
+                                <br /><br />
+                                Upgrade your plan to validate the entire list and get more credits.
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction
+                                onClick={() => router.push('/pricing')}
+                                className={buttonVariants({ variant: 'default' })}
+                            >
+                                <CreditCard className="mr-2 h-4 w-4" />
+                                Upgrade Plan
+                            </AlertDialogAction>
+                            <AlertDialogAction onClick={() => handleValidateAction(true)}>
+                                Proceed with {creditsLeft}
+                            </AlertDialogAction>
+                        </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialog>
                 </CardFooter>
             </Card>
         )
@@ -601,3 +654,5 @@ export default function BulkValidatePage() {
   </main>
   );
 }
+
+    
