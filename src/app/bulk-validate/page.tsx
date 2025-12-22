@@ -530,27 +530,6 @@ export default function BulkValidatePage() {
     }
 
     const renderFileUpload = () => {
-        if (user?.plan === 'Free' && creditsLeft <= 0) {
-            return (
-                <Card>
-                    <CardHeader className="text-center">
-                        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-destructive/10">
-                            <CreditCard className="h-8 w-8 text-destructive" />
-                        </div>
-                        <CardTitle className="text-2xl mt-4">You've Used All Your Credits</CardTitle>
-                        <CardDescription>
-                            You have used all your free monthly credits. Please upgrade your plan to continue validating emails.
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent className="flex flex-col items-center gap-4">
-                        <Button asChild size="lg">
-                            <Link href="/pricing">Upgrade Plan</Link>
-                        </Button>
-                        <p className="text-xs text-muted-foreground">Your credits will reset next month.</p>
-                    </CardContent>
-                </Card>
-            );
-        }
         return (
             <>
                 <Tabs defaultValue="clean" onValueChange={setActiveTab} value={activeTab}>
@@ -647,6 +626,28 @@ export default function BulkValidatePage() {
             );
         }
 
+        if (user?.plan === 'Free' && creditsLeft <= 0) {
+            return (
+                <Card>
+                    <CardHeader className="text-center">
+                        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-destructive/10">
+                            <CreditCard className="h-8 w-8 text-destructive" />
+                        </div>
+                        <CardTitle className="text-2xl mt-4">You've Used All Your Credits</CardTitle>
+                        <CardDescription>
+                            You have used all your free monthly credits. Please upgrade your plan to continue validating emails.
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent className="flex flex-col items-center gap-4">
+                        <Button asChild size="lg">
+                            <Link href="/pricing">Upgrade Plan</Link>
+                        </Button>
+                        <p className="text-xs text-muted-foreground">Your credits will reset next month.</p>
+                    </CardContent>
+                </Card>
+            );
+        }
+        
         if (tableData) {
             if (activeTab === 'clean') {
                 return renderCleanFlow();
@@ -678,6 +679,3 @@ export default function BulkValidatePage() {
   </main>
   );
 }
-
-    
-    
