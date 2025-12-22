@@ -44,11 +44,11 @@ export default function PricingSection() {
                                 </Tabs>
                                 
                                 <div className='mt-8'>
-                                    <h3 className="text-2xl font-semibold">{plan === 'pro' ? 'Pro Plan' : 'Pay As You Go'}</h3>
+                                    <h3 className="text-2xl font-semibold">{plan === 'pro' ? 'Lifetime Deal' : 'Pay As You Go'}</h3>
                                     <p className="mt-2 text-lg">{plan === 'pro' ? 'For power users and businesses' : 'For one-off validation needs'}</p>
                                     <span className="mb-6 mt-4 inline-block text-6xl font-bold">
                                         <span className="text-4xl">$</span>{plan === 'pro' ? '69' : '9'}
-                                        {plan === 'pro' && <span className="text-lg font-normal text-muted-foreground">/year</span>}
+                                        {plan === 'pro' && <span className="text-lg font-normal text-muted-foreground">/lifetime</span>}
                                     </span>
                                 </div>
 
@@ -59,7 +59,7 @@ export default function PricingSection() {
                                         <Link href="/pricing">Get started</Link>
                                     </Button>
                                 </div>
-                                 <p className="text-muted-foreground mt-12 text-sm">{plan === 'pro' ? 'Includes: 500,000 verifications per year, bulk cleaning, and priority support.' : 'Includes: 50,000 verifications. Credits do not expire. Use them when you need them.'}</p>
+                                 <p className="text-muted-foreground mt-12 text-sm">{plan === 'pro' ? 'Includes: 500,000 verifications per year for life, bulk cleaning, and priority support.' : 'Includes: 50,000 verifications. Credits do not expire. Use them when you need them.'}</p>
                             </div>
                             <div className="relative pt-12 md:pt-0 md:pl-12">
                                 <ul
