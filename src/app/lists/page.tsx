@@ -91,6 +91,7 @@ export default function ListsPage() {
   const { toast } = useToast();
   const [downloadingId, setDownloadingId] = React.useState<string | null>(null);
   const [deletingId, setDeletingId] = React.useState<string | null>(null);
+  const [selectedListForDownload, setSelectedListForDownload] = React.useState<List | null>(null);
 
   const listsQuery = React.useMemo(() => {
     if (!user) return null;
@@ -162,12 +163,12 @@ export default function ListsPage() {
     },
   ]
 
-  const handleDownload = async (list: List) => {
-    if (!list.id || !user) return;
-    setDownloadingId(list.id);
+  const handleDownload = async (filter: 'Good' | 'Risky' | 'All') => {
+    if (!selectedListForDownload || !selectedListForDownload.id || !user) return;
+    setDownloadingId(selectedListForDownload.id);
 
     try {
-        const listDocRef = doc(db, `users/${user.uid}/lists`, list.id);
+        const listDocRef = doc(db, `users/${user.uid}/lists`, selectedListForDownload.id);
         const listDoc = await getDoc(listDocRef);
 
         if (listDoc.exists()) {
@@ -175,12 +176,26 @@ export default function ListsPage() {
             if (!listData.data) {
                 throw new Error("Full list data is not available for download. It might still be processing or was created with a previous version.");
             }
+
+            let dataToExport = listData.data;
+            if (filter !== 'All') {
+                dataToExport = listData.data.filter(row => row.Status === filter);
+            }
             
-            const ws = XLSX.utils.json_to_sheet(listData.data);
+            if (dataToExport.length === 0) {
+              toast({
+                variant: 'destructive',
+                title: 'No Emails to Download',
+                description: `There are no emails with the status "${filter}" in this list.`,
+              })
+              return;
+            }
+
+            const ws = XLSX.utils.json_to_sheet(dataToExport);
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, "Validated List");
 
-            const fileName = `${list.name.replace(/[^a-z0-9_]/gi, '-')}.csv`;
+            const fileName = `${selectedListForDownload.name.replace(/[^a-z0-9_]/gi, '-')}_${filter}.csv`;
             XLSX.writeFile(wb, fileName, { bookType: "csv" });
 
         } else {
@@ -188,10 +203,17 @@ export default function ListsPage() {
         }
     } catch (error: any) {
         console.error("Error downloading list:", error);
+        toast({
+            variant: 'destructive',
+            title: 'Download Error',
+            description: error.message || 'Could not download the list.',
+        });
     } finally {
         setDownloadingId(null);
+        setSelectedListForDownload(null);
     }
   };
+
 
   const handleDelete = async (listId: string) => {
     if (!user || !listId) return;
@@ -395,19 +417,40 @@ export default function ListsPage() {
                   </div>
                 </CardContent>
                 <CardFooter className="flex items-center gap-2">
-                  <Button 
-                    variant="outline" 
-                    className="w-full"
-                    onClick={() => handleDownload(list)}
-                    disabled={downloadingId === list.id || list.status !== 'Completed'}
-                  >
-                    {downloadingId === list.id ? (
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    ) : (
-                      <Download className="mr-2 h-4 w-4" />
-                    )}
-                    Download
-                  </Button>
+                   <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                         <Button
+                            variant="outline"
+                            className="w-full"
+                            disabled={downloadingId === list.id || list.status !== 'Completed'}
+                            onClick={() => setSelectedListForDownload(list)}
+                          >
+                            {downloadingId === list.id ? (
+                              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            ) : (
+                              <Download className="mr-2 h-4 w-4" />
+                            )}
+                            Download
+                          </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Choose Download Option</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Select which category of emails you would like to download from the list "{selectedListForDownload?.name}".
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter className="sm:justify-between flex-col-reverse sm:flex-row gap-2">
+                           <AlertDialogCancel onClick={() => setSelectedListForDownload(null)}>Cancel</AlertDialogCancel>
+                           <div className='flex flex-col sm:flex-row gap-2'>
+                             <AlertDialogAction onClick={() => handleDownload('Good')} className={buttonVariants({ variant: 'outline' })}>Download Valid</AlertDialogAction>
+                             <AlertDialogAction onClick={() => handleDownload('Risky')} className={buttonVariants({ variant: 'outline' })}>Download Risky</AlertDialogAction>
+                             <AlertDialogAction onClick={() => handleDownload('All')}>Download All</AlertDialogAction>
+                           </div>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                   </AlertDialog>
+                  
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
                       <Button
