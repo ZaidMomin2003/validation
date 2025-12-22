@@ -1,6 +1,7 @@
+
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FileUp, Download, CheckCircle, Info, Loader2, Settings, Columns, Milestone } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { FileUpload } from "@/components/ui/file-upload";
@@ -51,8 +52,32 @@ export default function BulkValidatePage() {
     const [activeTab, setActiveTab] = React.useState('clean');
     const { toast } = useToast();
 
-    const processFile = (file: File) => {
+    useEffect(() => {
+        const validationDataString = sessionStorage.getItem('validationData');
+        if (validationDataString) {
+            try {
+                const { emails, fileName } = JSON.parse(validationDataString);
+                
+                // Create a CSV string
+                const csvContent = "Email\n" + emails.join("\n");
+                const blob = new Blob([csvContent], { type: 'text/csv' });
+                const file = new File([blob], fileName, { type: 'text/csv' });
+
+                // Process this file
+                processFile(file, 'validate');
+                
+            } catch (e) {
+                console.error("Failed to parse validation data from sessionStorage", e);
+            } finally {
+                 // Clean up sessionStorage
+                sessionStorage.removeItem('validationData');
+            }
+        }
+    }, []);
+
+    const processFile = (file: File, defaultTab: 'clean' | 'validate' = 'clean') => {
         setIsLoading(true);
+        setActiveTab(defaultTab);
         const reader = new FileReader();
 
         reader.onload = (e) => {
@@ -120,7 +145,7 @@ export default function BulkValidatePage() {
     const handleFileUpload = (uploadedFiles: File[]) => {
         setFiles(uploadedFiles);
         if (uploadedFiles.length > 0) {
-            processFile(uploadedFiles[0]);
+            processFile(uploadedFiles[0], activeTab as 'clean' | 'validate');
         }
     };
 
