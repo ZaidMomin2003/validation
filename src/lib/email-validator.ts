@@ -206,62 +206,108 @@ export const ROLE_BASED_PREFIXES = new Set([
   'welcome', 'whois', 'win', 'work', 'workshop', 'www'
 ]);
 
+export const FREE_DOMAINS = new Set([
+    'gmail.com', 'yahoo.com', 'hotmail.com', 'aol.com', 'hotmail.co.uk', 'hotmail.fr',
+    'msn.com', 'yahoo.fr', 'wanadoo.fr', 'orange.fr', 'comcast.net', 'yahoo.co.uk',
+    'yahoo.com.br', 'yahoo.co.in', 'live.com', 'rediffmail.com', 'free.fr',
+    'gmx.de', 'web.de', 'yandex.ru', 'ymail.com', 'libero.it', 'outlook.com',
+    'uol.com.br', 'bol.com.br', 'mail.ru', 'cox.net', 'hotmail.it', 'sbcglobal.net',
+    'sfr.fr', 'live.fr', 'verizon.net', 'live.co.uk', 'googlemail.com', 'yahoo.es',
+    'ig.com.br', 'live.nl', 'bigpond.com', 'terra.com.br', 'yahoo.it', 'neuf.fr',
+    'yahoo.de', 'alice.it', 'rocketmail.com', 'att.net', 'laposte.net', 'facebook.com',
+    'bellsouth.net', 'yahoo.in', 'hotmail.es', 'charter.net', 'yahoo.ca', 'yahoo.com.au',
+    'rambler.ru', 'hotmail.de', 'tiscali.it', 'shaw.ca', 'yahoo.co.jp', 'sky.com',
+    'earthlink.net', 'optonline.net', 'freenet.de', 't-online.de', 'aliceadsl.fr',
+    'virgilio.it', 'home.nl', 'qq.com', 'telenet.be', 'me.com', 'yahoo.com.ar',
+    'tiscali.co.uk', 'yahoo.com.mx', 'voila.fr', 'gmx.net', 'mail.com', 'planet.nl',
+    'tin.it', 'live.it', 'ntlworld.com', 'arcor.de', 'yahoo.co.id', 'frontiernet.net',
+    'hetnet.nl', 'live.com.au', 'yahoo.com.sg', 'zonnet.nl', 'club-internet.fr',
+    'juno.com', 'optusnet.com.au', 'blueyonder.co.uk', 'bluewin.ch', 'skynet.be',
+    'sympatico.ca', 'windstream.net', 'mac.com', 'centurytel.net', 'chello.nl',
+    'live.ca', 'bigpond.net.au', 'protonmail.com'
+]);
 
-export const getDomainFromEmail = (email: string): string | null => {
+const COMMON_TYPOS: Record<string, string> = {
+    'gnail.com': 'gmail.com',
+    'gamil.com': 'gmail.com',
+    'gmial.com': 'gmail.com',
+    'gmal.com': 'gmail.com',
+    'gmil.com': 'gmail.com',
+    'yaho.com': 'yahoo.com',
+    'yahho.com': 'yahoo.com',
+    'hotmal.com': 'hotmail.com',
+    'hotmial.com': 'hotmail.com',
+    'outlok.com': 'outlook.com',
+    'outlock.com': 'outlook.com'
+};
+
+const getDomainFromEmail = (email: string): string | null => {
     if (typeof email !== 'string' || !email.includes('@')) {
         return null;
     }
     return email.split('@')[1].toLowerCase();
 };
 
-export const getPrefixFromEmail = (email: string): string | null => {
+const getPrefixFromEmail = (email: string): string | null => {
     if (typeof email !== 'string' || !email.includes('@')) {
         return null;
     }
     return email.split('@')[0].toLowerCase();
 }
 
+const checkTypo = (domain: string): string | null => {
+    return COMMON_TYPOS[domain] || null;
+}
+
 export const validate = async (
     rows: Record<string, any>[], 
     emailColumn: string,
     onProgress: (progress: { good: number, risky: number, bad: number, total: number, data: Record<string, any>[] }) => void
-) => {
+): Promise<{ good: number; risky: number; bad: number; total: number; data: Record<string, any>[] }> => {
     let good = 0;
-    let risky = 0; // This will now be treated as 'Bad' but we can still count it.
+    let risky = 0;
     let bad = 0;
     const total = rows.length;
-    const validatedData = [];
+    const validatedData: Record<string, any>[] = [];
 
-    // Step 1: Basic syntax validation and collect all unique domains
-    const syntaxCheckedRows: { row: Record<string, any>; email: string; domain: string | null; }[] = [];
+    // Step 1: Pre-validation checks (syntax, empty, typo) and domain collection
+    const validRowsToProcess: { row: Record<string, any>; email: string; domain: string }[] = [];
     const domainsToValidate = new Set<string>();
 
     for (const row of rows) {
         const email = String(row[emailColumn] || '').trim();
         if (!email) {
             bad++;
-            validatedData.push({ ...row, Status: 'Bad', Notes: 'Missing email' });
+            validatedData.push({ ...row, Status: 'Bad', Notes: 'Missing email', Category: 'Invalid' });
             continue;
         }
 
         if (!EMAIL_REGEX.test(email)) {
             bad++;
-            validatedData.push({ ...row, Status: 'Bad', Notes: 'Invalid syntax' });
+            validatedData.push({ ...row, Status: 'Bad', Notes: 'Invalid syntax', Category: 'Invalid' });
             continue;
         }
 
         const domain = getDomainFromEmail(email);
-        if (domain) {
-            syntaxCheckedRows.push({ row, email, domain });
-            domainsToValidate.add(domain);
-        } else {
+        if (!domain) {
             bad++;
-            validatedData.push({ ...row, Status: 'Bad', Notes: 'Invalid domain' });
+            validatedData.push({ ...row, Status: 'Bad', Notes: 'Invalid domain', Category: 'Invalid' });
+            continue;
         }
+
+        const typoSuggestion = checkTypo(domain);
+        if (typoSuggestion) {
+            bad++;
+            validatedData.push({ ...row, Status: 'Bad', Notes: `Typo, did you mean ${typoSuggestion}?`, Category: 'Invalid' });
+            continue;
+        }
+        
+        validRowsToProcess.push({ row, email, domain });
+        domainsToValidate.add(domain);
     }
     
-    // Step 2: Batch validate domains via API
-    let domainValidationMap: Record<string, boolean> = {};
+    // Step 2: Batch validate domains for MX records and catch-all status
+    let domainValidationMap: Record<string, { hasMx: boolean; isCatchAll?: boolean }> = {};
     if (domainsToValidate.size > 0) {
         try {
             const response = await fetch('/api/validate-domains', {
@@ -277,56 +323,64 @@ export const validate = async (
             }
         } catch (error) {
              console.error("MX validation failed for all domains:", error);
-             // If API fails, mark all as bad to be safe
-             syntaxCheckedRows.forEach(item => {
+             validRowsToProcess.forEach(item => {
                 bad++;
-                validatedData.push({ ...item.row, Status: 'Bad', Notes: 'Domain check failed' });
+                validatedData.push({ ...item.row, Status: 'Bad', Notes: 'Domain check failed', Category: 'Invalid' });
              });
-             // Exit early if the domain check fails entirely
              onProgress({ good, risky, bad, total, data: validatedData });
              return { good, risky, bad, total, data: validatedData };
         }
     }
 
     // Step 3: Final classification
-    for (const { row, email, domain } of syntaxCheckedRows) {
-        let currentStatus: 'Good' | 'Bad' = 'Good';
-        let currentNotes = '';
+    for (const { row, email, domain } of validRowsToProcess) {
+        let status: 'Good' | 'Risky' | 'Bad' = 'Good';
+        let notes = '';
+        let category = FREE_DOMAINS.has(domain) ? 'Free' : 'Business';
 
-        if (!domain || domainValidationMap[domain] === false) {
-            currentStatus = 'Bad';
-            currentNotes = 'No MX Record';
+        const domainInfo = domainValidationMap[domain];
+
+        if (!domainInfo || !domainInfo.hasMx) {
+            status = 'Bad';
+            notes = 'No MX Record';
+            category = 'Invalid';
+        } else if (DISPOSABLE_DOMAINS.has(domain)) {
+            status = 'Bad';
+            notes = 'Disposable domain';
+            category = 'Invalid';
         } else {
             const prefix = getPrefixFromEmail(email);
-            if (DISPOSABLE_DOMAINS.has(domain)) {
-                currentStatus = 'Bad';
-                currentNotes = 'Disposable domain';
-                risky++; // still count as risky for internal stats if needed
-            } else if (prefix && ROLE_BASED_PREFIXES.has(prefix)) {
-                currentStatus = 'Bad';
-                currentNotes = 'Role-based email';
-                risky++; // still count as risky for internal stats if needed
+            if (prefix && ROLE_BASED_PREFIXES.has(prefix)) {
+                status = 'Risky';
+                notes = 'Role-based email';
             }
         }
         
-        if (currentStatus === 'Good') good++;
+        if (status === 'Good') {
+            // This is a simplified catch-all check based on common patterns.
+            // A true catch-all check requires an SMTP connection.
+            const commonCatchAllPrefixes = ['info', 'contact', 'support', 'sales', 'admin'];
+            const prefix = getPrefixFromEmail(email);
+            if (prefix && commonCatchAllPrefixes.includes(prefix)) {
+                 status = 'Risky';
+                 notes = 'Potential catch-all (role-based)';
+            }
+        }
+
+        if (status === 'Good') good++;
+        else if (status === 'Risky') risky++;
         else bad++;
 
-        validatedData.push({ ...row, Status: currentStatus, Notes: currentNotes });
+        validatedData.push({ ...row, Status: status, Notes: notes, Category: category });
         
-        // Report progress periodically
-        if ((good + bad) % 10 === 0 || (good + bad) === total) {
-             // Pass 0 for risky as we are classifying them as bad
-            onProgress({ good, risky: 0, bad, total, data: validatedData });
+        if ((good + risky + bad) % 10 === 0 || (good + risky + bad) === total) {
+            onProgress({ good, risky, bad, total, data: validatedData });
         }
     }
 
     // Final progress report
-    onProgress({ good, risky: 0, bad, total, data: validatedData });
+    const finalValidatedData = [...validatedData, ...rows.filter(r => !validatedData.some(vr => vr[emailColumn] === r[emailColumn]))];
+    onProgress({ good, risky, bad, total, data: finalValidatedData });
 
-    // Return 0 for risky as they are now considered 'Bad'
-    return { good, risky: 0, bad, total, data: validatedData };
+    return { good, risky, bad, total, data: finalValidatedData };
 };
-
-    
-    

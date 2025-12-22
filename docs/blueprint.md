@@ -19,3 +19,4 @@
 - Clean SaaS layout with clear sections for CSV upload, mode selection, progress display, and results export. Light and dark mode support.
 - Simple, clear icons to represent each verification mode and status. Minimalist style to match the overall aesthetic.
 - Subtle progress bar animation and loading indicators during the verification process.
+- 
