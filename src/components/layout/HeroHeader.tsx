@@ -30,7 +30,6 @@ export const HeroHeader = () => {
                         <PartyPopper className="mr-2 h-4 w-4" />
                         <span className="font-semibold md:hidden">Lifetime Deal : 69$ for 500k credits yearly</span>
                         <span className="hidden font-semibold md:inline">Lifetime Deal : 69$ for 500k credits yearly</span>
-                        <ArrowRight className="ml-2 h-4 w-4 transform transition-transform duration-300 group-hover:translate-x-1" />
                     </div>
                 </Link>
             </div>
