@@ -484,29 +484,6 @@ export default function ListsPage() {
                 </CardFooter>
               </Card>
             ))}
-
-            {Array(Math.max(0, 8 - (lists?.length || 0)))
-              .fill(0)
-              .map((_, index) => (
-                <Card
-                  key={`locked-${index}`}
-                  className="relative flex flex-col items-center justify-center bg-muted/50"
-                >
-                  <div className="absolute right-4 top-4">
-                    <Lock className="h-5 w-5 text-muted-foreground" />
-                  </div>
-                  <div className="w-full p-6 space-y-4 animate-pulse">
-                    <div className="h-5 w-3/4 rounded-md bg-muted-foreground/20" />
-                    <div className="h-3 w-1/2 rounded-md bg-muted-foreground/20" />
-                    <div className="h-2 w-full rounded-full bg-muted-foreground/20 mt-4" />
-                    <div className="flex justify-between items-center">
-                      <div className="h-6 w-12 rounded-full bg-muted-foreground/20" />
-                      <div className="h-4 w-20 rounded-md bg-muted-foreground/20" />
-                    </div>
-                    <div className="h-10 w-full rounded-md bg-muted-foreground/20 mt-4" />
-                  </div>
-                </Card>
-              ))}
           </div>
         )}
 
