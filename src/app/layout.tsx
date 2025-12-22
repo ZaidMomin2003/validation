@@ -2,7 +2,6 @@
 'use client';
 
 import './globals.css';
-import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/toaster';
 import { Inter } from 'next/font/google';
 import { FirebaseProvider } from '@/firebase/provider';
@@ -35,17 +34,10 @@ export default function RootLayout({
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
       </head>
       <body className={`${inter.variable} font-body antialiased`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
           <FirebaseProvider>
             {children}
           </FirebaseProvider>
           <Toaster />
-        </ThemeProvider>
       </body>
     </html>
   );
