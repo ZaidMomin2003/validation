@@ -131,17 +131,6 @@ export default function DashboardLayout({
             </SidebarMenu>
           </SidebarContent>
           <SidebarFooter className="mt-auto">
-            <div className="p-2">
-                <div className="rounded-lg bg-sidebar-accent p-4 border border-sidebar-border">
-                    <div className="mb-3">
-                        <p className="text-sm font-medium text-sidebar-accent-foreground">Credits Usage</p>
-                        <p className="text-xs text-muted-foreground">
-                            {usedCredits.toLocaleString()} / {totalCredits.toLocaleString()} used
-                        </p>
-                    </div>
-                    <Progress value={creditPercentage} className="h-2" />
-                </div>
-            </div>
             <SidebarGroup>
               <SidebarGroupLabel>QUICK LINKS</SidebarGroupLabel>
               <SidebarMenu>
@@ -161,6 +150,17 @@ export default function DashboardLayout({
                 </SidebarMenuItem>
               </SidebarMenu>
             </SidebarGroup>
+             <div className="p-2">
+                <div className="rounded-lg bg-sidebar-accent p-4 border border-sidebar-border">
+                    <div className="mb-3">
+                        <p className="text-sm font-medium text-sidebar-accent-foreground">Credits Usage</p>
+                        <p className="text-xs text-muted-foreground">
+                            {usedCredits.toLocaleString()} / {totalCredits.toLocaleString()} used
+                        </p>
+                    </div>
+                    <Progress value={creditPercentage} className="h-2" />
+                </div>
+            </div>
             <SidebarSeparator />
             <ClientOnly>
               <DropdownMenu>
