@@ -32,6 +32,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import Link from 'next/link';
 
 
 const PREVIEW_ROW_COUNT = 8;
@@ -528,88 +529,111 @@ export default function BulkValidatePage() {
         )
     }
 
-    const renderFileUpload = () => (
-        <>
-            <Tabs defaultValue="clean" onValueChange={setActiveTab} value={activeTab}>
-                <div className="flex justify-start">
-                    <TabsList>
-                        <TabsTrigger value="clean">
-                            <Columns className="mr-2 h-4 w-4" />
-                            Clean List
-                        </TabsTrigger>
-                        <TabsTrigger value="validate">
-                            <CheckCircle className="mr-2 h-4 w-4" />
-                            Validate List
-                        </TabsTrigger>
-                    </TabsList>
+    const renderFileUpload = () => {
+        if (user?.plan === 'Free' && creditsLeft <= 0) {
+            return (
+                <Card>
+                    <CardHeader className="text-center">
+                        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-destructive/10">
+                            <CreditCard className="h-8 w-8 text-destructive" />
+                        </div>
+                        <CardTitle className="text-2xl mt-4">You've Used All Your Credits</CardTitle>
+                        <CardDescription>
+                            You have used all your free monthly credits. Please upgrade your plan to continue validating emails.
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent className="flex flex-col items-center gap-4">
+                        <Button asChild size="lg">
+                            <Link href="/pricing">Upgrade Plan</Link>
+                        </Button>
+                        <p className="text-xs text-muted-foreground">Your credits will reset next month.</p>
+                    </CardContent>
+                </Card>
+            );
+        }
+        return (
+            <>
+                <Tabs defaultValue="clean" onValueChange={setActiveTab} value={activeTab}>
+                    <div className="flex justify-start">
+                        <TabsList>
+                            <TabsTrigger value="clean">
+                                <Columns className="mr-2 h-4 w-4" />
+                                Clean List
+                            </TabsTrigger>
+                            <TabsTrigger value="validate">
+                                <CheckCircle className="mr-2 h-4 w-4" />
+                                Validate List
+                            </TabsTrigger>
+                        </TabsList>
+                    </div>
+                    <TabsContent value="clean">
+                        <Card>
+                            <CardContent className="w-full max-w-4xl mx-auto p-0">
+                                <FileUpload onChange={handleFileUpload} accept=".csv, .xlsx" />
+                            </CardContent>
+                        </Card>
+                    </TabsContent>
+                    <TabsContent value="validate">
+                        <Card>
+                            <CardContent className="w-full max-w-4xl mx-auto p-0">
+                                <FileUpload onChange={handleFileUpload} accept=".csv, .xlsx" />
+                            </CardContent>
+                        </Card>
+                    </TabsContent>
+                </Tabs>
+                <div className="grid gap-4 mt-8">
+                    <h2 className="text-2xl font-bold">How it works</h2>
+                    <div className="grid gap-4 md:grid-cols-3">
+                        <Card>
+                            <CardHeader>
+                                <div className="flex items-center gap-4">
+                                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+                                        <FileUp className="h-6 w-6 text-primary" />
+                                    </div>
+                                    <CardTitle>1. Upload File</CardTitle>
+                                </div>
+                            </CardHeader>
+                            <CardContent>
+                            <p className="text-muted-foreground">
+                            Upload a CSV or XLSX file containing the email addresses you want to process.
+                            </p>
+                            </CardContent>
+                        </Card>
+                        <Card>
+                            <CardHeader>
+                                <div className="flex items-center gap-4">
+                                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+                                        <Milestone className="h-6 w-6 text-primary" />
+                                    </div>
+                                    <CardTitle>2. Choose Action</CardTitle>
+                                </div>
+                            </CardHeader>
+                            <CardContent>
+                            <p className="text-muted-foreground">
+                                Choose to clean a messy list (multiple emails per cell) or validate a clean list.
+                            </p>
+                            </CardContent>
+                        </Card>
+                        <Card>
+                            <CardHeader>
+                                <div className="flex items-center gap-4">
+                                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+                                        <Download className="h-6 w-6 text-primary" />
+                                    </div>
+                                    <CardTitle>3. Download Results</CardTitle>
+                                </div>
+                            </CardHeader>
+                            <CardContent>
+                            <p className="text-muted-foreground">
+                                Once processing is complete, go to the 'Lists' page to download your detailed report.
+                            </p>
+                            </CardContent>
+                        </Card>
+                    </div>
                 </div>
-                <TabsContent value="clean">
-                    <Card>
-                        <CardContent className="w-full max-w-4xl mx-auto p-0">
-                            <FileUpload onChange={handleFileUpload} accept=".csv, .xlsx" />
-                        </CardContent>
-                    </Card>
-                </TabsContent>
-                <TabsContent value="validate">
-                    <Card>
-                        <CardContent className="w-full max-w-4xl mx-auto p-0">
-                            <FileUpload onChange={handleFileUpload} accept=".csv, .xlsx" />
-                        </CardContent>
-                    </Card>
-                </TabsContent>
-            </Tabs>
-             <div className="grid gap-4 mt-8">
-                <h2 className="text-2xl font-bold">How it works</h2>
-                <div className="grid gap-4 md:grid-cols-3">
-                    <Card>
-                        <CardHeader>
-                            <div className="flex items-center gap-4">
-                                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                                    <FileUp className="h-6 w-6 text-primary" />
-                                </div>
-                                <CardTitle>1. Upload File</CardTitle>
-                            </div>
-                        </CardHeader>
-                        <CardContent>
-                        <p className="text-muted-foreground">
-                           Upload a CSV or XLSX file containing the email addresses you want to process.
-                        </p>
-                        </CardContent>
-                    </Card>
-                    <Card>
-                        <CardHeader>
-                            <div className="flex items-center gap-4">
-                                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                                    <Milestone className="h-6 w-6 text-primary" />
-                                </div>
-                                <CardTitle>2. Choose Action</CardTitle>
-                            </div>
-                        </CardHeader>
-                        <CardContent>
-                        <p className="text-muted-foreground">
-                            Choose to clean a messy list (multiple emails per cell) or validate a clean list.
-                        </p>
-                        </CardContent>
-                    </Card>
-                    <Card>
-                        <CardHeader>
-                            <div className="flex items-center gap-4">
-                                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                                    <Download className="h-6 w-6 text-primary" />
-                                </div>
-                                <CardTitle>3. Download Results</CardTitle>
-                            </div>
-                        </CardHeader>
-                        <CardContent>
-                        <p className="text-muted-foreground">
-                            Once processing is complete, go to the 'Lists' page to download your detailed report.
-                        </p>
-                        </CardContent>
-                    </Card>
-                </div>
-            </div>
-        </>
-    );
+            </>
+        )
+    };
     
     const renderContent = () => {
         if (isLoading) {
@@ -655,4 +679,5 @@ export default function BulkValidatePage() {
   );
 }
 
+    
     
