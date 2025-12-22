@@ -1,5 +1,7 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   Activity,
   ArrowUpRight,
@@ -8,6 +10,7 @@ import {
   CreditCard,
   DollarSign,
   Download,
+  Loader2,
   Users,
 } from 'lucide-react';
 import {
@@ -37,8 +40,6 @@ import {
   ChartTooltipContent,
 } from '@/components/ui/chart';
 import { Bar, BarChart as RechartsBarChart, XAxis, YAxis } from 'recharts';
-import { useRouter } from 'next/navigation';
-
 
 const chartData = [
   { month: 'January', users: 186 },
@@ -72,13 +73,33 @@ const recentUsers = [
 
 export default function AdminDashboardPage() {
     const router = useRouter();
+    const [isVerified, setIsVerified] = useState(false);
+
+    useEffect(() => {
+        const isAdmin = sessionStorage.getItem('isAdminAuthenticated') === 'true';
+        if (!isAdmin) {
+            router.replace('/admin/login');
+        } else {
+            setIsVerified(true);
+        }
+    }, [router]);
+
 
     const handleSignOut = () => {
         sessionStorage.removeItem('isAdminAuthenticated');
         router.push('/admin/login');
     }
+
+    if (!isVerified) {
+        return (
+            <div className="flex min-h-screen w-full items-center justify-center bg-background">
+                <Loader2 className="h-12 w-12 animate-spin text-primary" />
+            </div>
+        );
+    }
+
   return (
-    <div className="flex flex-1 flex-col">
+    <div className="flex min-h-screen w-full flex-col bg-muted/40">
       <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
         <h1 className="text-2xl font-bold">Admin Dashboard</h1>
         <div className="ml-auto flex items-center gap-2">
