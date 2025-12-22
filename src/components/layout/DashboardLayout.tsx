@@ -172,9 +172,9 @@ export default function DashboardLayout({
                         <p className="text-sm font-medium text-sidebar-accent-foreground">
                             {planName === 'Free' ? 'Monthly Credits' : `${planName} Credits`}
                         </p>
-                        <p className="text-xs text-muted-foreground">
+                        <div className="text-xs text-muted-foreground">
                             {listsLoading ? <Skeleton className="h-4 w-20" /> : `${usedCredits.toLocaleString()} / ${totalCredits.toLocaleString()} used`}
-                        </p>
+                        </div>
                     </div>
                     <Progress value={creditPercentage} className="h-2" />
                 </div>
@@ -256,7 +256,7 @@ export default function DashboardLayout({
                                 <DropdownMenuItem onClick={() => setTheme('dark')}>
                                   Dark
                                 </DropdownMenuItem>
-                                <DropdownMenuItem onClick={() => setTheme('system')}>
+                                <DropdownMenuItem onClick={()={() => setTheme('system')}}>
                                   System
                                 </DropdownMenuItem>
                               </DropdownMenuSubContent>
