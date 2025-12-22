@@ -1,5 +1,8 @@
 
 import * as XLSX from 'xlsx';
+import { doc, getDoc, updateDoc, increment } from 'firebase/firestore';
+import { db } from '@/firebase/firebaseClient';
+
 
 export const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -259,6 +262,20 @@ const checkTypo = (domain: string): string | null => {
     return COMMON_TYPOS[domain] || null;
 }
 
+const updateUserCredits = async (userId: string, creditsToDeduct: number) => {
+    if (!userId || creditsToDeduct <= 0) return;
+
+    const userDocRef = doc(db, 'users', userId);
+    try {
+        await updateDoc(userDocRef, {
+            creditsUsed: increment(creditsToDeduct)
+        });
+    } catch (error) {
+        console.error("Failed to update user credits:", error);
+        // We might want to handle this more gracefully, e.g., retry or log for manual correction
+    }
+};
+
 export const validate = async (
     rows: Record<string, any>[], 
     emailColumn: string,
@@ -269,6 +286,7 @@ export const validate = async (
     let bad = 0;
     const total = rows.length;
     const validatedData: Record<string, any>[] = [];
+    const userId = rows.length > 0 ? rows[0].userId : null;
 
     // Step 1: Pre-validation checks (syntax, empty, typo) and domain collection
     const validRowsToProcess: { row: Record<string, any>; email: string; domain: string }[] = [];
@@ -328,6 +346,7 @@ export const validate = async (
                 validatedData.push({ ...item.row, Status: 'Bad', Notes: 'Domain check failed', Category: 'Invalid' });
              });
              onProgress({ good, risky, bad, total, data: validatedData });
+             // Since validation failed, don't deduct credits
              return { good, risky, bad, total, data: validatedData };
         }
     }
@@ -388,6 +407,12 @@ export const validate = async (
     });
 
     onProgress({ good, risky, bad, total, data: finalValidatedData });
+
+    // Step 4: Deduct credits after processing is complete
+    if (userId) {
+        await updateUserCredits(userId, total);
+    }
+
 
     return { good, risky, bad, total, data: finalValidatedData };
 };

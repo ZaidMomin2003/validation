@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -11,6 +12,8 @@ import {
   FirestoreError,
   Unsubscribe,
   DocumentData,
+  setDoc,
+  getDoc,
 } from 'firebase/firestore';
 import { onAuthStateChanged, signOut as firebaseSignOut, User as FirebaseUser } from 'firebase/auth';
 import { useAuthContext, useFirestore } from './provider';
@@ -91,6 +94,30 @@ export function useDoc<T>(ref: DocumentReference | null) {
   return { data, loading, error };
 }
 
+const createUserProfileDocument = async (db: Firestore, user: FirebaseUser) => {
+    const userDocRef = doc(db, 'users', user.uid);
+    const userDoc = await getDoc(userDocRef);
+
+    if (!userDoc.exists()) {
+        const newUserProfile: AppUser = {
+            uid: user.uid,
+            email: user.email,
+            displayName: user.displayName,
+            photoURL: user.photoURL,
+            providerId: user.providerData[0]?.providerId || 'password',
+            plan: 'Free',
+            creditsUsed: 0,
+            creditsTotal: 1000,
+        };
+        try {
+            await setDoc(userDocRef, newUserProfile);
+        } catch (error) {
+            console.error("Error creating user profile:", error);
+        }
+    }
+};
+
+
 export function useUser() {
   const auth = useAuthContext();
   const db = useFirestore();
@@ -105,10 +132,12 @@ export function useUser() {
         return;
     }
     
-    const unsubscribeAuth = onAuthStateChanged(auth, (firebaseUser: FirebaseUser | null) => {
+    const unsubscribeAuth = onAuthStateChanged(auth, async (firebaseUser: FirebaseUser | null) => {
       if (firebaseUser) {
         if (firebaseUser.emailVerified) {
-          // User is authenticated, now fetch their profile from Firestore
+          
+          await createUserProfileDocument(db, firebaseUser);
+
           const userDocRef = doc(db, 'users', firebaseUser.uid);
           const unsubscribeProfile = onSnapshot(userDocRef, 
             (docSnapshot) => {
@@ -121,19 +150,6 @@ export function useUser() {
                   photoURL: firebaseUser.photoURL,
                   providerId: firebaseUser.providerData[0]?.providerId || 'password',
                   ...profileData, // Merge Firestore profile data
-                };
-                setUser(formattedUser);
-              } else {
-                 // Profile doesn't exist, use auth data and maybe create a profile
-                 const formattedUser: AppUser = {
-                  uid: firebaseUser.uid,
-                  email: firebaseUser.email,
-                  displayName: firebaseUser.displayName,
-                  photoURL: firebaseUser.photoURL,
-                  providerId: firebaseUser.providerData[0]?.providerId || 'password',
-                  plan: 'Free',
-                  creditsUsed: 0,
-                  creditsTotal: 1000,
                 };
                 setUser(formattedUser);
               }
