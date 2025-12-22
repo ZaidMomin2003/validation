@@ -93,8 +93,8 @@ export default function DashboardLayout({
       .toUpperCase();
   };
 
-  const usedCredits = 12500;
-  const totalCredits = 500000;
+  const usedCredits = 250; // Example usage
+  const totalCredits = 1000; // Free plan monthly credits
   const creditPercentage = (usedCredits / totalCredits) * 100;
 
   return (
@@ -153,7 +153,7 @@ export default function DashboardLayout({
              <div className="p-2">
                 <div className="rounded-lg bg-sidebar-accent p-4 border border-sidebar-border">
                     <div className="mb-3">
-                        <p className="text-sm font-medium text-sidebar-accent-foreground">Credits Usage</p>
+                        <p className="text-sm font-medium text-sidebar-accent-foreground">Monthly Credits</p>
                         <p className="text-xs text-muted-foreground">
                             {usedCredits.toLocaleString()} / {totalCredits.toLocaleString()} used
                         </p>

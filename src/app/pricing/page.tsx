@@ -3,7 +3,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Check, ShieldCheck, Sparkles } from "lucide-react";
+import { Check, ShieldCheck, Sparkles, Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 
@@ -11,7 +11,7 @@ const plans = [
   {
     name: "Lifetime Deal",
     price: "$69",
-    description: "For power users and businesses.",
+    description: "For power users and businesses. Limited time offer!",
     features: [
       "500,000 Verifications/Year",
       "Bulk List Cleaning",
@@ -19,14 +19,15 @@ const plans = [
       "Priority Support",
       "Lifetime Access & Updates",
     ],
-    cta: "Upgrade to Pro",
+    cta: "Get the Deal",
     isCurrent: false,
     isFeatured: true,
-    priceDetails: "/ lifetime"
+    priceDetails: "/ lifetime",
+    note: "Offer expires on December 31st!"
   },
   {
     name: "Pay as you go",
-    price: "$9",
+    price: "$19",
     description: "For one-off validation needs.",
     features: [
       "50,000 Verifications",
@@ -46,7 +47,7 @@ const freePlan = {
   price: "$0",
   description: "For getting started and small projects.",
   features: [
-    "500 Verifications/Day",
+    "1,000 Verifications/Month",
     "Bulk List Cleaning",
     "Bulk CSV Processing",
     "Community Support",
@@ -73,8 +74,9 @@ export default function PricingPage() {
             <Card key={plan.name} className={cn("flex flex-col h-full", plan.isFeatured && "border-primary shadow-2xl relative")}>
               {plan.isFeatured && (
                 <div className="absolute top-0 -translate-y-1/2 w-full flex justify-center">
-                    <div className="bg-primary text-primary-foreground px-4 py-1 rounded-full text-sm font-semibold">
-                        Best Value
+                    <div className="bg-primary text-primary-foreground px-4 py-1 rounded-full text-sm font-semibold flex items-center gap-2">
+                        <Star className="h-4 w-4" />
+                        <span>Best Value</span>
                     </div>
                 </div>
               )}
@@ -97,6 +99,7 @@ export default function PricingPage() {
                 </ul>
               </CardContent>
               <CardFooter className="flex-col items-center pt-6">
+                 {plan.note && <p className="text-xs text-amber-500 mb-4 font-semibold">{plan.note}</p>}
                 <Button 
                   className="w-full" 
                   disabled={plan.isCurrent}
@@ -134,7 +137,7 @@ export default function PricingPage() {
               <div className="p-8 border-t md:border-t-0 md:border-l flex flex-col items-center justify-center text-center">
                   <p className="text-4xl font-bold">
                     {freePlan.price}
-                    <span className="text-base font-normal text-muted-foreground">/ forever</span>
+                    <span className="text-base font-normal text-muted-foreground">/ month</span>
                   </p>
                   <Button asChild className="mt-4 w-full max-w-xs">
                     <Link href="/auth">{freePlan.cta}</Link>

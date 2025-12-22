@@ -1,25 +1,28 @@
 
 'use client'
 import { Button } from '@/components/ui/button'
-import { Check } from 'lucide-react'
+import { Check, Star } from 'lucide-react'
 import Link from 'next/link'
 import { Cover } from '@/components/ui/cover';
 import Image from 'next/image';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import React from 'react';
+import { cn } from '@/lib/utils';
 
 const features = {
     pro: [
         '500,000 Verifications/Year',
         'Bulk List Cleaning',
         'Bulk CSV Processing',
-        'Priority Support'
+        'Priority Support',
+        'Lifetime Access & Updates'
     ],
     payg: [
         '50,000 Verifications',
         'Bulk List Cleaning',
         'Bulk CSV Processing',
-        'Standard Support'
+        'Standard Support',
+        'Credits never expire'
     ]
 };
 
@@ -33,22 +36,25 @@ export default function PricingSection() {
                 </div>
                 <div className="mt-8 md:mt-20">
                     <div className="bg-card relative rounded-3xl border shadow-2xl shadow-zinc-950/5">
-                        <div className="grid items-center gap-12 divide-y p-12 md:grid-cols-2 md:divide-x md:divide-y-0">
+                        <div className="grid items-center gap-12 divide-y p-8 sm:p-12 md:grid-cols-2 md:divide-x md:divide-y-0">
                             <div className="pb-12 text-center md:pb-0 md:pr-12">
 
                                 <Tabs defaultValue="pro" onValueChange={setPlan} className="w-full max-w-xs mx-auto">
                                     <TabsList className="grid w-full grid-cols-2">
                                         <TabsTrigger value="payg">Pay as you go</TabsTrigger>
-                                        <TabsTrigger value="pro">Pro Plan</TabsTrigger>
+                                        <TabsTrigger value="pro">Lifetime</TabsTrigger>
                                     </TabsList>
                                 </Tabs>
                                 
                                 <div className='mt-8'>
-                                    <h3 className="text-2xl font-semibold">{plan === 'pro' ? 'Lifetime Deal' : 'Pay As You Go'}</h3>
-                                    <p className="mt-2 text-lg">{plan === 'pro' ? 'For power users and businesses' : 'For one-off validation needs'}</p>
+                                    <div className="flex items-center justify-center gap-2">
+                                        {plan === 'pro' && <Star className="h-6 w-6 text-amber-400" />}
+                                        <h3 className="text-2xl font-semibold">{plan === 'pro' ? 'Lifetime Deal' : 'Pay As You Go'}</h3>
+                                    </div>
+                                    <p className="mt-2 text-lg text-muted-foreground">{plan === 'pro' ? 'For power users and businesses' : 'For one-off validation needs'}</p>
                                     <span className="mb-6 mt-4 inline-block text-6xl font-bold">
-                                        <span className="text-4xl">$</span>{plan === 'pro' ? '69' : '9'}
-                                        {plan === 'pro' && <span className="text-lg font-normal text-muted-foreground">/lifetime</span>}
+                                        <span className="text-4xl">$</span>{plan === 'pro' ? '69' : '19'}
+                                        <span className={cn("text-lg font-normal text-muted-foreground", plan === 'pro' && 'line-through opacity-70 ml-2')}>$99</span>
                                     </span>
                                 </div>
 
@@ -59,7 +65,9 @@ export default function PricingSection() {
                                         <Link href="/pricing">Get started</Link>
                                     </Button>
                                 </div>
-                                 <p className="text-muted-foreground mt-12 text-sm">{plan === 'pro' ? 'Includes: 500,000 verifications per year for life, bulk cleaning, and priority support.' : 'Includes: 50,000 verifications. Credits do not expire. Use them when you need them.'}</p>
+                                <p className={cn("text-amber-500 mt-4 text-xs font-semibold transition-opacity duration-300", plan === 'pro' ? 'opacity-100' : 'opacity-0')}>
+                                    Offer expires on December 31st!
+                                </p>
                             </div>
                             <div className="relative pt-12 md:pt-0 md:pl-12">
                                 <ul
@@ -69,7 +77,7 @@ export default function PricingSection() {
                                         <li
                                             key={index}
                                             className="flex items-center gap-2">
-                                            <Check className="size-3" />
+                                            <Check className="size-4 text-primary" />
                                             <span>{item}</span>
                                         </li>
                                     ))}
