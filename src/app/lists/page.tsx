@@ -270,13 +270,24 @@ export default function ListsPage() {
       <div className="grid gap-8">
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           {stats.map((stat) => (
-            <Card key={stat.title}>
+            <Card
+              key={stat.title}
+              className={cn(
+                stat.title === 'Valid Emails' && 'bg-white text-black'
+              )}
+            >
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
                   {stat.title}
                 </CardTitle>
                 <stat.icon
-                  className={cn('h-4 w-4 text-muted-foreground', stat.color)}
+                  className={cn(
+                    'h-4 w-4',
+                    stat.title === 'Valid Emails'
+                      ? 'text-green-500'
+                      : 'text-muted-foreground',
+                    stat.color
+                  )}
                 />
               </CardHeader>
               <CardContent>
@@ -287,7 +298,14 @@ export default function ListsPage() {
                     stat.value
                   )}
                 </div>
-                <p className="text-xs text-muted-foreground">
+                <p
+                  className={cn(
+                    'text-xs',
+                    stat.title === 'Valid Emails'
+                      ? 'text-gray-600'
+                      : 'text-muted-foreground'
+                  )}
+                >
                   {stat.description}
                 </p>
               </CardContent>
