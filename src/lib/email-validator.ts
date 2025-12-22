@@ -307,7 +307,7 @@ export const validate = async (
     }
     
     // Step 2: Batch validate domains for MX records and catch-all status
-    let domainValidationMap: Record<string, { hasMx: boolean; isCatchAll?: boolean }> = {};
+    let apiValidationMap: Record<string, boolean> = {};
     if (domainsToValidate.size > 0) {
         try {
             const response = await fetch('/api/validate-domains', {
@@ -317,7 +317,7 @@ export const validate = async (
             });
             if (response.ok) {
                 const result = await response.json();
-                domainValidationMap = result.validationMap;
+                apiValidationMap = result.validationMap;
             } else {
                  throw new Error('Domain validation API failed');
             }
@@ -338,9 +338,9 @@ export const validate = async (
         let notes = '';
         let category = FREE_DOMAINS.has(domain) ? 'Free' : 'Business';
 
-        const domainInfo = domainValidationMap[domain];
+        const hasMx = apiValidationMap[domain];
 
-        if (!domainInfo || !domainInfo.hasMx) {
+        if (hasMx === false) { // Explicitly check for false, as undefined means the API call might have failed for this domain
             status = 'Bad';
             notes = 'No MX Record';
             category = 'Invalid';
@@ -379,7 +379,14 @@ export const validate = async (
     }
 
     // Final progress report
-    const finalValidatedData = [...validatedData, ...rows.filter(r => !validatedData.some(vr => vr[emailColumn] === r[emailColumn]))];
+    const finalValidatedData = [...validatedData];
+    const validatedEmails = new Set(validatedData.map(v => v[emailColumn]));
+    rows.forEach(r => {
+        if (!validatedEmails.has(r[emailColumn])) {
+            finalValidatedData.push({ ...r, Status: 'Bad', Notes: 'Unknown validation error', Category: 'Invalid' });
+        }
+    });
+
     onProgress({ good, risky, bad, total, data: finalValidatedData });
 
     return { good, risky, bad, total, data: finalValidatedData };
