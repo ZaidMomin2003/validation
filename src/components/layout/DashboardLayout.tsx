@@ -16,6 +16,7 @@ import {
   UserCog,
   CreditCard,
   LifeBuoy,
+  FileText,
 } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -113,6 +114,13 @@ export default function DashboardLayout({
                   <FileUp />
                   Clean and validate
                   {pathname === '/bulk-validate' && <ChevronRight className="ml-auto h-4 w-4" />}
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton href="/extract-from-text" isActive={pathname === '/extract-from-text'}>
+                  <FileText />
+                  Extract from text
+                  {pathname === '/extract-from-text' && <ChevronRight className="ml-auto h-4 w-4" />}
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
