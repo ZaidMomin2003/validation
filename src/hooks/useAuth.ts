@@ -10,11 +10,5 @@ export const useAuth = () => {
     console.error("Authentication error:", error);
   }
 
-  const creditsUsed = user?.creditsUsed ?? 0;
-  const creditsTotal = user?.creditsTotal ?? 1000;
-  const creditsLeft = creditsTotal - creditsUsed;
-
-  return { user, loading, signOut, creditsLeft };
+  return { user, loading, signOut };
 };
-
-    

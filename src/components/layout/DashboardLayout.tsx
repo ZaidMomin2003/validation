@@ -58,6 +58,10 @@ import { ClientOnly } from '@/components/ClientOnly';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '../ui/skeleton';
 import { Progress } from '../ui/progress';
+import { useCollection } from '@/firebase/hooks';
+import { collection, query } from 'firebase/firestore';
+import { db } from '@/firebase/firebaseClient';
+import type { List } from '@/types';
 
 export default function DashboardLayout({
   children,
@@ -65,17 +69,29 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const { user, signOut, loading } = useAuth();
+  const { user, signOut, loading: authLoading } = useAuth();
   const { setTheme } = useTheme();
   const router = useRouter();
 
+  const listsQuery = React.useMemo(() => {
+    if (!user) return null;
+    return query(collection(db, `users/${user.uid}/lists`));
+  }, [user]);
+
+  const { data: lists, loading: listsLoading } = useCollection<List>(listsQuery);
+
+  const usedCredits = React.useMemo(() => {
+    if (!lists) return 0;
+    return lists.reduce((acc, list) => acc + (list.emailCount || 0), 0);
+  }, [lists]);
+
   React.useEffect(() => {
-    if (!loading && !user) {
+    if (!authLoading && !user) {
       router.push('/auth');
     }
-  }, [loading, user, router]);
+  }, [authLoading, user, router]);
 
-  if (loading || !user) {
+  if (authLoading || !user) {
     return (
         <div className="flex min-h-screen items-center justify-center">
             <Skeleton className="h-20 w-20 rounded-full" />
@@ -93,7 +109,6 @@ export default function DashboardLayout({
       .toUpperCase();
   };
 
-  const usedCredits = user?.creditsUsed ?? 0;
   const totalCredits = user?.creditsTotal ?? 1000;
   const creditPercentage = totalCredits > 0 ? (usedCredits / totalCredits) * 100 : 0;
   const planName = user?.plan ?? 'Free';
@@ -158,7 +173,7 @@ export default function DashboardLayout({
                             {planName === 'Free' ? 'Monthly Credits' : `${planName} Credits`}
                         </p>
                         <p className="text-xs text-muted-foreground">
-                            {usedCredits.toLocaleString()} / {totalCredits.toLocaleString()} used
+                            {listsLoading ? <Skeleton className="h-4 w-20" /> : `${usedCredits.toLocaleString()} / ${totalCredits.toLocaleString()} used`}
                         </p>
                     </div>
                     <Progress value={creditPercentage} className="h-2" />
@@ -169,7 +184,7 @@ export default function DashboardLayout({
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <div className="p-2 cursor-pointer">
-                      {loading ? (
+                      {authLoading ? (
                           <div className="flex items-center gap-3 p-2 rounded-lg">
                               <Skeleton className="h-9 w-9 rounded-full" />
                               <div className="flex flex-col gap-1">
