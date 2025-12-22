@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import {
   collection,
   doc,
@@ -12,7 +12,7 @@ import {
   Unsubscribe,
   DocumentData,
 } from 'firebase/firestore';
-import { onAuthStateChanged, signOut as firebaseSignOut, User } from 'firebase/auth';
+import { onAuthStateChanged, signOut as firebaseSignOut, User as FirebaseUser } from 'firebase/auth';
 import { useAuthContext, useFirestore } from './provider';
 import type { User as AppUser } from '@/types';
 import { useRouter } from 'next/navigation';
@@ -93,43 +93,77 @@ export function useDoc<T>(ref: DocumentReference | null) {
 
 export function useUser() {
   const auth = useAuthContext();
+  const db = useFirestore();
   const router = useRouter();
   const [user, setUser] = useState<AppUser | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    if (!auth) {
-        // Auth is not yet initialized
+    if (!auth || !db) {
+        // Firebase services not yet initialized
         return;
     }
     
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser: User | null) => {
+    const unsubscribeAuth = onAuthStateChanged(auth, (firebaseUser: FirebaseUser | null) => {
       if (firebaseUser) {
         if (firebaseUser.emailVerified) {
-          const formattedUser: AppUser = {
-            uid: firebaseUser.uid,
-            email: firebaseUser.email,
-            displayName: firebaseUser.displayName,
-            photoURL: firebaseUser.photoURL,
-            providerId: firebaseUser.providerData[0]?.providerId || 'password',
-          };
-          setUser(formattedUser);
+          // User is authenticated, now fetch their profile from Firestore
+          const userDocRef = doc(db, 'users', firebaseUser.uid);
+          const unsubscribeProfile = onSnapshot(userDocRef, 
+            (docSnapshot) => {
+              if (docSnapshot.exists()) {
+                const profileData = docSnapshot.data() as AppUser;
+                const formattedUser: AppUser = {
+                  uid: firebaseUser.uid,
+                  email: firebaseUser.email,
+                  displayName: firebaseUser.displayName,
+                  photoURL: firebaseUser.photoURL,
+                  providerId: firebaseUser.providerData[0]?.providerId || 'password',
+                  ...profileData, // Merge Firestore profile data
+                };
+                setUser(formattedUser);
+              } else {
+                 // Profile doesn't exist, use auth data and maybe create a profile
+                 const formattedUser: AppUser = {
+                  uid: firebaseUser.uid,
+                  email: firebaseUser.email,
+                  displayName: firebaseUser.displayName,
+                  photoURL: firebaseUser.photoURL,
+                  providerId: firebaseUser.providerData[0]?.providerId || 'password',
+                  plan: 'Free',
+                  creditsUsed: 0,
+                  creditsTotal: 1000,
+                };
+                setUser(formattedUser);
+              }
+              setLoading(false);
+            },
+            (profileError) => {
+              console.error("Error fetching user profile:", profileError);
+              setError(profileError);
+              setLoading(false);
+            }
+          );
+          
+          return () => unsubscribeProfile();
+
         } else {
           firebaseSignOut(auth);
           setUser(null);
+          setLoading(false);
         }
       } else {
         setUser(null);
+        setLoading(false);
       }
-      setLoading(false);
     }, (err) => {
         setError(err);
         setLoading(false);
     });
 
-    return () => unsubscribe();
-  }, [auth]);
+    return () => unsubscribeAuth();
+  }, [auth, db]);
 
   const signOut = async () => {
     if(auth) {

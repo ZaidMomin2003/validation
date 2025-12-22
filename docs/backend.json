@@ -22,6 +22,19 @@
           "type": "string",
           "format": "uri",
           "description": "URL of the user's profile picture."
+        },
+        "plan": {
+          "type": "string",
+          "description": "The user's subscription plan.",
+          "enum": ["Free", "Pay-as-you-go", "Lifetime"]
+        },
+        "creditsUsed": {
+          "type": "number",
+          "description": "The number of credits the user has used."
+        },
+        "creditsTotal": {
+          "type": "number",
+          "description": "The total number of credits available to the user."
         }
       },
       "required": ["uid", "email"]
@@ -75,6 +88,12 @@
     "providers": ["google.com", "password"]
   },
   "firestore": {
+    "/users/{userId}": {
+      "schema": {
+        "$ref": "#/entities/UserProfile"
+      },
+      "description": "Stores user profile information, including subscription and credit details."
+    },
     "/users/{userId}/lists/{listId}": {
       "schema": {
         "$ref": "#/entities/List"

@@ -93,9 +93,10 @@ export default function DashboardLayout({
       .toUpperCase();
   };
 
-  const usedCredits = 250; // Example usage
-  const totalCredits = 1000; // Free plan monthly credits
-  const creditPercentage = (usedCredits / totalCredits) * 100;
+  const usedCredits = user?.creditsUsed ?? 0;
+  const totalCredits = user?.creditsTotal ?? 1000;
+  const creditPercentage = totalCredits > 0 ? (usedCredits / totalCredits) * 100 : 0;
+  const planName = user?.plan ?? 'Free';
 
   return (
       <SidebarProvider>
@@ -153,7 +154,9 @@ export default function DashboardLayout({
              <div className="p-2">
                 <div className="rounded-lg bg-sidebar-accent p-4 border border-sidebar-border">
                     <div className="mb-3">
-                        <p className="text-sm font-medium text-sidebar-accent-foreground">Monthly Credits</p>
+                        <p className="text-sm font-medium text-sidebar-accent-foreground">
+                            {planName === 'Free' ? 'Monthly Credits' : `${planName} Credits`}
+                        </p>
                         <p className="text-xs text-muted-foreground">
                             {usedCredits.toLocaleString()} / {totalCredits.toLocaleString()} used
                         </p>
@@ -182,7 +185,7 @@ export default function DashboardLayout({
                               </Avatar>
                               <div className="flex flex-col text-left">
                                   <span className="text-sm font-medium">{user?.displayName}</span>
-                                  <span className="text-xs text-muted-foreground">Free Plan</span>
+                                  <span className="text-xs text-muted-foreground">{planName} Plan</span>
                               </div>
                               <ChevronsUpDown className="ml-auto h-4 w-4 text-muted-foreground" />
                           </div>
@@ -210,12 +213,12 @@ export default function DashboardLayout({
                             </Link>
                           </DropdownMenuItem>
                           <DropdownMenuItem asChild>
-                            <Link href="/subscription" className='flex items-center justify-between w-full'>
+                            <Link href="/pricing" className='flex items-center justify-between w-full'>
                               <div className='flex items-center'>
                                 <CreditCard className="mr-2 h-4 w-4" />
                                 <span>Subscription</span>
                               </div>
-                              <Badge variant="secondary">Free</Badge>
+                              <Badge variant="secondary">{planName}</Badge>
                             </Link>
                           </DropdownMenuItem>
                            <DropdownMenuItem asChild>

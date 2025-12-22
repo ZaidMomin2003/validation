@@ -4,6 +4,9 @@ export type User = {
   displayName: string | null;
   photoURL: string | null;
   providerId: string;
+  plan?: string;
+  creditsUsed?: number;
+  creditsTotal?: number;
 };
 
 export interface List {
