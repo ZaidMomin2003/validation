@@ -7,6 +7,21 @@ import { Check, ShieldCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const plans = [
+    {
+    name: "Free Plan",
+    price: "$0",
+    description: "For getting started and small projects.",
+    features: [
+      "500 Verifications/Day",
+      "Bulk List Cleaning",
+      "Bulk CSV Processing",
+      "Community Support",
+    ],
+    cta: "Current Plan",
+    isCurrent: true,
+    isFeatured: false,
+    priceDetails: "/ forever"
+  },
   {
     name: "Pro Plan",
     price: "$69",
@@ -53,7 +68,7 @@ export default function PricingPage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto items-start pt-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto items-start pt-8">
           {plans.map((plan) => (
             <Card key={plan.name} className={cn("flex flex-col h-full", plan.isFeatured && "border-primary shadow-2xl relative")}>
               {plan.isFeatured && (
