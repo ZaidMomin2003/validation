@@ -3,24 +3,22 @@
 
 import { useState, useEffect } from 'react';
 import {
-  collection,
   doc,
   onSnapshot,
-  query,
-  Query,
-  DocumentReference,
   FirestoreError,
   Unsubscribe,
-  DocumentData,
   setDoc,
   getDoc,
+  Firestore,
+  query,
+  collection
 } from 'firebase/firestore';
 import { onAuthStateChanged, signOut as firebaseSignOut, User as FirebaseUser } from 'firebase/auth';
 import { useAuthContext, useFirestore } from './provider';
-import type { User as AppUser } from '@/types';
+import type { User as AppUser, List } from '@/types';
 import { useRouter } from 'next/navigation';
 
-export function useCollection<T>(q: Query | null) {
+export function useCollection<T>(q: query.Query | null) {
   const [data, setData] = useState<T[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<FirestoreError | null>(null);
@@ -55,51 +53,12 @@ export function useCollection<T>(q: Query | null) {
   return { data, loading, error };
 }
 
-export function useDoc<T>(ref: DocumentReference | null) {
-  const [data, setData] = useState<T | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<FirestoreError | null>(null);
-
-  useEffect(() => {
-    if (!ref) {
-      setData(null);
-      setLoading(false);
-      return;
-    }
-
-    setLoading(true);
-    const unsubscribe: Unsubscribe = onSnapshot(
-      ref,
-      (snapshot) => {
-        if (snapshot.exists()) {
-          const data = {
-            id: snapshot.id,
-            ...snapshot.data(),
-          } as T;
-          setData(data);
-        } else {
-          setData(null);
-        }
-        setLoading(false);
-      },
-      (err) => {
-        setError(err);
-        setLoading(false);
-      }
-    );
-
-    return () => unsubscribe();
-  }, [ref]);
-
-  return { data, loading, error };
-}
-
 const createUserProfileDocument = async (db: Firestore, user: FirebaseUser) => {
     const userDocRef = doc(db, 'users', user.uid);
     const userDoc = await getDoc(userDocRef);
 
     if (!userDoc.exists()) {
-        const newUserProfile: AppUser = {
+        const newUserProfile: Partial<AppUser> = {
             uid: user.uid,
             email: user.email,
             displayName: user.displayName,
@@ -128,7 +87,6 @@ export function useUser() {
 
   useEffect(() => {
     if (!auth || !db) {
-        // Firebase services not yet initialized
         return;
     }
     
@@ -142,22 +100,26 @@ export function useUser() {
           const unsubscribeProfile = onSnapshot(userDocRef, 
             (docSnapshot) => {
               if (docSnapshot.exists()) {
-                const profileData = docSnapshot.data() as AppUser;
+                const profileData = docSnapshot.data() as Omit<AppUser, 'uid' | 'email' | 'providerId' >;
                 const formattedUser: AppUser = {
                   uid: firebaseUser.uid,
                   email: firebaseUser.email,
                   displayName: firebaseUser.displayName,
                   photoURL: firebaseUser.photoURL,
                   providerId: firebaseUser.providerData[0]?.providerId || 'password',
-                  ...profileData, // Merge Firestore profile data
+                  ...profileData,
                 };
                 setUser(formattedUser);
+              } else {
+                 // If the profile doesn't exist for some reason, create it and then listen again
+                 createUserProfileDocument(db, firebaseUser);
               }
               setLoading(false);
             },
             (profileError) => {
               console.error("Error fetching user profile:", profileError);
               setError(profileError);
+              setUser(null);
               setLoading(false);
             }
           );
@@ -165,16 +127,20 @@ export function useUser() {
           return () => unsubscribeProfile();
 
         } else {
-          firebaseSignOut(auth);
-          setUser(null);
-          setLoading(false);
+          // If email is not verified, sign out the user
+           if (auth.currentUser) {
+            firebaseSignOut(auth);
+           }
+           setUser(null);
+           setLoading(false);
         }
       } else {
         setUser(null);
         setLoading(false);
       }
-    }, (err) => {
-        setError(err);
+    }, (authError) => {
+        console.error("Auth state error:", authError);
+        setError(authError);
         setLoading(false);
     });
 
@@ -183,9 +149,13 @@ export function useUser() {
 
   const signOut = async () => {
     if(auth) {
-        await firebaseSignOut(auth);
-        setUser(null);
-        router.push('/auth');
+        try {
+            await firebaseSignOut(auth);
+            setUser(null);
+            router.push('/auth');
+        } catch(e) {
+            console.error("Sign out error", e);
+        }
     }
   };
 

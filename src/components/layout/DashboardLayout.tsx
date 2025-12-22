@@ -82,7 +82,12 @@ export default function DashboardLayout({
 
   const usedCredits = React.useMemo(() => {
     if (!lists) return 0;
-    return lists.reduce((acc, list) => acc + (list.emailCount || 0), 0);
+    return lists.reduce((acc, list) => {
+        if (list.status === 'Completed' || list.name.startsWith('Cleaned -')) {
+             return acc + (list.emailCount || 0);
+        }
+        return acc;
+    }, 0);
   }, [lists]);
 
   React.useEffect(() => {
@@ -94,7 +99,10 @@ export default function DashboardLayout({
   if (authLoading || !user) {
     return (
         <div className="flex min-h-screen items-center justify-center">
-            <Skeleton className="h-20 w-20 rounded-full" />
+            <div className="flex flex-col items-center gap-4">
+              <Logo />
+              <p>Loading your dashboard...</p>
+            </div>
         </div>
     );
   }
@@ -109,7 +117,7 @@ export default function DashboardLayout({
       .toUpperCase();
   };
 
-  const totalCredits = user?.creditsTotal ?? 1000;
+  const totalCredits = user?.creditsTotal ?? 0;
   const creditPercentage = totalCredits > 0 ? (usedCredits / totalCredits) * 100 : 0;
   const planName = user?.plan ?? 'Free';
 

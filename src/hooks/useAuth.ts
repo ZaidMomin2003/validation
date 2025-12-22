@@ -10,5 +10,6 @@ export const useAuth = () => {
     console.error("Authentication error:", error);
   }
 
+  // Pass the user object directly from the centralized hook
   return { user, loading, signOut };
 };
