@@ -29,21 +29,34 @@ import {
   TrendingUp,
   TrendingDown,
   Mail,
+  Trash2,
 } from 'lucide-react';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/useAuth';
 import { useCollection } from '@/firebase/hooks';
-import { collection, query, getDoc, doc } from 'firebase/firestore';
+import { collection, query, getDoc, doc, deleteDoc } from 'firebase/firestore';
 import { db } from '@/firebase/firebaseClient';
 import React from 'react';
 import { List } from '@/types';
 import { Skeleton } from '@/components/ui/skeleton';
 import * as XLSX from 'xlsx';
+import { useToast } from '@/hooks/use-toast';
 
 const ProgressMultiple = ({
   values,
@@ -75,7 +88,9 @@ const ProgressMultiple = ({
 
 export default function ListsPage() {
   const { user } = useAuth();
+  const { toast } = useToast();
   const [downloadingId, setDownloadingId] = React.useState<string | null>(null);
+  const [deletingId, setDeletingId] = React.useState<string | null>(null);
 
   const listsQuery = React.useMemo(() => {
     if (!user) return null;
@@ -175,6 +190,26 @@ export default function ListsPage() {
         console.error("Error downloading list:", error);
     } finally {
         setDownloadingId(null);
+    }
+  };
+
+  const handleDelete = async (listId: string) => {
+    if (!user || !listId) return;
+    setDeletingId(listId);
+    try {
+      await deleteDoc(doc(db, `users/${user.uid}/lists`, listId));
+      toast({
+        title: 'List Deleted',
+        description: 'The selected list has been permanently deleted.',
+      });
+    } catch (error: any) {
+      toast({
+        variant: 'destructive',
+        title: 'Error Deleting List',
+        description: error.message || 'Could not delete the list.',
+      });
+    } finally {
+      setDeletingId(null);
     }
   };
 
@@ -359,7 +394,7 @@ export default function ListsPage() {
                     </span>
                   </div>
                 </CardContent>
-                <CardFooter>
+                <CardFooter className="flex items-center gap-2">
                   <Button 
                     variant="outline" 
                     className="w-full"
@@ -371,8 +406,40 @@ export default function ListsPage() {
                     ) : (
                       <Download className="mr-2 h-4 w-4" />
                     )}
-                    {downloadingId === list.id ? 'Preparing...' : 'Download Report'}
+                    Download
                   </Button>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button
+                        variant="destructive"
+                        size="icon"
+                        disabled={deletingId === list.id}
+                      >
+                         {deletingId === list.id ? (
+                           <Loader2 className="h-4 w-4 animate-spin" />
+                         ) : (
+                          <Trash2 className="h-4 w-4" />
+                         )}
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          This action cannot be undone. This will permanently delete the list "{list.name}" from our servers.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() => handleDelete(list.id!)}
+                          className={buttonVariants({ variant: 'destructive' })}
+                        >
+                          Yes, delete
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </CardFooter>
               </Card>
             ))}
