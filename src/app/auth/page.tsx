@@ -14,7 +14,7 @@ import {
     signInWithPopup
 } from 'firebase/auth';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Eye, EyeOff } from 'lucide-react';
 import { useAuthContext } from '@/firebase/provider';
 import { LogoIcon } from '@/components/logo-icon';
 import { ThemeToggle } from '@/components/theme-toggle';
@@ -32,6 +32,9 @@ export default function AuthPage() {
     const [isSigningIn, setIsSigningIn] = useState(false);
     const [isSigningUp, setIsSigningUp] = useState(false);
     const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     
     const isLoading = isSigningIn || isSigningUp || isGoogleLoading;
 
@@ -133,23 +136,45 @@ export default function AuthPage() {
                             required
                             className="h-12 rounded-xl border-border bg-background px-4 text-base placeholder:text-muted-foreground"
                         />
-                        <Input 
-                            type="password" 
-                            placeholder="Your Password" 
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                            className="h-12 rounded-xl border-border bg-background px-4 text-base placeholder:text-muted-foreground"
-                        />
-                        {isSignUp && (
-                             <Input 
-                                type="password" 
-                                placeholder="Confirm Password" 
-                                value={confirmPassword}
-                                onChange={(e) => setConfirmPassword(e.target.value)}
+                        <div className="relative">
+                            <Input 
+                                type={showPassword ? 'text' : 'password'}
+                                placeholder="Your Password" 
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
                                 required
                                 className="h-12 rounded-xl border-border bg-background px-4 text-base placeholder:text-muted-foreground"
                             />
+                            <Button
+                                type="button"
+                                variant="ghost"
+                                size="icon"
+                                className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 text-muted-foreground"
+                                onClick={() => setShowPassword((prev) => !prev)}
+                            >
+                                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                            </Button>
+                        </div>
+                        {isSignUp && (
+                             <div className="relative">
+                                <Input 
+                                    type={showConfirmPassword ? 'text' : 'password'}
+                                    placeholder="Confirm Password" 
+                                    value={confirmPassword}
+                                    onChange={(e) => setConfirmPassword(e.target.value)}
+                                    required
+                                    className="h-12 rounded-xl border-border bg-background px-4 text-base placeholder:text-muted-foreground"
+                                />
+                                <Button
+                                    type="button"
+                                    variant="ghost"
+                                    size="icon"
+                                    className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 text-muted-foreground"
+                                    onClick={() => setShowConfirmPassword((prev) => !prev)}
+                                >
+                                    {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                                </Button>
+                            </div>
                         )}
                         
                         {!isSignUp && (
