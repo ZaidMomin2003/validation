@@ -47,6 +47,12 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/useAuth';
 import { useCollection } from '@/firebase/hooks';
@@ -91,8 +97,7 @@ export default function ListsPage() {
   const { toast } = useToast();
   const [downloadingId, setDownloadingId] = React.useState<string | null>(null);
   const [deletingId, setDeletingId] = React.useState<string | null>(null);
-  const [selectedListForDownload, setSelectedListForDownload] = React.useState<List | null>(null);
-
+  
   const listsQuery = React.useMemo(() => {
     if (!user) return null;
     return query(collection(db, `users/${user.uid}/lists`));
@@ -163,12 +168,12 @@ export default function ListsPage() {
     },
   ]
 
-  const handleDownload = async (filter: 'Good' | 'Risky' | 'All') => {
-    if (!selectedListForDownload || !selectedListForDownload.id || !user) return;
-    setDownloadingId(selectedListForDownload.id);
+  const handleDownload = async (list: List, filter: 'Good' | 'Risky' | 'All') => {
+    if (!list.id || !user) return;
+    setDownloadingId(list.id);
 
     try {
-        const listDocRef = doc(db, `users/${user.uid}/lists`, selectedListForDownload.id);
+        const listDocRef = doc(db, `users/${user.uid}/lists`, list.id);
         const listDoc = await getDoc(listDocRef);
 
         if (listDoc.exists()) {
@@ -195,7 +200,7 @@ export default function ListsPage() {
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, "Validated List");
 
-            const fileName = `${selectedListForDownload.name.replace(/[^a-z0-9_]/gi, '-')}_${filter}.csv`;
+            const fileName = `${list.name.replace(/[^a-z0-9_]/gi, '-')}_${filter}.csv`;
             XLSX.writeFile(wb, fileName, { bookType: "csv" });
 
         } else {
@@ -210,7 +215,6 @@ export default function ListsPage() {
         });
     } finally {
         setDownloadingId(null);
-        setSelectedListForDownload(null);
     }
   };
 
@@ -417,39 +421,33 @@ export default function ListsPage() {
                   </div>
                 </CardContent>
                 <CardFooter className="flex items-center gap-2">
-                   <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                         <Button
-                            variant="outline"
-                            className="w-full"
-                            disabled={downloadingId === list.id || list.status !== 'Completed'}
-                            onClick={() => setSelectedListForDownload(list)}
-                          >
-                            {downloadingId === list.id ? (
-                              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                            ) : (
-                              <Download className="mr-2 h-4 w-4" />
-                            )}
-                            Download
-                          </Button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>Choose Download Option</AlertDialogTitle>
-                          <AlertDialogDescription>
-                            Select which category of emails you would like to download from the list "{selectedListForDownload?.name}".
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter className="sm:justify-between flex-col-reverse sm:flex-row gap-2">
-                           <AlertDialogCancel onClick={() => setSelectedListForDownload(null)}>Cancel</AlertDialogCancel>
-                           <div className='flex flex-col sm:flex-row gap-2'>
-                             <AlertDialogAction onClick={() => handleDownload('Good')} className={buttonVariants({ variant: 'outline' })}>Download Valid</AlertDialogAction>
-                             <AlertDialogAction onClick={() => handleDownload('Risky')} className={buttonVariants({ variant: 'outline' })}>Download Risky</AlertDialogAction>
-                             <AlertDialogAction onClick={() => handleDownload('All')}>Download All</AlertDialogAction>
-                           </div>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                   </AlertDialog>
+                   <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="w-full"
+                        disabled={downloadingId === list.id || list.status !== 'Completed'}
+                      >
+                        {downloadingId === list.id ? (
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        ) : (
+                          <Download className="mr-2 h-4 w-4" />
+                        )}
+                        Download
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem onClick={() => handleDownload(list, 'Good')}>
+                        Download Valid
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleDownload(list, 'Risky')}>
+                        Download Risky
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleDownload(list, 'All')}>
+                        Download All
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                   
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
