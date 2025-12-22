@@ -6,6 +6,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { Inter } from 'next/font/google';
 import { FirebaseProvider } from '@/firebase/provider';
 import { ThemeProvider } from '@/components/theme-provider';
+import { ClientOnly } from '@/components/ClientOnly';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -19,7 +20,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className="dark">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <title>Verilist</title>
         <meta
@@ -41,9 +42,11 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <FirebaseProvider>
-              {children}
-            </FirebaseProvider>
+            <ClientOnly>
+              <FirebaseProvider>
+                {children}
+              </FirebaseProvider>
+            </ClientOnly>
             <Toaster />
           </ThemeProvider>
       </body>
