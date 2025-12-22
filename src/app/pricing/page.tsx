@@ -3,27 +3,13 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Check, ShieldCheck } from "lucide-react";
+import { Check, ShieldCheck, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 const plans = [
-    {
-    name: "Free Plan",
-    price: "$0",
-    description: "For getting started and small projects.",
-    features: [
-      "500 Verifications/Day",
-      "Bulk List Cleaning",
-      "Bulk CSV Processing",
-      "Community Support",
-    ],
-    cta: "Current Plan",
-    isCurrent: true,
-    isFeatured: false,
-    priceDetails: "/ forever"
-  },
   {
-    name: "Pro Plan",
+    name: "Lifetime Deal",
     price: "$69",
     description: "For power users and businesses.",
     features: [
@@ -55,6 +41,20 @@ const plans = [
   },
 ];
 
+const freePlan = {
+  name: "Free Plan",
+  price: "$0",
+  description: "For getting started and small projects.",
+  features: [
+    "500 Verifications/Day",
+    "Bulk List Cleaning",
+    "Bulk CSV Processing",
+    "Community Support",
+  ],
+  cta: "Start for Free",
+  isCurrent: true,
+};
+
 export default function PricingPage() {
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
@@ -68,7 +68,7 @@ export default function PricingPage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto items-start pt-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-4xl mx-auto items-start pt-8">
           {plans.map((plan) => (
             <Card key={plan.name} className={cn("flex flex-col h-full", plan.isFeatured && "border-primary shadow-2xl relative")}>
               {plan.isFeatured && (
@@ -111,6 +111,38 @@ export default function PricingPage() {
               </CardFooter>
             </Card>
           ))}
+        </div>
+
+        <div className="max-w-4xl mx-auto w-full pt-8">
+          <Card className="bg-muted/30">
+            <div className="grid md:grid-cols-2 items-center">
+              <div className="p-8">
+                <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-sm font-semibold text-primary">
+                    <Sparkles className="h-4 w-4" />
+                    {freePlan.name}
+                </div>
+                <p className="mt-4 text-lg font-semibold">{freePlan.description}</p>
+                <ul className="mt-4 space-y-2 text-muted-foreground">
+                    {freePlan.features.map((feature, index) => (
+                        <li key={index} className="flex items-center gap-3">
+                            <Check className="h-4 w-4 text-foreground flex-shrink-0" />
+                            <span>{feature}</span>
+                        </li>
+                    ))}
+                </ul>
+              </div>
+              <div className="p-8 border-t md:border-t-0 md:border-l flex flex-col items-center justify-center text-center">
+                  <p className="text-4xl font-bold">
+                    {freePlan.price}
+                    <span className="text-base font-normal text-muted-foreground">/ forever</span>
+                  </p>
+                  <Button asChild className="mt-4 w-full max-w-xs">
+                    <Link href="/auth">{freePlan.cta}</Link>
+                  </Button>
+                  <p className="text-xs text-muted-foreground mt-3">No credit card required.</p>
+              </div>
+            </div>
+          </Card>
         </div>
       </div>
     </main>
