@@ -45,6 +45,12 @@ const nextConfig: NextConfig = {
         hostname: 'api.microlink.io',
         port: '',
         pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdn.razorpay.com',
+        port: '',
+        pathname: '/**',
       }
     ],
   },
