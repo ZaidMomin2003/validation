@@ -33,6 +33,8 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import Link from 'next/link';
+import { useCollection } from '@/firebase/hooks';
+import { query } from 'firebase/firestore';
 
 
 const PREVIEW_ROW_COUNT = 8;
@@ -51,7 +53,7 @@ interface CleanedData {
 }
 
 export default function BulkValidatePage() {
-    const { user, creditsLeft } = useAuth();
+    const { user } = useAuth();
     const router = useRouter();
     const [files, setFiles] = React.useState<File[]>([]);
     const [tableData, setTableData] = React.useState<TableData | null>(null);
@@ -64,6 +66,27 @@ export default function BulkValidatePage() {
     const [isProcessing, setIsProcessing] = React.useState(false);
     const [activeTab, setActiveTab] = React.useState('clean');
     const { toast } = useToast();
+
+    const listsQuery = React.useMemo(() => {
+        if (!user) return null;
+        return query(collection(db, `users/${user.uid}/lists`));
+    }, [user]);
+
+    const { data: lists } = useCollection<List>(listsQuery);
+
+    const usedCredits = React.useMemo(() => {
+        if (!lists) return 0;
+        return lists.reduce((acc, list) => {
+            if (list.status === 'Completed' && !list.name.startsWith('Cleaned -')) {
+                return acc + (list.emailCount || 0);
+            }
+            return acc;
+        }, 0);
+    }, [lists]);
+    
+    const totalCredits = user?.creditsTotal ?? 0;
+    const creditsLeft = totalCredits - usedCredits;
+
 
     useEffect(() => {
         const validationDataString = sessionStorage.getItem('validationData');
@@ -626,6 +649,15 @@ export default function BulkValidatePage() {
             );
         }
 
+        if (tableData) {
+            if (activeTab === 'clean') {
+                return renderCleanFlow();
+            }
+            if (activeTab === 'validate') {
+                return renderValidateFlow();
+            }
+        }
+        
         if (user?.plan === 'Free' && creditsLeft <= 0) {
             return (
                 <Card>
@@ -647,15 +679,6 @@ export default function BulkValidatePage() {
                 </Card>
             );
         }
-        
-        if (tableData) {
-            if (activeTab === 'clean') {
-                return renderCleanFlow();
-            }
-            if (activeTab === 'validate') {
-                return renderValidateFlow();
-            }
-        }
 
         return renderFileUpload();
     }
@@ -664,14 +687,16 @@ export default function BulkValidatePage() {
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
     <div className="grid gap-4 md:gap-8">
         {!tableData && !isLoading && (
-            <div>
-                <h1 className="text-3xl font-bold tracking-tight">
-                    Clean or Validate Your Email Lists
-                </h1>
-                <p className="text-muted-foreground">
-                    Upload a CSV or XLSX file to begin the process.
-                </p>
-            </div>
+             user?.plan !== 'Free' || creditsLeft > 0 ? (
+                <div>
+                    <h1 className="text-3xl font-bold tracking-tight">
+                        Clean or Validate Your Email Lists
+                    </h1>
+                    <p className="text-muted-foreground">
+                        Upload a CSV or XLSX file to begin the process.
+                    </p>
+                </div>
+            ) : null
         )}
         
         {renderContent()}
@@ -679,3 +704,5 @@ export default function BulkValidatePage() {
   </main>
   );
 }
+
+    
