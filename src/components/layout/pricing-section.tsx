@@ -59,6 +59,13 @@ export default function PricingSection() {
         return () => clearInterval(timer);
     }, []);
 
+    const TimerBox = ({ value, label }: { value: number, label: string }) => (
+        <div className="flex flex-col items-center">
+            <div className="text-2xl font-bold">{String(value).padStart(2, '0')}</div>
+            <div className="text-xs uppercase">{label}</div>
+        </div>
+    );
+
     return (
         <div className="relative py-16 md:py-32">
             <div className="mx-auto max-w-5xl px-6">
@@ -96,11 +103,20 @@ export default function PricingSection() {
                                         <Link href="/pricing">Get started</Link>
                                     </Button>
                                 </div>
-                                <div className={cn("text-amber-500 mt-4 text-xs font-semibold transition-opacity duration-300 min-h-[16px]", plan === 'pro' ? 'opacity-100' : 'opacity-0')}>
+                                <div className={cn("mt-4 text-xs font-semibold transition-opacity duration-300 min-h-[56px]", plan === 'pro' ? 'opacity-100' : 'opacity-0')}>
                                     {plan === 'pro' ? (
-                                        <span>
-                                            Offer ends in: {timeLeft.days}d {timeLeft.hours}h {timeLeft.minutes}m {timeLeft.seconds}s
-                                        </span>
+                                        <div className='space-y-2'>
+                                            <p className='text-amber-500'>Offer ends in:</p>
+                                            <div className="flex justify-center items-center gap-4 text-amber-400">
+                                                <TimerBox value={timeLeft.days} label="Days" />
+                                                <span className="text-2xl font-bold -translate-y-1">:</span>
+                                                <TimerBox value={timeLeft.hours} label="Hours" />
+                                                <span className="text-2xl font-bold -translate-y-1">:</span>
+                                                <TimerBox value={timeLeft.minutes} label="Mins" />
+                                                <span className="text-2xl font-bold -translate-y-1">:</span>
+                                                <TimerBox value={timeLeft.seconds} label="Secs" />
+                                            </div>
+                                        </div>
                                     ) : (
                                         <span>&nbsp;</span>
                                     )}
