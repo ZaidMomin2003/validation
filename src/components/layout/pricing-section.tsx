@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { Cover } from '@/components/ui/cover';
 import Image from 'next/image';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 
 const features = {
@@ -28,6 +28,37 @@ const features = {
 
 export default function PricingSection() {
     const [plan, setPlan] = React.useState('pro');
+    const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+
+    useEffect(() => {
+        const calculateTimeLeft = () => {
+            const now = new Date();
+            const year = now.getFullYear();
+            const difference = +new Date(`${year}-12-31T23:59:59`) - +now;
+
+            let newTimeLeft = { days: 0, hours: 0, minutes: 0, seconds: 0 };
+
+            if (difference > 0) {
+                newTimeLeft = {
+                    days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+                    hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+                    minutes: Math.floor((difference / 1000 / 60) % 60),
+                    seconds: Math.floor((difference / 1000) % 60),
+                };
+            }
+            return newTimeLeft;
+        };
+        
+        // Set initial time left to avoid hydration mismatch
+        setTimeLeft(calculateTimeLeft());
+
+        const timer = setInterval(() => {
+            setTimeLeft(calculateTimeLeft());
+        }, 1000);
+
+        return () => clearInterval(timer);
+    }, []);
+
     return (
         <div className="relative py-16 md:py-32">
             <div className="mx-auto max-w-5xl px-6">
@@ -40,7 +71,7 @@ export default function PricingSection() {
                             <div className="pb-12 text-center md:pb-0 md:pr-12">
 
                                 <Tabs defaultValue="pro" onValueChange={setPlan} className="w-full max-w-xs mx-auto">
-                                    <TabsList className="grid w-full grid-cols-2 bg-primary/20 text-white">
+                                    <TabsList className="grid w-full grid-cols-2 bg-primary/20 text-white/70">
                                         <TabsTrigger value="payg">Pay as you go</TabsTrigger>
                                         <TabsTrigger value="pro">Lifetime</TabsTrigger>
                                     </TabsList>
@@ -65,9 +96,15 @@ export default function PricingSection() {
                                         <Link href="/pricing">Get started</Link>
                                     </Button>
                                 </div>
-                                <p className={cn("text-amber-500 mt-4 text-xs font-semibold transition-opacity duration-300", plan === 'pro' ? 'opacity-100' : 'opacity-0')}>
-                                    Offer expires on December 31st!
-                                </p>
+                                <div className={cn("text-amber-500 mt-4 text-xs font-semibold transition-opacity duration-300 min-h-[16px]", plan === 'pro' ? 'opacity-100' : 'opacity-0')}>
+                                    {plan === 'pro' ? (
+                                        <span>
+                                            Offer ends in: {timeLeft.days}d {timeLeft.hours}h {timeLeft.minutes}m {timeLeft.seconds}s
+                                        </span>
+                                    ) : (
+                                        <span>&nbsp;</span>
+                                    )}
+                                </div>
                             </div>
                             <div className="relative pt-12 md:pt-0 md:pl-12">
                                 <ul
