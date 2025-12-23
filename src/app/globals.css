@@ -74,6 +74,10 @@
     color: hsl(200 100% 80%); /* Bright Blue Text */
   }
 
+  .dark [data-sidebar="header"] .font-bold {
+    color: hsl(200 100% 80%); /* Bright Blue Text */
+  }
+
   .dark .landing-page {
     --background: 0 0% 0%;
     --foreground: 0 0% 98%;
