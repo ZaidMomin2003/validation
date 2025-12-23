@@ -2,11 +2,23 @@ import { NextResponse } from 'next/server';
 import Razorpay from 'razorpay';
 import { randomBytes } from 'crypto';
 
+// Server-side price mapping to prevent client-side tampering
+const planPrices: Record<string, number> = {
+    'lifetime': 69,
+    'payg': 19,
+};
+
 export async function POST(request: Request) {
-  const { amount, plan } = await request.json();
+  const { plan } = await request.json();
 
   if (!process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET) {
     return NextResponse.json({ error: 'Razorpay API keys are not configured.' }, { status: 500 });
+  }
+
+  const amount = planPrices[plan];
+
+  if (!amount) {
+    return NextResponse.json({ error: 'Invalid plan selected.' }, { status: 400 });
   }
 
   const razorpay = new Razorpay({
