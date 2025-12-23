@@ -51,11 +51,14 @@ export default function HeroSection() {
             </div>
           </div>
           <div className="mx-10 mt-32">
-            <img
-              src="https://i.postimg.cc/0yk8Vz7t/dashboard.webp"
-              className="w-full rounded-lg border shadow-lg"
-              alt=""
-            />
+             <div className="aspect-video w-full overflow-hidden rounded-lg border shadow-lg">
+                <iframe
+                    src="https://player.vimeo.com/video/76979871?badge=0&autopause=0&player_id=0&app_id=58479"
+                    allow="autoplay; fullscreen; picture-in-picture; clipboard-write"
+                    className="h-full w-full"
+                    title="Placeholder Video"
+                ></iframe>
+            </div>
           </div>
         </div>
       </section>
