@@ -35,12 +35,12 @@ export default function PricingSection() {
                     <h2 className="text-balance text-3xl font-bold text-gray-200 md:text-4xl lg:text-5xl">Verify thousands of emails <Cover>At Sonic speed</Cover></h2>
                 </div>
                 <div className="mt-8 md:mt-20">
-                    <div className="bg-card relative rounded-3xl border shadow-2xl shadow-zinc-950/5">
-                        <div className="grid items-center gap-12 divide-y p-8 sm:p-12 md:grid-cols-2 md:divide-x md:divide-y-0">
+                    <div className="bg-primary/10 relative rounded-3xl border border-primary/20 shadow-2xl shadow-blue-950/50">
+                        <div className="grid items-center gap-12 divide-y divide-primary/20 p-8 sm:p-12 md:grid-cols-2 md:divide-x md:divide-y-0">
                             <div className="pb-12 text-center md:pb-0 md:pr-12">
 
                                 <Tabs defaultValue="pro" onValueChange={setPlan} className="w-full max-w-xs mx-auto">
-                                    <TabsList className="grid w-full grid-cols-2">
+                                    <TabsList className="grid w-full grid-cols-2 bg-primary/20 text-primary-foreground">
                                         <TabsTrigger value="payg">Pay as you go</TabsTrigger>
                                         <TabsTrigger value="pro">Lifetime</TabsTrigger>
                                     </TabsList>
