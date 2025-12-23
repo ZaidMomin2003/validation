@@ -15,6 +15,7 @@ import {loadSlim} from '@tsparticles/slim';
 import ParallaxScrollDemo from '@/components/layout/parallax-scroll-demo';
 import StatsSection from '@/components/layout/stats-section';
 import { ThreeStepFeatures } from '@/components/layout/three-step-features';
+import BlogShowcase from '@/components/layout/blog-showcase';
 
 export default function Home() {
   useEffect(() => {
@@ -60,6 +61,7 @@ export default function Home() {
         </div>
         <PricingSection />
         <FaqSection />
+        <BlogShowcase />
         <ContactUsSection />
         <Footer />
       </div>

@@ -10,6 +10,10 @@ const links = [
         href: '/pricing',
     },
     {
+        title: 'Blog',
+        href: '/blogs',
+    },
+    {
         title: 'Terms',
         href: '/terms',
     },
