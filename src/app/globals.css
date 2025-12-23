@@ -37,9 +37,9 @@
     --sidebar-ring: 0 72% 51%;
   }
   .dark {
-    --background: 0 0% 0%;
+    --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
-    --card: 0 0% 8%;
+    --card: 0 0% 3.9%;
     --card-foreground: 0 0% 98%;
     --popover: 0 0% 3.9%;
     --popover-foreground: 0 0% 98%;
@@ -61,13 +61,37 @@
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
-    --sidebar-background: 0 0% 0%;
+    --sidebar-background: 0 0% 3.9%;
     --sidebar-foreground: 0 0% 98%;
     --sidebar-border: 0 0% 14.9%;
     --sidebar-accent: 0 0% 14.9%;
     --sidebar-accent-foreground: 0 0% 98%;
     --sidebar-ring: 0 0% 83.1%;
-    --radius: 0.5rem;
+  }
+
+  .dark .landing-page {
+    --background: 0 0% 0%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 8%;
+    --card-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+  }
+
+  .dark .landing-page .bg-card\/5 {
+    background-color: hsla(0, 0%, 8%, 1); /* Equivalent to card */
+  }
+
+  .dark .landing-page .bg-neutral-950 {
+    background-color: hsl(var(--background));
+  }
+
+  .dark .landing-page .text-white {
+    color: hsl(var(--foreground));
   }
 }
 

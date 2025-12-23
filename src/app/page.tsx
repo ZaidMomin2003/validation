@@ -23,7 +23,7 @@ export default function Home() {
     });
   }, []);
   return (
-    <div className="bg-neutral-950">
+    <div className="bg-neutral-950 landing-page">
       <HeroHeader />
       <HeroSection />
       <div className="relative overflow-hidden">
