@@ -40,7 +40,7 @@ export default function PricingSection() {
                             <div className="pb-12 text-center md:pb-0 md:pr-12">
 
                                 <Tabs defaultValue="pro" onValueChange={setPlan} className="w-full max-w-xs mx-auto">
-                                    <TabsList className="grid w-full grid-cols-2 bg-primary/20 text-primary-foreground">
+                                    <TabsList className="grid w-full grid-cols-2 bg-primary/20 text-white">
                                         <TabsTrigger value="payg">Pay as you go</TabsTrigger>
                                         <TabsTrigger value="pro">Lifetime</TabsTrigger>
                                     </TabsList>
