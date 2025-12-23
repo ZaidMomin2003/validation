@@ -128,7 +128,7 @@ export default function PricingPage() {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
         amount: order.amount,
         currency: order.currency,
-        name: 'Verilist',
+        name: 'Cleanmails',
         description: `Payment for ${plan.name}`,
         order_id: order.id,
         handler: async function (response: any) {
@@ -154,7 +154,7 @@ export default function PricingPage() {
           }
         },
         prefill: {
-          name: user.displayName || 'Verilist User',
+          name: user.displayName || 'Cleanmails User',
           email: user.email,
         },
         theme: {

@@ -11,12 +11,8 @@ export default function Logo({ className }: { className?: string }) {
         <MailCheck className="h-6 w-6 text-primary" />
       </div>
       <div className="flex flex-col">
-        <span className="font-bold text-lg text-foreground">Verilist</span>
-        <span className="text-sm text-muted-foreground -mt-1 hidden md:block">
-          by Talxify
-        </span>
+        <span className="font-bold text-lg text-foreground">Cleanmails</span>
       </div>
     </div>
   );
 }
-

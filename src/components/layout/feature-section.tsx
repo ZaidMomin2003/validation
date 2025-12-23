@@ -288,7 +288,7 @@ const SkeletonFive = () => {
           className="rounded-full h-10 w-10"
         />
         <p className="text-xs text-neutral-500">
-          Verilist helps you clean your email lists, improve deliverability, and protect your sender reputation.
+          Cleanmails helps you clean your email lists, improve deliverability, and protect your sender reputation.
         </p>
       </motion.div>
       <motion.div

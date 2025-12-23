@@ -16,7 +16,7 @@ export default function PrivacyPolicyPage() {
         <Card className="w-full max-w-4xl mx-auto bg-card/5 border-white/10 text-white">
           <CardContent className="p-8 space-y-6 text-sm text-foreground/80">
             <p>
-              Talxify ("us", "we", or "our") operates the Verilist website (the "Service"). This page informs you of our policies regarding the collection, use, and disclosure of personal data when you use our Service and the choices you have associated with that data.
+              This page informs you of our policies regarding the collection, use, and disclosure of personal data when you use our Service and the choices you have associated with that data.
             </p>
 
             <div className="space-y-2">
@@ -37,7 +37,7 @@ export default function PrivacyPolicyPage() {
             <div className="space-y-2">
               <h2 className="text-xl font-semibold text-foreground">2. Use of Data</h2>
               <p>
-                Verilist uses the collected data for various purposes:
+                Cleanmails uses the collected data for various purposes:
               </p>
                <ul className="list-disc list-inside space-y-1 pl-4">
                 <li>To provide and maintain our Service</li>

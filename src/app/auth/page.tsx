@@ -123,7 +123,7 @@ export default function AuthPage() {
                             {isSignUp ? 'Create an account' : 'Welcome back'}
                         </h2>
                         <p className="mt-2 text-muted-foreground">
-                            {isSignUp ? "Let's get you started with Verilist" : "Let's get you in to Verilist"}
+                            {isSignUp ? "Let's get you started with Cleanmails" : "Let's get you in to Cleanmails"}
                         </p>
                     </div>
 

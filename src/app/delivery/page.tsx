@@ -16,13 +16,13 @@ export default function DeliveryPolicyPage() {
         <Card className="w-full max-w-4xl mx-auto bg-card/5 border-white/10 text-white">
           <CardContent className="p-8 space-y-6 text-sm text-foreground/80">
             <p>
-              This Delivery Policy outlines how our services are delivered to you upon purchase and use of the Verilist platform.
+              This Delivery Policy outlines how our services are delivered to you upon purchase and use of the Cleanmails platform.
             </p>
 
             <div className="space-y-2">
               <h2 className="text-xl font-semibold text-foreground">1. Service Delivery</h2>
               <p>
-                Verilist provides a digital service for cleaning and validating email lists. Upon successful file upload and initiation of a validation or cleaning process, our service begins immediately.
+                Cleanmails provides a digital service for cleaning and validating email lists. Upon successful file upload and initiation of a validation or cleaning process, our service begins immediately.
               </p>
                <ul className="list-disc list-inside space-y-1 pl-4">
                 <li>
@@ -52,7 +52,7 @@ export default function DeliveryPolicyPage() {
             <div className="space-y-2">
               <h2 className="text-xl font-semibold text-foreground">3. No Physical Delivery</h2>
               <p>
-                As Verilist is a purely digital service, no physical products will be shipped or delivered. All services and results are delivered electronically through our web platform.
+                As Cleanmails is a purely digital service, no physical products will be shipped or delivered. All services and results are delivered electronically through our web platform.
               </p>
             </div>
             

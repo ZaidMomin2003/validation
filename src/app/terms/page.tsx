@@ -16,9 +16,8 @@ export default function TermsOfServicePage() {
         <Card className="w-full max-w-4xl mx-auto bg-card/5 border-white/10 text-white">
           <CardContent className="p-8 space-y-6 text-sm text-foreground/80">
             <p>
-              Welcome to Verilist! These Terms and Conditions ("Terms") govern
-              your use of our website and services (collectively, the "Service"),
-              operated by Talxify ("us", "we", or "our"). Please read these Terms
+              Welcome to Cleanmails! These Terms and Conditions ("Terms") govern
+              your use of our website and services (collectively, the "Service"). Please read these Terms
               carefully before using our Service.
             </p>
 
@@ -34,7 +33,7 @@ export default function TermsOfServicePage() {
             <div className="space-y-2">
               <h2 className="text-xl font-semibold text-foreground">2. Description of Service</h2>
               <p>
-                Verilist provides email list cleaning and validation services. This
+                Cleanmails provides email list cleaning and validation services. This
                 includes, but is not limited to, syntax checking, domain/MX record
                 verification, disposable email detection, and role-based account
                 detection.
@@ -91,7 +90,7 @@ export default function TermsOfServicePage() {
              <div className="space-y-2">
               <h2 className="text-xl font-semibold text-foreground">7. Limitation of Liability</h2>
               <p>
-                In no event shall Verilist, nor its directors, employees, partners,
+                In no event shall Cleanmails, nor its directors, employees, partners,
                 agents, suppliers, or affiliates, be liable for any indirect,
                 incidental, special, consequential or punitive damages, including
                 without limitation, loss of profits, data, use, goodwill, or

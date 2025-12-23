@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -10,7 +11,7 @@ import { Loader2, ShieldCheck } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 
 // Hardcoded credentials
-const ADMIN_EMAIL = 'admin@verilist.com';
+const ADMIN_EMAIL = 'admin@cleanmails.com';
 const ADMIN_PASSWORD = 'admin123';
 
 export default function AdminLoginPage() {

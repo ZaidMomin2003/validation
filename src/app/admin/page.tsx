@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -191,7 +192,7 @@ export default function AdminDashboardPage() {
             <CardHeader>
               <CardTitle>Recent Sign-ups</CardTitle>
               <CardDescription>
-                The latest users to join Verilist.
+                The latest users to join Cleanmails.
               </CardDescription>
             </CardHeader>
             <CardContent className="grid gap-8">

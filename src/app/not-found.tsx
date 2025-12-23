@@ -29,7 +29,7 @@ export default function NotFound() {
         <div className="mt-8 rounded-lg bg-card p-6 text-left">
             <h3 className="font-semibold text-card-foreground">While you're here, why not clean your email list?</h3>
             <p className="mt-2 text-sm text-muted-foreground">
-                Verilist helps you remove bad emails, reduce bounces, and improve your sender reputation. Get started for free.
+                Cleanmails helps you remove bad emails, reduce bounces, and improve your sender reputation. Get started for free.
             </p>
         </div>
         <div className="mt-10 flex items-center justify-center gap-x-4">

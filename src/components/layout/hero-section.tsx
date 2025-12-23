@@ -33,7 +33,7 @@ export default function HeroSection() {
             </h2>
 
             <p className="mx-auto max-w-2xl text-gray-300">
-              Verilist provides robust, fast, and affordable email validation.
+              Cleanmails provides robust, fast, and affordable email validation.
               Stop bounces, remove disposable addresses, and protect your sender reputation in minutes.
             </p>
             <div className="items-center justify-center space-y-3 gap-x-3 sm:flex sm:space-y-0">

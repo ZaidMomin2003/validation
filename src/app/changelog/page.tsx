@@ -41,7 +41,7 @@ const inProgressFeatures = [
   },
   {
     name: 'Public API Access',
-    description: 'Integrate Veriflow into your own applications with a simple and powerful API.',
+    description: 'Integrate Cleanmails into your own applications with a simple and powerful API.',
   },
   {
     name: 'Team Collaboration',

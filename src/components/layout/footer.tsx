@@ -67,7 +67,7 @@ export default function Footer() {
                             viewBox="0 0 24 24">
                             <path
                                 fill="currentColor"
-                                d="M10.488 14.651L15.25 21h7l-7.858-10.478L20.93 3h-2.65l-5.117 5.886L8.75 3h-7l7.51 10.015L2.32 21h2.65zM16.25 19L5.75 5h2l10.5 14z"></path>
+                                d="M10.488 14.651L15.25 21h7l-7.858-10.478L20.93 3h-2.65l-5.117 5.886L8.75 3h-7l7.51 10.015L2.32 21h2.65z"></path>
                         </svg>
                     </Link>
                     <Link
@@ -161,7 +161,7 @@ export default function Footer() {
                         </svg>
                     </Link>
                 </div>
-                <span className="text-muted-foreground block text-center text-sm"> © {new Date().getFullYear()} Verilist, All rights reserved</span>
+                <span className="text-muted-foreground block text-center text-sm"> © {new Date().getFullYear()} Cleanmails, All rights reserved</span>
             </div>
         </footer>
     )
