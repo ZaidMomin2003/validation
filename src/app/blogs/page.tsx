@@ -91,8 +91,8 @@ export default function BlogPage() {
                                 <div className="mt-6 flex items-center gap-4 text-muted-foreground">
                                     <div className="flex items-center gap-2">
                                         <div className="text-sm">
-                                            <p className="font-semibold text-white">{post.author}</p>
-                                            <p>{post.date}</p>
+                                            <p className="font-semibold text-white">{latestPost.author}</p>
+                                            <p>{latestPost.date}</p>
                                         </div>
                                     </div>
                                 </div>
