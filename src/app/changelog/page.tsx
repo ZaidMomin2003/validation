@@ -8,19 +8,29 @@ import { Separator } from '@/components/ui/separator';
 
 const builtFeatures = [
   {
-    name: 'Secure User Authentication',
-    description: 'Sign up and sign in using Email & Password or Google.',
-    version: 'v1.0.0',
+    name: 'Advanced Security Hardening',
+    description: 'Implemented strict data validation in Firestore and secured payment APIs to prevent tampering.',
+    version: 'v1.6.0',
   },
   {
-    name: 'Real-time List Management',
-    description: 'Your email lists are now synced across all devices using Firestore.',
-    version: 'v1.1.0',
+    name: 'Vercel-Inspired Dark Theme',
+    description: 'A complete redesign of the dashboard\'s dark mode for a sleeker, more modern UI.',
+    version: 'v1.5.0',
   },
   {
-    name: 'Bulk Email Validation',
-    description: 'Upload CSV or XLSX files to validate your email lists.',
-    version: 'v1.2.0',
+    name: 'Password Visibility Toggle',
+    description: 'Added an eye icon to password fields, allowing users to see what they are typing.',
+    version: 'v1.5.0',
+  },
+  {
+    name: 'Pricing Page Countdown',
+    description: 'A live countdown timer was added to the Lifetime Deal to create urgency.',
+    version: 'v1.5.0',
+  },
+  {
+    name: 'Support & Feedback Forms',
+    description: 'Dedicated forms for users to submit support requests and feedback.',
+    version: 'v1.4.0',
   },
   {
     name: 'Profile & Password Management',
@@ -28,13 +38,27 @@ const builtFeatures = [
     version: 'v1.3.0',
   },
   {
-    name: 'Support & Feedback Forms',
-    description: 'Dedicated forms for users to submit support requests and feedback.',
-    version: 'v1.4.0',
+    name: 'Bulk Email Validation',
+    description: 'Upload CSV or XLSX files to validate your email lists.',
+    version: 'v1.2.0',
+  },
+  {
+    name: 'Real-time List Management',
+    description: 'Your email lists are now synced across all devices using Firestore.',
+    version: 'v1.1.0',
+  },
+  {
+    name: 'Secure User Authentication',
+    description: 'Sign up and sign in using Email & Password or Google.',
+    version: 'v1.0.0',
   },
 ];
 
 const inProgressFeatures = [
+  {
+    name: 'Admin Dashboard Security',
+    description: 'Securing administrator credentials using server-side authentication.',
+  },
   {
     name: 'Real-time Validation Progress',
     description: 'See the progress of your list validation update in real-time without refreshing.',
@@ -50,10 +74,6 @@ const inProgressFeatures = [
   {
     name: 'Detailed List Analytics',
     description: 'Get deeper insights into your email list quality with advanced analytics and charts.',
-  },
-  {
-    name: 'Expanded Export Options',
-    description: 'Download your validation results in additional formats like JSON and TXT.',
   },
 ];
 
