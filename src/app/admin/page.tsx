@@ -199,7 +199,6 @@ export default function AdminDashboardPage() {
               {recentUsers.map((user, index) => (
                 <div key={index} className="flex items-center gap-4">
                     <Avatar className="hidden h-9 w-9 sm:flex">
-                    <AvatarImage src={`https://i.pravatar.cc/150?u=${user.email}`} alt="Avatar" />
                     <AvatarFallback>{user.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
                     </Avatar>
                     <div className="grid gap-1">

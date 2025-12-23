@@ -31,7 +31,7 @@ const BlogCard = ({ post }: { post: BlogPost }) => (
         <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{post.description}</p>
         <div className="mt-4 flex items-center gap-4 text-sm text-muted-foreground">
             <div className="flex items-center gap-2">
-                <Image src={post.authorAvatar} alt={post.author} width={24} height={24} className="rounded-full" />
+                <User className="h-4 w-4" />
                 <span>{post.author}</span>
             </div>
              <span className="text-muted-foreground/50">|</span>
@@ -90,7 +90,6 @@ export default function BlogPage() {
                                 </p>
                                 <div className="mt-6 flex items-center gap-4 text-muted-foreground">
                                     <div className="flex items-center gap-2">
-                                        <Image src={latestPost.authorAvatar} alt={latestPost.author} width={32} height={32} className="rounded-full" />
                                         <div className="text-sm">
                                             <p className="font-semibold text-white">{latestPost.author}</p>
                                             <p>{latestPost.date}</p>
