@@ -69,6 +69,11 @@
     --sidebar-ring: 0 0% 83.1%;
   }
 
+  .dark [data-sidebar="menu-button"][data-active="true"] {
+    background-color: hsl(221.2 83.2% 53.3%); /* Primary Blue */
+    color: hsl(200 100% 80%); /* Bright Blue Text */
+  }
+
   .dark .landing-page {
     --background: 0 0% 0%;
     --foreground: 0 0% 98%;
