@@ -12,7 +12,7 @@ import Footer from '@/components/layout/footer';
 import { Input } from '@/components/ui/input';
 
 const BlogCard = ({ post }: { post: BlogPost }) => (
-    <Link href="#" className="group block overflow-hidden rounded-2xl border border-white/10 bg-card/5 shadow-sm transition-all duration-300 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/10">
+    <Link href={`/blogs/${post.slug}`} className="group block overflow-hidden rounded-2xl border border-white/10 bg-card/5 shadow-sm transition-all duration-300 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/10">
       <Image
         src={post.imageUrl}
         alt={post.title}
@@ -68,7 +68,7 @@ export default function BlogPage() {
 
                  {latestPost && (
                     <div className="mt-16 group">
-                        <Link href="#" className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+                        <Link href={`/blogs/${latestPost.slug}`} className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
                             <div className="overflow-hidden rounded-2xl">
                                 <Image
                                     src={latestPost.imageUrl}
@@ -91,8 +91,8 @@ export default function BlogPage() {
                                 <div className="mt-6 flex items-center gap-4 text-muted-foreground">
                                     <div className="flex items-center gap-2">
                                         <div className="text-sm">
-                                            <p className="font-semibold text-white">{latestPost.author}</p>
-                                            <p>{latestPost.date}</p>
+                                            <p className="font-semibold text-white">{post.author}</p>
+                                            <p>{post.date}</p>
                                         </div>
                                     </div>
                                 </div>

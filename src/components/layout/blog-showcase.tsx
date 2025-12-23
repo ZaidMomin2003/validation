@@ -1,7 +1,7 @@
 
 'use client';
 
-import { blogPosts, BlogPost } from '@/lib/blog-data';
+import { blogPosts } from '@/lib/blog-data';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -25,7 +25,7 @@ export default function BlogShowcase() {
 
         <div className="mt-12 grid gap-8 md:grid-cols-3">
           {latestPosts.map((post) => (
-            <Link key={post.id} href="/blogs" className="group block">
+            <Link key={post.id} href={`/blogs/${post.slug}`} className="group block">
               <div className="overflow-hidden rounded-lg">
                 <Image
                   src={post.imageUrl}
