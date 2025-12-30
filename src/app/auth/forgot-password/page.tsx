@@ -11,6 +11,13 @@ import { useAuthContext } from '@/firebase/provider';
 import { sendPasswordResetEmail } from 'firebase/auth';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, ArrowLeft } from 'lucide-react';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Forgot Password | Cleanmails',
+  description: 'Reset your password for your Cleanmails account. Enter your email to receive a reset link.',
+};
+
 
 export default function ForgotPasswordPage() {
     const auth = useAuthContext();

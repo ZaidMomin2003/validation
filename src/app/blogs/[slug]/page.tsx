@@ -10,16 +10,62 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import Logo from '@/components/logo';
+import type { Metadata } from 'next';
+
+type Props = {
+  params: { slug: string }
+}
+
+const getPost = (slug: string): BlogPost | undefined => {
+  return blogPosts.find((post) => post.slug === slug);
+};
+
+export async function generateMetadata(
+  { params }: Props
+): Promise<Metadata> {
+  const post = getPost(params.slug);
+
+  if (!post) {
+    return {
+      title: 'Post Not Found',
+    }
+  }
+
+  return {
+    title: `${post.title} | Cleanmails Blog`,
+    description: post.description,
+    openGraph: {
+      title: `${post.title} | Cleanmails Blog`,
+      description: post.description,
+      url: `https://cleanmails.com/blogs/${post.slug}`,
+      siteName: 'Cleanmails',
+      images: [
+        {
+          url: post.imageUrl,
+          width: 1200,
+          height: 630,
+        },
+      ],
+      locale: 'en_US',
+      type: 'article',
+      authors: [post.author],
+      publishedTime: new Date('2025-12-23T12:00:00Z').toISOString(), // Placeholder, ideally from blog data
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${post.title} | Cleanmails Blog`,
+      description: post.description,
+      images: [post.imageUrl],
+    },
+  }
+}
+
 
 export async function generateStaticParams() {
   return blogPosts.map((post) => ({
     slug: post.slug,
   }));
 }
-
-const getPost = (slug: string): BlogPost | undefined => {
-  return blogPosts.find((post) => post.slug === slug);
-};
 
 const PromoCard = () => (
     <Card className="my-12 bg-primary/10 border-primary/20 text-white">

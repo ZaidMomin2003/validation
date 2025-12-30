@@ -1,5 +1,11 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Privacy Policy | Cleanmails',
+  description: 'Our privacy policy details how we collect, use, and protect your personal and uploaded data when you use the Cleanmails service.',
+};
 
 export default function PrivacyPolicyPage() {
   return (

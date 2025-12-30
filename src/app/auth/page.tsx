@@ -18,6 +18,13 @@ import { Loader2, Eye, EyeOff } from 'lucide-react';
 import { useAuthContext } from '@/firebase/provider';
 import { LogoIcon } from '@/components/logo-icon';
 import { ThemeToggle } from '@/components/theme-toggle';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Sign In / Sign Up | Cleanmails',
+  description: 'Access your Cleanmails account or create a new one for free. Start validating your email lists in minutes.',
+};
+
 
 export default function AuthPage() {
     const router = useRouter();

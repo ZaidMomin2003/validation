@@ -1,5 +1,12 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Terms and Conditions | Cleanmails',
+  description: 'Read the terms and conditions for using the Cleanmails email validation service. Understand your rights and responsibilities.',
+};
+
 
 export default function TermsOfServicePage() {
   return (

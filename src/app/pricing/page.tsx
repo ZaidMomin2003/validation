@@ -12,6 +12,24 @@ import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '@/firebase/firebaseClient';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Pricing | Cleanmails',
+  description: 'Simple, transparent pricing for email validation. Choose from our Lifetime Deal or Pay-as-you-go plans to start cleaning your lists today.',
+   openGraph: {
+    title: 'Pricing | Cleanmails',
+    description: 'Find the perfect plan for your email verification needs. Lifetime and Pay-as-you-go options available.',
+    url: 'https://cleanmails.com/pricing',
+    siteName: 'Cleanmails',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Pricing | Cleanmails',
+    description: 'Simple and affordable email validation pricing.',
+  },
+};
+
 
 declare global {
   interface Window {
@@ -257,7 +275,7 @@ export default function PricingPage() {
               </CardContent>
               <CardFooter className="flex-col items-center pt-6">
                  {plan.isFeatured ? (
-                     <div className='space-y-3 text-center mb-4'>
+                     <div className='space-y-3 text-center mb-4 min-h-[56px] flex flex-col justify-center'>
                         <p className='text-xs text-amber-500 font-semibold'>Offer expires in:</p>
                         <div className="flex justify-center items-center gap-3 text-amber-400">
                             <TimerBox value={timeLeft.days} label="Days" />
@@ -269,7 +287,7 @@ export default function PricingPage() {
                             <TimerBox value={timeLeft.seconds} label="Secs" />
                         </div>
                     </div>
-                 ) : (plan.note && <p className="text-xs text-muted-foreground mb-4 h-12 flex items-center">{plan.note}</p>)}
+                 ) : (plan.note && <div className="text-xs text-muted-foreground mb-4 h-[56px] flex items-center text-center">{plan.note}</div>)}
                 <Button 
                   className="w-full" 
                   disabled={plan.isCurrent || isLoading === plan.planId}

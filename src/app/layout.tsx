@@ -1,17 +1,42 @@
 
-'use client';
-
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { Inter } from 'next/font/google';
 import { FirebaseProvider } from '@/firebase/provider';
 import { ThemeProvider } from '@/components/theme-provider';
 import { ClientOnly } from '@/components/ClientOnly';
+import type { Metadata } from 'next';
 
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
 })
+
+export const metadata: Metadata = {
+  title: 'Cleanmails | Instant Email Validation & Cleaning Service',
+  description: 'Clean, verify, and protect your email lists with Cleanmails. Reduce bounce rates, remove invalid addresses, and improve sender reputation. Try for free.',
+  openGraph: {
+    title: 'Cleanmails | Instant Email Validation & Cleaning Service',
+    description: 'Stop bounces and improve your email deliverability. Fast, affordable, and accurate email verification.',
+    url: 'https://cleanmails.com',
+    siteName: 'Cleanmails',
+    images: [
+      {
+        url: 'https://cleanmails.com/og-image.png', // Replace with your actual OG image URL
+        width: 1200,
+        height: 630,
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Cleanmails | Instant Email Validation & Cleaning Service',
+    description: 'Stop bounces and improve your email deliverability. Fast, affordable, and accurate email verification.',
+    // images: ['https://cleanmails.com/og-image.png'], // Replace with your actual OG image URL
+  },
+};
 
 
 export default function RootLayout({
@@ -22,11 +47,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <title>Cleanmails</title>
-        <meta
-          name="description"
-          content="Bulk email verification made easy."
-        />
+        
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link

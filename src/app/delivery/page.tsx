@@ -1,5 +1,11 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Delivery Policy | Cleanmails',
+  description: 'Learn how our digital email validation and cleaning services are delivered to you instantly through our secure platform.',
+};
 
 export default function DeliveryPolicyPage() {
   return (

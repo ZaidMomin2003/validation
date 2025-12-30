@@ -10,6 +10,32 @@ import { Badge } from '@/components/ui/badge';
 import { HeroHeader } from '@/components/layout/HeroHeader';
 import Footer from '@/components/layout/footer';
 import { Input } from '@/components/ui/input';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Blog | Cleanmails',
+  description: 'Insights, tips, and updates on email validation, deliverability, and marketing from the Cleanmails team.',
+  openGraph: {
+    title: 'Blog | Cleanmails',
+    description: 'Insights, tips, and updates on email validation, deliverability, and marketing from the Cleanmails team.',
+    url: 'https://cleanmails.com/blogs',
+    siteName: 'Cleanmails',
+     images: [
+      {
+        url: 'https://cleanmails.com/og-blog.png', // Replace with your actual OG image URL
+        width: 1200,
+        height: 630,
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+   twitter: {
+    card: 'summary_large_image',
+    title: 'Blog | Cleanmails',
+    description: 'Insights, tips, and updates on email validation and marketing.',
+  },
+};
 
 const BlogCard = ({ post }: { post: BlogPost }) => (
     <Link href={`/blogs/${post.slug}`} className="group block overflow-hidden rounded-2xl border border-white/10 bg-card/5 shadow-sm transition-all duration-300 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/10">
