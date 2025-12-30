@@ -24,7 +24,9 @@ type SpamResult = {
 
 const HighlightingInput = ({ value, onChange, placeholder, isTextarea = false }: { value: string, onChange: (value: string) => void, placeholder: string, isTextarea?: boolean }) => {
     const highlightedContent = useMemo(() => {
-        if (!value) return <span className="text-muted-foreground">{placeholder}</span>;
+        if (!value) {
+            return <span className="text-muted-foreground pointer-events-none">{placeholder}</span>;
+        }
 
         const regex = new RegExp(`\\b(${Array.from(SPAM_WORDS).join('|')})\\b`, 'gi');
         
