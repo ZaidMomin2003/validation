@@ -1,10 +1,10 @@
 
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, ShieldAlert, ShieldCheck, ShieldX, ListChecks } from "lucide-react";
+import { Loader2, ShieldAlert, ShieldCheck, ShieldX, ListChecks, Star, ArrowRight, Zap } from "lucide-react";
 import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Input } from '@/components/ui/input';
@@ -13,6 +13,8 @@ import { SPAM_WORDS } from '@/lib/spam-words';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import Link from 'next/link';
 
 type SpamResult = {
   score: number;
@@ -26,7 +28,6 @@ const HighlightingInput = ({ value, onChange, placeholder, isTextarea = false }:
 
         const regex = new RegExp(`\\b(${Array.from(SPAM_WORDS).join('|')})\\b`, 'gi');
         
-        // For textarea, we need to handle newlines
         if (isTextarea) {
             return value.split('\n').map((line, lineIndex) => (
                 <div key={lineIndex}>
@@ -43,7 +44,6 @@ const HighlightingInput = ({ value, onChange, placeholder, isTextarea = false }:
             ));
         }
 
-        // For single-line input
         const parts = value.split(regex);
         return parts.map((part, index) =>
             regex.test(part) && SPAM_WORDS.has(part.toLowerCase()) ? (
@@ -68,7 +68,6 @@ const HighlightingInput = ({ value, onChange, placeholder, isTextarea = false }:
             >
                 <div className="truncate">
                     {highlightedContent}
-                    {/* Blinking cursor effect is tricky with this setup, so it's simplified */}
                 </div>
             </div>
             <InputComponent
@@ -90,6 +89,14 @@ export default function SpamCheckerPage() {
   const [emailContent, setEmailContent] = useState('');
   const [result, setResult] = useState<SpamResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [showPromoDialog, setShowPromoDialog] = useState(false);
+
+  useEffect(() => {
+    // Cleanup timer if component unmounts
+    return () => {
+      // This is a placeholder for a potential timer cleanup
+    };
+  }, []);
 
   const detectedSpamWords = useMemo(() => {
     const content = `${subject} ${emailContent}`.toLowerCase();
@@ -98,7 +105,6 @@ export default function SpamCheckerPage() {
     if(!content) return [];
 
     SPAM_WORDS.forEach(word => {
-      // Use word boundaries to avoid matching parts of words (e.g., 'free' in 'freedom')
       const regex = new RegExp(`\\b${word}\\b`, 'gi');
       if (regex.test(content)) {
         detected.add(word);
@@ -112,7 +118,6 @@ export default function SpamCheckerPage() {
     let score = 10;
     const issues: string[] = [];
 
-    // Basic checks for common spam triggers
     if (detectedSpamWords.length > 0) {
         score -= detectedSpamWords.length * 0.5;
         issues.push(`Found ${detectedSpamWords.length} potential spam trigger words. Try to replace them with more neutral language.`);
@@ -153,11 +158,16 @@ export default function SpamCheckerPage() {
     setIsLoading(true);
     setResult(null);
 
-    // Simulate analysis delay
     setTimeout(() => {
         const spamResult = calculateSpamScore();
         setResult(spamResult);
         setIsLoading(false);
+
+        // Trigger the promo dialog 3 seconds after results are shown
+        setTimeout(() => {
+            setShowPromoDialog(true);
+        }, 3000);
+
     }, 1500);
   };
   
@@ -230,6 +240,15 @@ export default function SpamCheckerPage() {
         </Card>
     );
   }
+
+  const promoFeatures = [
+    "Validate millions of emails via CSV/XLSX",
+    "Clean messy lists with multiple emails per cell",
+    "Real-time validation progress tracking",
+    "Download detailed reports (Good, Risky, Bad)",
+    "Securely store and manage lists",
+    "Priority support"
+  ];
 
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
@@ -316,6 +335,44 @@ export default function SpamCheckerPage() {
         </div>
 
       </div>
+
+      <Dialog open={showPromoDialog} onOpenChange={setShowPromoDialog}>
+        <DialogContent className="sm:max-w-md bg-card/80 dark:bg-zinc-900/80 backdrop-blur-lg border-primary/20 text-white">
+            <DialogHeader>
+                 <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10">
+                    <Zap className="h-8 w-8 text-primary" />
+                </div>
+                <DialogTitle className="text-center text-2xl">Unlock the Full Power of Cleanmails</DialogTitle>
+                <DialogDescription className="text-center">
+                    This free checker is just the beginning. Get access to powerful bulk validation tools.
+                </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4 py-4">
+                <ul className="space-y-2">
+                    {promoFeatures.map((feature, i) => (
+                        <li key={i} className="flex items-start gap-3">
+                            <ShieldCheck className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                            <span>{feature}</span>
+                        </li>
+                    ))}
+                </ul>
+                <div className="!mt-6 rounded-lg border border-amber-500/30 bg-amber-500/10 p-4 text-center">
+                    <div className="flex items-center justify-center gap-2 font-bold text-amber-400">
+                        <Star className="h-5 w-5" />
+                        Limited Time Lifetime Deal
+                    </div>
+                    <p className="mt-2 text-3xl font-bold">$69 <span className="text-base font-normal text-muted-foreground">one-time payment</span></p>
+                </div>
+            </div>
+            <DialogFooter className="sm:justify-center">
+                <Button asChild size="lg">
+                    <Link href="/auth">
+                        Sign Up Now <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
+                </Button>
+            </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </main>
   );
 }
