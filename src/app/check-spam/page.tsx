@@ -68,7 +68,7 @@ const HighlightingInput = ({ value, onChange, placeholder, isTextarea = false }:
                     isTextarea ? "min-h-[250px]" : "h-10 flex items-center"
                 )}
             >
-                <div className="truncate">
+                <div className="break-words">
                     {highlightedContent}
                 </div>
             </div>
