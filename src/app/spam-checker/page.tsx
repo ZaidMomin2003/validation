@@ -1,15 +1,16 @@
-
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import { Loader2, ShieldAlert, ShieldCheck, ShieldX } from "lucide-react";
+import { Loader2, ShieldAlert, ShieldCheck, ShieldX, ListChecks } from "lucide-react";
 import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { SPAM_WORDS } from '@/lib/spam-words';
+import { Badge } from '@/components/ui/badge';
 
 type SpamResult = {
   score: number;
@@ -23,19 +24,38 @@ export default function SpamCheckerPage() {
   const [result, setResult] = useState<SpamResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
+  const detectedSpamWords = useMemo(() => {
+    const content = `${subject} ${emailContent}`.toLowerCase();
+    const detected: Set<string> = new Set();
+    
+    if(!content) return [];
+
+    SPAM_WORDS.forEach(word => {
+      // Use word boundaries to avoid matching parts of words (e.g., 'free' in 'freedom')
+      const regex = new RegExp(`\\b${word}\\b`, 'gi');
+      if (regex.test(content)) {
+        detected.add(word);
+      }
+    });
+
+    return Array.from(detected);
+  }, [subject, emailContent]);
+
   const calculateSpamScore = (): SpamResult => {
     let score = 10;
     const issues: string[] = [];
 
     // Basic checks for common spam triggers
-    if (subject.match(/free|buy now|limited time|urgent|!/gi)) {
-      score -= 2;
-      issues.push("Subject line contains spammy words like 'free', 'buy now', or excessive punctuation.");
+    if (detectedSpamWords.length > 0) {
+        score -= detectedSpamWords.length * 0.5;
+        issues.push(`Found ${detectedSpamWords.length} potential spam trigger words. Try to replace them with more neutral language.`);
     }
-    if (emailContent.match(/(\$|€|£)\d+/g)) {
-      score -= 1;
-      issues.push("Content includes currency symbols and prices, which can trigger filters.");
+
+    if (subject.match(/!{2,}|(\?|!)\s*(\?|!)/g)) {
+        score -= 1.5;
+        issues.push("Subject line contains excessive or repeated punctuation (e.g., '!!', '?!').");
     }
+
     if (emailContent.toUpperCase() === emailContent && emailContent.length > 50) {
         score -= 3;
         issues.push("Email body contains excessive use of uppercase letters (ALL CAPS).");
@@ -44,9 +64,9 @@ export default function SpamCheckerPage() {
         score -= 1.5;
         issues.push("Contains a high number of links, which can appear suspicious.");
     }
-     if (!emailContent.includes("unsubscribe")) {
-        score -= 2;
-        issues.push("Missing an unsubscribe link, which is a major red flag for spam filters.");
+     if (!emailContent.toLowerCase().includes("unsubscribe")) {
+        score -= 2.5;
+        issues.push("Missing an unsubscribe link. This is a major red flag for spam filters and is often legally required.");
     }
 
     score = Math.max(0, score);
@@ -119,8 +139,8 @@ export default function SpamCheckerPage() {
                 
                 {result.issues.length > 0 && (
                     <Alert>
-                        <ShieldAlert className="h-4 w-4" />
-                        <AlertTitle>Potential Issues Found</AlertTitle>
+                        <ListChecks className="h-4 w-4" />
+                        <AlertTitle>Recommendations for Improvement</AlertTitle>
                         <AlertDescription>
                             <ul className="list-disc list-inside space-y-1 mt-2">
                                 {result.issues.map((issue, index) => (
@@ -156,48 +176,70 @@ export default function SpamCheckerPage() {
           </p>
         </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Email Content</CardTitle>
-            <CardDescription>
-                Paste your email subject and body below to get an estimated spam score.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-             <div className="space-y-2">
-                <Label htmlFor="subject">Subject</Label>
-                <Input 
-                  id="subject"
-                  placeholder="Your amazing email subject"
-                  value={subject}
-                  onChange={(e) => setSubject(e.target.value)}
-                />
-             </div>
-             <div className="space-y-2">
-                <Label htmlFor="email-content">Email Body</Label>
-                <Textarea 
-                    id="email-content"
-                    placeholder="Paste your full email content here..."
-                    className="min-h-[250px] text-base"
-                    value={emailContent}
-                    onChange={(e) => setEmailContent(e.target.value)}
-                />
-             </div>
-          </CardContent>
-          <CardFooter>
-             <Button onClick={handleCheckSpam} disabled={isLoading || !emailContent}>
-                {isLoading ? (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                ) : (
-                    <ShieldCheck className="mr-2 h-4 w-4" />
-                )}
-                Check Score
-            </Button>
-          </CardFooter>
-        </Card>
+        <div className="grid md:grid-cols-3 gap-8 items-start">
+            <Card className="md:col-span-2">
+            <CardHeader>
+                <CardTitle>Email Content</CardTitle>
+                <CardDescription>
+                    Paste your email subject and body below to get an estimated spam score.
+                </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+                <div className="space-y-2">
+                    <Label htmlFor="subject">Subject</Label>
+                    <Input 
+                    id="subject"
+                    placeholder="Your amazing email subject"
+                    value={subject}
+                    onChange={(e) => setSubject(e.target.value)}
+                    />
+                </div>
+                <div className="space-y-2">
+                    <Label htmlFor="email-content">Email Body</Label>
+                    <Textarea 
+                        id="email-content"
+                        placeholder="Paste your full email content here..."
+                        className="min-h-[250px] text-base"
+                        value={emailContent}
+                        onChange={(e) => setEmailContent(e.target.value)}
+                    />
+                </div>
+            </CardContent>
+            <CardFooter>
+                <Button onClick={handleCheckSpam} disabled={isLoading || !emailContent}>
+                    {isLoading ? (
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    ) : (
+                        <ShieldCheck className="mr-2 h-4 w-4" />
+                    )}
+                    Check Score
+                </Button>
+            </CardFooter>
+            </Card>
+
+             <Card>
+                <CardHeader>
+                    <CardTitle>Trigger Words Found</CardTitle>
+                    <CardDescription>
+                        These words in your content may trigger spam filters. Try to replace them.
+                    </CardDescription>
+                </CardHeader>
+                <CardContent>
+                    {detectedSpamWords.length > 0 ? (
+                        <div className="flex flex-wrap gap-2">
+                            {detectedSpamWords.map(word => (
+                                <Badge key={word} variant="destructive">{word}</Badge>
+                            ))}
+                        </div>
+                    ) : (
+                        <p className="text-sm text-muted-foreground">No spam words detected yet.</p>
+                    )}
+                </CardContent>
+            </Card>
+        </div>
         
         {isLoading && (
-             <div className="flex items-center justify-center rounded-lg border border-dashed p-20">
+             <div className="flex items-center justify-center rounded-lg border border-dashed p-20 md:col-span-3">
                 <div className="flex flex-col items-center gap-2 text-muted-foreground">
                     <Loader2 className="h-8 w-8 animate-spin text-primary" />
                     <p>Analyzing email content...</p>
@@ -205,7 +247,7 @@ export default function SpamCheckerPage() {
              </div>
         )}
 
-        {result && renderResult()}
+        {result && <div className="md:col-span-3">{renderResult()}</div>}
 
       </div>
     </main>
