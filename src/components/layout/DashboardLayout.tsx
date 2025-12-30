@@ -17,6 +17,7 @@ import {
   CreditCard,
   LifeBuoy,
   FileText,
+  ShieldAlert,
 } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -143,6 +144,13 @@ export default function DashboardLayout({
                   <FileText />
                   Extract from text
                   {pathname === '/extract-from-text' && <ChevronRight className="ml-auto h-4 w-4" />}
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton href="/spam-checker" isActive={pathname === '/spam-checker'}>
+                  <ShieldAlert />
+                  Spam Checker
+                  {pathname === '/spam-checker' && <ChevronRight className="ml-auto h-4 w-4" />}
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
