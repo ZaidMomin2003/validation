@@ -29,7 +29,7 @@ service cloud.firestore {
 
     function isNewsletterSubscriber(data) {
       return data.email is string &&
-             data.email.matches('.+@.+\\..+') &&
+             data.email.matches('.+@.+\..+') &&
              data.subscribedAt is number;
     }
 

@@ -6,8 +6,11 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, ArrowRight } from 'lucide-react';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc } from 'firebase/firestore';
 import { useFirestore } from '@/firebase/provider';
+import { errorEmitter } from '@/firebase/error-emitter';
+import { FirestorePermissionError } from '@/firebase/errors';
+
 
 export function NewsletterForm() {
   const db = useFirestore();
@@ -20,28 +23,33 @@ export function NewsletterForm() {
     if (!email || !db) return;
 
     setIsLoading(true);
-    try {
-      await addDoc(collection(db, 'subscribers'), {
+    
+    const newSubscriber = {
         email: email,
         subscribedAt: Date.now(),
+    };
+    
+    const subscribersCollection = collection(db, 'subscribers');
+
+    addDoc(subscribersCollection, newSubscriber)
+      .then(() => {
+        toast({
+          title: 'Subscription Successful!',
+          description: "Thanks for joining our newsletter. You're in!",
+        });
+        setEmail('');
+      })
+      .catch((serverError) => {
+        const permissionError = new FirestorePermissionError({
+            path: subscribersCollection.path,
+            operation: 'create',
+            requestResourceData: newSubscriber,
+        });
+        errorEmitter.emit('permission-error', permissionError);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
-      toast({
-        title: 'Subscription Successful!',
-        description: "Thanks for joining our newsletter. You're in!",
-      });
-      setEmail('');
-    } catch (error: any) {
-      console.error('Newsletter subscription error:', error);
-      toast({
-        variant: 'destructive',
-        title: 'Subscription Failed',
-        description: error.code === 'permission-denied' 
-            ? 'Invalid email format or server error.'
-            : 'Something went wrong. Please try again later.',
-      });
-    } finally {
-      setIsLoading(false);
-    }
   };
 
   return (
