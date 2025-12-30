@@ -12,6 +12,7 @@ import { Label } from '@/components/ui/label';
 import { SPAM_WORDS } from '@/lib/spam-words';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { cn } from '@/lib/utils';
 
 type SpamResult = {
   score: number;
@@ -19,14 +20,32 @@ type SpamResult = {
   issues: string[];
 };
 
-const HighlightedTextarea = ({ value, onChange, placeholder }: { value: string, onChange: (value: string) => void, placeholder: string }) => {
+const HighlightingInput = ({ value, onChange, placeholder, isTextarea = false }: { value: string, onChange: (value: string) => void, placeholder: string, isTextarea?: boolean }) => {
     const highlightedContent = useMemo(() => {
         if (!value) return <span className="text-muted-foreground">{placeholder}</span>;
 
         const regex = new RegExp(`\\b(${Array.from(SPAM_WORDS).join('|')})\\b`, 'gi');
-        const parts = value.split(regex);
         
-        return parts.map((part, index) => 
+        // For textarea, we need to handle newlines
+        if (isTextarea) {
+            return value.split('\n').map((line, lineIndex) => (
+                <div key={lineIndex}>
+                    {line.split(regex).map((part, index) =>
+                        regex.test(part) && SPAM_WORDS.has(part.toLowerCase()) ? (
+                            <mark key={index} className="bg-yellow-300 dark:bg-yellow-700 text-black dark:text-white rounded-sm px-0.5">
+                                {part}
+                            </mark>
+                        ) : (
+                            <React.Fragment key={index}>{part}</React.Fragment>
+                        )
+                    )}
+                </div>
+            ));
+        }
+
+        // For single-line input
+        const parts = value.split(regex);
+        return parts.map((part, index) =>
             regex.test(part) && SPAM_WORDS.has(part.toLowerCase()) ? (
                 <mark key={index} className="bg-yellow-300 dark:bg-yellow-700 text-black dark:text-white rounded-sm px-0.5">
                     {part}
@@ -35,22 +54,31 @@ const HighlightedTextarea = ({ value, onChange, placeholder }: { value: string, 
                 <React.Fragment key={index}>{part}</React.Fragment>
             )
         );
-    }, [value, placeholder]);
+    }, [value, placeholder, isTextarea]);
+
+    const InputComponent = isTextarea ? 'textarea' : 'input';
 
     return (
         <div className="relative w-full">
-            <div 
-                className="min-h-[250px] w-full rounded-md border border-input bg-background px-3 py-2 text-base whitespace-pre-wrap break-words"
+            <div
+                className={cn(
+                    "w-full rounded-md border border-input bg-background px-3 py-2 text-base whitespace-pre-wrap break-words",
+                    isTextarea ? "min-h-[250px]" : "h-10 flex items-center"
+                )}
             >
-                {highlightedContent}
-                 {/* This creates a blinking cursor effect */}
-                <span className="animate-pulse">|</span>
+                <div className="truncate">
+                    {highlightedContent}
+                    {/* Blinking cursor effect is tricky with this setup, so it's simplified */}
+                </div>
             </div>
-            <textarea
+            <InputComponent
                 value={value}
-                onChange={(e) => onChange(e.target.value)}
+                onChange={(e: any) => onChange(e.target.value)}
                 placeholder={placeholder}
-                className="absolute inset-0 w-full h-full bg-transparent text-transparent caret-foreground resize-none border-none p-3 text-base focus:outline-none"
+                className={cn(
+                    "absolute inset-0 w-full h-full bg-transparent text-transparent caret-foreground resize-none border-none p-3 text-base focus:outline-none",
+                     isTextarea ? "" : "py-2"
+                )}
             />
         </div>
     );
@@ -206,15 +234,15 @@ export default function SpamCheckerPage() {
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
       <div className="grid gap-8">
+        <div className="md:col-span-3">
+          <h1 className="text-3xl font-bold tracking-tight">
+            Spam Checker
+          </h1>
+          <p className="text-muted-foreground">
+            Analyze your email content to predict its spam score before you send it.
+          </p>
+        </div>
         <div className="grid md:grid-cols-3 gap-8 items-start">
-             <div className="md:col-span-3">
-                <h1 className="text-3xl font-bold tracking-tight">
-                    Spam Checker
-                </h1>
-                <p className="text-muted-foreground">
-                    Analyze your email content to predict its spam score before you send it.
-                </p>
-            </div>
             <Card className="md:col-span-2">
             <CardHeader>
                 <CardTitle>Email Content</CardTitle>
@@ -225,16 +253,16 @@ export default function SpamCheckerPage() {
             <CardContent className="space-y-4">
                 <div className="space-y-2">
                     <Label htmlFor="subject">Subject</Label>
-                    <Input 
-                    id="subject"
-                    placeholder="Your amazing email subject"
-                    value={subject}
-                    onChange={(e) => setSubject(e.target.value)}
+                    <HighlightingInput
+                        value={subject}
+                        onChange={setSubject}
+                        placeholder="Your amazing email subject"
                     />
                 </div>
                 <div className="space-y-2">
                     <Label htmlFor="email-content">Email Body</Label>
-                    <HighlightedTextarea
+                    <HighlightingInput
+                        isTextarea
                         value={emailContent}
                         onChange={setEmailContent}
                         placeholder="Paste your full email content here..."
