@@ -28,7 +28,7 @@ const plans = [
     features: [
       "500,000 Verifications/Year",
       "Bulk List Cleaning",
-      "Bulk CSV Processing",
+      "Unlimited Email Extraction",
       "Priority Support",
       "Lifetime Access & Updates",
     ],
@@ -47,7 +47,7 @@ const plans = [
     features: [
       "50,000 Verifications",
       "Bulk List Cleaning",
-      "Bulk CSV Processing",
+      "Unlimited Email Extraction",
       "Standard Support",
       "Credits never expire"
     ],
@@ -64,8 +64,8 @@ const freePlan = {
   description: "For getting started and small projects.",
   features: [
     "1,000 Verifications/Month",
-    "Bulk List Cleaning",
-    "Bulk CSV Processing",
+    "Spam Checker (Free Forever)",
+    "Email Extractor (100k chars)",
     "Community Support",
   ],
   cta: "Start for Free",

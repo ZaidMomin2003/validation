@@ -22,11 +22,12 @@ type SpamResult = {
 
 const HighlightingInput = ({ value, onChange, placeholder, isTextarea = false }: { value: string, onChange: (value: string) => void, placeholder: string, isTextarea?: boolean }) => {
     const highlightedContent = useMemo(() => {
-        if (!value) return <span className="text-muted-foreground">{placeholder}</span>;
+        if (!value) {
+            return <span className="text-muted-foreground pointer-events-none">{placeholder}</span>;
+        }
 
         const regex = new RegExp(`\\b(${Array.from(SPAM_WORDS).join('|')})\\b`, 'gi');
         
-        // For textarea, we need to handle newlines
         if (isTextarea) {
             return value.split('\n').map((line, lineIndex) => (
                 <div key={lineIndex}>
@@ -43,7 +44,6 @@ const HighlightingInput = ({ value, onChange, placeholder, isTextarea = false }:
             ));
         }
 
-        // For single-line input
         const parts = value.split(regex);
         return parts.map((part, index) =>
             regex.test(part) && SPAM_WORDS.has(part.toLowerCase()) ? (
@@ -66,15 +66,13 @@ const HighlightingInput = ({ value, onChange, placeholder, isTextarea = false }:
                     isTextarea ? "min-h-[250px]" : "h-10 flex items-center"
                 )}
             >
-                <div className="truncate">
-                    {highlightedContent}
-                    {/* Blinking cursor effect is tricky with this setup, so it's simplified */}
+                <div className="break-words">
+                    {value ? highlightedContent : <span className="text-muted-foreground pointer-events-none">{placeholder}</span>}
                 </div>
             </div>
             <InputComponent
                 value={value}
                 onChange={(e: any) => onChange(e.target.value)}
-                placeholder={placeholder}
                 className={cn(
                     "absolute inset-0 w-full h-full bg-transparent text-transparent caret-foreground resize-none border-none p-3 text-base focus:outline-none",
                      isTextarea ? "" : "py-2"
@@ -234,10 +232,13 @@ export default function SpamCheckerPage() {
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
       <div className="grid gap-8">
-        <div className="md:col-span-3">
-          <h1 className="text-3xl font-bold tracking-tight">
-            Spam Checker
-          </h1>
+        <div className="md:col-span-3 text-center">
+            <div className="flex items-center justify-center gap-2">
+                 <h1 className="text-3xl font-bold tracking-tight">
+                    Spam Checker
+                </h1>
+                <Badge variant="secondary">Free Forever</Badge>
+            </div>
           <p className="text-muted-foreground">
             Analyze your email content to predict its spam score before you send it.
           </p>

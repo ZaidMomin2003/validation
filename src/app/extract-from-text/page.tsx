@@ -5,19 +5,25 @@ import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import { Loader2, Zap, Copy, Download, CheckCircle } from "lucide-react";
+import { Loader2, Zap, Copy, Download, CheckCircle, UploadCloud } from "lucide-react";
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import * as XLSX from 'xlsx';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/hooks/useAuth';
+import Link from 'next/link';
 
 export default function ExtractFromTextPage() {
+  const { user } = useAuth();
   const [text, setText] = useState('');
   const [emails, setEmails] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
 
+  const isFreeUser = !user || user.plan === 'Free';
+  const charLimit = isFreeUser ? 100000 : Infinity;
+  const charsLeft = charLimit - text.length;
 
   const handleExtract = () => {
     setIsLoading(true);
@@ -76,6 +82,11 @@ export default function ExtractFromTextPage() {
           <p className="text-muted-foreground">
             Paste any block of text below to find and extract all email addresses.
           </p>
+           {isFreeUser && (
+            <p className="text-sm text-amber-500 dark:text-amber-400 mt-2">
+                100k character limit for free users. <Link href="/pricing" className="underline font-semibold">Upgrade for unlimited</Link>.
+            </p>
+          )}
         </div>
 
         <Card>
@@ -91,15 +102,23 @@ export default function ExtractFromTextPage() {
               className="min-h-[200px] text-base"
               value={text}
               onChange={(e) => setText(e.target.value)}
+              maxLength={isFreeUser ? 100000 : undefined}
             />
-             <Button onClick={handleExtract} disabled={isLoading || !text}>
-                {isLoading ? (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                ) : (
-                    <Zap className="mr-2 h-4 w-4" />
+            <div className="flex justify-between items-center">
+                <Button onClick={handleExtract} disabled={isLoading || !text}>
+                    {isLoading ? (
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    ) : (
+                        <Zap className="mr-2 h-4 w-4" />
+                    )}
+                    Extract Emails
+                </Button>
+                {isFreeUser && (
+                    <div className="text-sm text-muted-foreground">
+                        {charsLeft.toLocaleString()} characters remaining
+                    </div>
                 )}
-                Extract Emails
-            </Button>
+            </div>
           </CardContent>
         </Card>
 

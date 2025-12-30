@@ -10,6 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import * as XLSX from 'xlsx';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 export default function ExtractFromTextPage() {
   const [text, setText] = useState('');
@@ -76,6 +77,9 @@ export default function ExtractFromTextPage() {
           <p className="text-muted-foreground">
             Paste any block of text below to find and extract all email addresses.
           </p>
+           <p className="text-sm text-amber-400 mt-2">
+                100k character limit for free users. <Link href="/pricing" className="underline font-semibold">Upgrade for unlimited</Link>.
+            </p>
         </div>
 
         <Card className="bg-card/5 border-white/10 text-white">
@@ -91,6 +95,7 @@ export default function ExtractFromTextPage() {
               className="min-h-[200px] text-base bg-transparent"
               value={text}
               onChange={(e) => setText(e.target.value)}
+              maxLength={100000}
             />
              <Button onClick={handleExtract} disabled={isLoading || !text}>
                 {isLoading ? (

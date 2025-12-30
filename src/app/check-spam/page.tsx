@@ -69,7 +69,7 @@ const HighlightingInput = ({ value, onChange, placeholder, isTextarea = false }:
                 )}
             >
                 <div className="break-words">
-                    {highlightedContent}
+                    {value ? highlightedContent : <span className="text-muted-foreground pointer-events-none">{placeholder}</span>}
                 </div>
             </div>
             <InputComponent
@@ -255,9 +255,12 @@ export default function SpamCheckerPage() {
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
       <div className="grid gap-8">
         <div className="md:col-span-3 text-center">
-          <h1 className="text-3xl font-bold tracking-tight">
-            Spam Checker
-          </h1>
+            <div className="flex items-center justify-center gap-2">
+                <h1 className="text-3xl font-bold tracking-tight">
+                    Spam Checker
+                </h1>
+                <Badge variant="secondary">Free Forever</Badge>
+            </div>
           <p className="text-muted-foreground max-w-2xl mx-auto mt-2">
             Analyze your email content to predict its spam score before you send it. Our tool highlights common trigger words and provides actionable recommendations.
           </p>
