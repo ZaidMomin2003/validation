@@ -114,7 +114,7 @@ export default function SpamCheckerPage() {
     }
 
     return (
-        <Card>
+        <Card className="md:col-span-3">
             <CardHeader>
                 <CardTitle className="text-2xl">Analysis Complete</CardTitle>
                 <CardDescription>Here's the breakdown of your email's spam score.</CardDescription>
@@ -236,18 +236,18 @@ export default function SpamCheckerPage() {
                     )}
                 </CardContent>
             </Card>
-        </div>
         
-        {isLoading && (
-             <div className="flex items-center justify-center rounded-lg border border-dashed p-20 md:col-span-3">
-                <div className="flex flex-col items-center gap-2 text-muted-foreground">
-                    <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                    <p>Analyzing email content...</p>
-                </div>
-             </div>
-        )}
+            {isLoading && (
+                 <div className="flex items-center justify-center rounded-lg border border-dashed p-20 md:col-span-3">
+                    <div className="flex flex-col items-center gap-2 text-muted-foreground">
+                        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                        <p>Analyzing email content...</p>
+                    </div>
+                 </div>
+            )}
 
-        {result && <div className="md:col-span-3">{renderResult()}</div>}
+            {result && renderResult()}
+        </div>
 
       </div>
     </main>
