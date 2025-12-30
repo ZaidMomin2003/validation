@@ -32,9 +32,7 @@ export default function PricingSection() {
 
     useEffect(() => {
         const calculateTimeLeft = () => {
-            const now = new Date();
-            const year = now.getFullYear();
-            const difference = +new Date(`${year}-12-31T23:59:59`) - +now;
+            const difference = +new Date('2026-01-10T23:59:59') - +new Date();
 
             let newTimeLeft = { days: 0, hours: 0, minutes: 0, seconds: 0 };
 

@@ -36,7 +36,7 @@ const plans = [
     isCurrent: false,
     isFeatured: true,
     priceDetails: "/ lifetime",
-    note: "Offer expires on December 31st!",
+    note: "Offer expires on January 10th!",
     planId: "lifetime"
   },
   {
