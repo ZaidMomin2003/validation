@@ -149,8 +149,9 @@ export default function DashboardLayout({
               <SidebarMenuItem>
                 <SidebarMenuButton href="/spam-checker" isActive={pathname === '/spam-checker'}>
                   <ShieldAlert />
-                  Spam Checker
-                  {pathname === '/spam-checker' && <ChevronRight className="ml-auto h-4 w-4" />}
+                  <span className="flex-1">Spam Checker</span>
+                  <Badge variant="secondary" className="mr-auto">Free</Badge>
+                  {pathname === '/spam-checker' && <ChevronRight className="h-4 w-4" />}
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
