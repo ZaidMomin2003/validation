@@ -115,11 +115,12 @@ export default function PricingPage() {
       const orderResponse = await fetch('/api/create-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount: plan.price, plan: plan.planId }),
+        body: JSON.stringify({ plan: plan.planId }),
       });
 
       if (!orderResponse.ok) {
-        throw new Error('Failed to create order.');
+        const errorData = await orderResponse.json();
+        throw new Error(errorData.error || 'Failed to create order.');
       }
       
       const order = await orderResponse.json();
