@@ -16,6 +16,7 @@ import ParallaxScrollDemo from '@/components/layout/parallax-scroll-demo';
 import StatsSection from '@/components/layout/stats-section';
 import { ThreeStepFeatures } from '@/components/layout/three-step-features';
 import BlogShowcase from '@/components/layout/blog-showcase';
+import { ToolsShowcase } from '@/components/layout/tools-showcase';
 
 export default function Home() {
   useEffect(() => {
@@ -54,6 +55,7 @@ export default function Home() {
         />
         <LinkPreviewDemo />
         <ThreeStepFeatures />
+        <ToolsShowcase />
         <HowItWorksSection />
         <StatsSection />
         <div className="py-20">
