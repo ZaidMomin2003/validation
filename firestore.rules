@@ -27,6 +27,12 @@ service cloud.firestore {
                (!data.contains_key('status') || data.status is string);
     }
 
+    function isNewsletterSubscriber(data) {
+      return data.email is string &&
+             data.email.matches('.+@.+\\..+') &&
+             data.subscribedAt is number;
+    }
+
     match /users/{userId} {
       // Users can only read and write their own profile
       allow read: if request.auth.uid == userId;
@@ -63,6 +69,13 @@ service cloud.firestore {
         allow update: if request.auth.uid == userId && isList(request.resource.data) &&
                        request.resource.data.userId == resource.data.userId;
       }
+    }
+
+    match /subscribers/{subscriberId} {
+      // Anyone can create a subscription if the data is valid
+      allow create: if isNewsletterSubscriber(request.resource.data);
+      // No one can read, update, or delete subscriber emails from the client
+      allow read, update, delete: if false;
     }
   }
 }
