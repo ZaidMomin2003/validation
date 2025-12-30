@@ -89,7 +89,7 @@ export const blogPosts: BlogPost[] = [
         description: "Are you making these critical errors? We break down the top five mistakes that hurt your sender score and provide actionable steps to fix them.",
         author: 'Alice Johnson',
         date: generateDate(4),
-        imageUrl: 'https://images.unsplash.com/photo-1558494949-4e83636768c8?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=1200',
+        imageUrl: 'https://images.unsplash.com/photo-1557200134-90327ee9fafa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxlbWFpbHxlbnwwfHx8fDE3NjcxMDc3MDd8MA&ixlib=rb-4.1.0&q=80&w=1080',
         imageHint: 'email error',
         tags: ['Reputation', 'Strategy'],
         content: `
