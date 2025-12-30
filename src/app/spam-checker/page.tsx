@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, ShieldAlert, ShieldCheck, ShieldX, ListChecks } from "lucide-react";
@@ -206,16 +206,15 @@ export default function SpamCheckerPage() {
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
       <div className="grid gap-8">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">
-            Spam Checker
-          </h1>
-          <p className="text-muted-foreground">
-            Analyze your email content to predict its spam score before you send it.
-          </p>
-        </div>
-
         <div className="grid md:grid-cols-3 gap-8 items-start">
+             <div className="md:col-span-3">
+                <h1 className="text-3xl font-bold tracking-tight">
+                    Spam Checker
+                </h1>
+                <p className="text-muted-foreground">
+                    Analyze your email content to predict its spam score before you send it.
+                </p>
+            </div>
             <Card className="md:col-span-2">
             <CardHeader>
                 <CardTitle>Email Content</CardTitle>
