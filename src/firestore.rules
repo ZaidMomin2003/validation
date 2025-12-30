@@ -1,0 +1,80 @@
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper functions for data validation
+    function isUserProfile(data) {
+      return data.uid is string &&
+             data.email is string &&
+             (!data.contains_key('displayName') || data.displayName is string || data.displayName == null) &&
+             (!data.contains_key('photoURL') || data.photoURL is string || data.photoURL == null) &&
+             data.plan is string && (data.plan == 'Free' || data.plan == 'Pay as you go' || data.plan == 'Lifetime Deal') &&
+             data.creditsUsed is number &&
+             data.creditsTotal is number;
+    }
+    
+    function isList(data) {
+        return data.name is string &&
+               data.createdAt is number &&
+               data.emailCount is number &&
+               data.userId is string && data.userId == request.auth.uid &&
+               (!data.contains_key('progress') || data.progress is number) &&
+               (!data.contains_key('good') || data.good is number) &&
+               (!data.contains_key('risky') || data.risky is number) &&
+               (!data.contains_key('bad') || data.bad is number) &&
+               (!data.contains_key('data') || data.data is list) &&
+               (!data.contains_key('status') || data.status is string);
+    }
+
+    function isNewsletterSubscriber(data) {
+      return data.email is string &&
+             data.email.matches('.+@.+\\..+') &&
+             data.subscribedAt is number;
+    }
+
+    match /users/{userId} {
+      // Users can only read and write their own profile
+      allow read: if request.auth.uid == userId;
+      
+      // Allow creation only if the data is valid and required fields are present
+      allow create: if request.auth.uid == userId &&
+                       isUserProfile(request.resource.data) &&
+                       request.resource.data.uid == userId &&
+                       request.resource.data.plan == 'Free' &&
+                       request.resource.data.creditsTotal == 1000 &&
+                       request.resource.data.creditsUsed == 0;
+
+      // Allow update with validation
+      allow update: if request.auth.uid == userId && isUserProfile(request.resource.data) &&
+                       // Prevent user from changing their uid, email, creditsUsed
+                       request.resource.data.uid == resource.data.uid &&
+                       request.resource.data.email == resource.data.email &&
+                       request.resource.data.creditsUsed == resource.data.creditsUsed &&
+                       // Allow displayName and photoURL to be changed
+                       // Allow plan and creditsTotal to be changed (for upgrades)
+                       (request.resource.data.plan != resource.data.plan ||
+                        request.resource.data.creditsTotal != resource.data.creditsTotal ||
+                        request.resource.data.displayName != resource.data.displayName ||
+                        request.resource.data.photoURL != resource.data.photoURL);
+
+      match /lists/{listId} {
+        // Users can only manage their own lists
+        allow read, delete: if request.auth.uid == userId;
+
+        // Allow list creation if the data is valid
+        allow create: if request.auth.uid == userId && isList(request.resource.data);
+
+        // Allow updates if the data is valid and user ID remains unchanged
+        allow update: if request.auth.uid == userId && isList(request.resource.data) &&
+                       request.resource.data.userId == resource.data.userId;
+      }
+    }
+     match /subscribers/{subscriberId} {
+      // Anyone can create a subscription
+      allow create: if isNewsletterSubscriber(request.resource.data);
+      // No one can read, update, or delete subscriber emails from the client
+      allow read, update, delete: if false;
+    }
+  }
+}
