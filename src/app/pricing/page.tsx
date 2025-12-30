@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Check, ShieldCheck, Sparkles, Star, Loader2 } from "lucide-react";
@@ -77,6 +77,35 @@ export default function PricingPage() {
   const { toast } = useToast();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState<string | null>(null);
+  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+
+    useEffect(() => {
+        const calculateTimeLeft = () => {
+            const difference = +new Date('2026-01-10T23:59:59') - +new Date();
+            let newTimeLeft = { days: 0, hours: 0, minutes: 0, seconds: 0 };
+            if (difference > 0) {
+                newTimeLeft = {
+                    days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+                    hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+                    minutes: Math.floor((difference / 1000 / 60) % 60),
+                    seconds: Math.floor((difference / 1000) % 60),
+                };
+            }
+            return newTimeLeft;
+        };
+        setTimeLeft(calculateTimeLeft());
+        const timer = setInterval(() => {
+            setTimeLeft(calculateTimeLeft());
+        }, 1000);
+        return () => clearInterval(timer);
+    }, []);
+
+    const TimerBox = ({ value, label }: { value: number, label: string }) => (
+        <div className="flex flex-col items-center">
+            <div className="text-xl font-bold">{String(value).padStart(2, '0')}</div>
+            <div className="text-xs uppercase">{label}</div>
+        </div>
+    );
 
   const loadRazorpay = () => {
     return new Promise((resolve) => {
@@ -227,7 +256,20 @@ export default function PricingPage() {
                 </ul>
               </CardContent>
               <CardFooter className="flex-col items-center pt-6">
-                 {plan.note && <p className="text-xs text-amber-500 mb-4 font-semibold">{plan.note}</p>}
+                 {plan.isFeatured ? (
+                     <div className='space-y-3 text-center mb-4'>
+                        <p className='text-xs text-amber-500 font-semibold'>Offer expires in:</p>
+                        <div className="flex justify-center items-center gap-3 text-amber-400">
+                            <TimerBox value={timeLeft.days} label="Days" />
+                            <span className="text-xl font-bold -translate-y-1">:</span>
+                            <TimerBox value={timeLeft.hours} label="Hours" />
+                            <span className="text-xl font-bold -translate-y-1">:</span>
+                            <TimerBox value={timeLeft.minutes} label="Mins" />
+                            <span className="text-xl font-bold -translate-y-1">:</span>
+                            <TimerBox value={timeLeft.seconds} label="Secs" />
+                        </div>
+                    </div>
+                 ) : (plan.note && <p className="text-xs text-muted-foreground mb-4 h-12 flex items-center">{plan.note}</p>)}
                 <Button 
                   className="w-full" 
                   disabled={plan.isCurrent || isLoading === plan.planId}
