@@ -75,7 +75,6 @@ const HighlightingInput = ({ value, onChange, placeholder, isTextarea = false }:
             <InputComponent
                 value={value}
                 onChange={(e: any) => onChange(e.target.value)}
-                placeholder={placeholder}
                 className={cn(
                     "absolute inset-0 w-full h-full bg-transparent text-transparent caret-foreground resize-none border-none p-3 text-base focus:outline-none",
                      isTextarea ? "" : "py-2"
