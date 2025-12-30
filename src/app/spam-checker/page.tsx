@@ -1,9 +1,9 @@
+
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Textarea } from "@/components/ui/textarea";
 import { Loader2, ShieldAlert, ShieldCheck, ShieldX, ListChecks } from "lucide-react";
 import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -11,12 +11,51 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { SPAM_WORDS } from '@/lib/spam-words';
 import { Badge } from '@/components/ui/badge';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 type SpamResult = {
   score: number;
   verdict: 'Good' | 'High Risk' | 'Potential Issues';
   issues: string[];
 };
+
+const HighlightedTextarea = ({ value, onChange, placeholder }: { value: string, onChange: (value: string) => void, placeholder: string }) => {
+    const highlightedContent = useMemo(() => {
+        if (!value) return <span className="text-muted-foreground">{placeholder}</span>;
+
+        const regex = new RegExp(`\\b(${Array.from(SPAM_WORDS).join('|')})\\b`, 'gi');
+        const parts = value.split(regex);
+        
+        return parts.map((part, index) => 
+            regex.test(part) && SPAM_WORDS.has(part.toLowerCase()) ? (
+                <mark key={index} className="bg-yellow-300 dark:bg-yellow-700 text-black dark:text-white rounded-sm px-0.5">
+                    {part}
+                </mark>
+            ) : (
+                <React.Fragment key={index}>{part}</React.Fragment>
+            )
+        );
+    }, [value, placeholder]);
+
+    return (
+        <div className="relative w-full">
+            <div 
+                className="min-h-[250px] w-full rounded-md border border-input bg-background px-3 py-2 text-base whitespace-pre-wrap break-words"
+            >
+                {highlightedContent}
+                 {/* This creates a blinking cursor effect */}
+                <span className="animate-pulse">|</span>
+            </div>
+            <textarea
+                value={value}
+                onChange={(e) => onChange(e.target.value)}
+                placeholder={placeholder}
+                className="absolute inset-0 w-full h-full bg-transparent text-transparent caret-foreground resize-none border-none p-3 text-base focus:outline-none"
+            />
+        </div>
+    );
+};
+
 
 export default function SpamCheckerPage() {
   const [subject, setSubject] = useState('');
@@ -196,12 +235,10 @@ export default function SpamCheckerPage() {
                 </div>
                 <div className="space-y-2">
                     <Label htmlFor="email-content">Email Body</Label>
-                    <Textarea 
-                        id="email-content"
-                        placeholder="Paste your full email content here..."
-                        className="min-h-[250px] text-base"
+                    <HighlightedTextarea
                         value={emailContent}
-                        onChange={(e) => setEmailContent(e.target.value)}
+                        onChange={setEmailContent}
+                        placeholder="Paste your full email content here..."
                     />
                 </div>
             </CardContent>
@@ -221,16 +258,18 @@ export default function SpamCheckerPage() {
                 <CardHeader>
                     <CardTitle>Trigger Words Found</CardTitle>
                     <CardDescription>
-                        These words in your content may trigger spam filters. Try to replace them.
+                        These words may trigger spam filters. Try to replace them.
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
                     {detectedSpamWords.length > 0 ? (
-                        <div className="flex flex-wrap gap-2">
-                            {detectedSpamWords.map(word => (
-                                <Badge key={word} variant="destructive">{word}</Badge>
-                            ))}
-                        </div>
+                        <ScrollArea className="h-96">
+                            <div className="flex flex-col gap-2">
+                                {detectedSpamWords.map(word => (
+                                    <Badge key={word} variant="destructive" className="w-fit">{word}</Badge>
+                                ))}
+                            </div>
+                        </ScrollArea>
                     ) : (
                         <p className="text-sm text-muted-foreground">No spam words detected yet.</p>
                     )}
