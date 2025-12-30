@@ -87,9 +87,13 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
 
                 <div 
                     className="prose prose-invert prose-lg mx-auto max-w-none text-foreground/90 
-                    prose-headings:text-foreground prose-h3:mt-8 prose-h3:mb-2 prose-h3:text-xl prose-h3:font-bold prose-h3:leading-tight
-                    prose-a:text-primary prose-a:no-underline hover:prose-a:underline"
-                    dangerouslySetInnerHTML={{ __html: post.content.replace(/\n/g, '<br />') }} 
+                    prose-p:text-lg prose-p:leading-relaxed
+                    prose-headings:text-foreground prose-h3:mt-8 prose-h3:mb-2 prose-h3:text-2xl prose-h3:font-bold prose-h3:leading-tight
+                    prose-a:text-primary prose-a:no-underline hover:prose-a:underline
+                    prose-strong:text-foreground/90
+                    prose-ul:list-disc prose-ul:pl-6 prose-ul:space-y-2
+                    prose-li:text-lg"
+                    dangerouslySetInnerHTML={{ __html: post.content }} 
                 />
 
                 <PromoCard />
