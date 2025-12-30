@@ -1,3 +1,4 @@
+
 'use client';
 
 import Logo from '@/components/logo'
@@ -15,6 +16,10 @@ const links = [
     {
         title: 'Extract Emails',
         href: '/Email-extract',
+    },
+    {
+        title: 'Spam Checker',
+        href: '/check-spam',
     },
     {
         title: 'Terms',
