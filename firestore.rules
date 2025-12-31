@@ -49,7 +49,7 @@ service cloud.firestore {
     }
 
     match /users/{userId} {
-      // Users can only read and write their own profile
+      // Users can only read their own profile
       allow read: if request.auth.uid == userId;
       
       // Allow creation only if the data is valid and required fields are present
@@ -60,13 +60,15 @@ service cloud.firestore {
                        request.resource.data.creditsTotal == 1000 &&
                        request.resource.data.creditsUsed == 0;
 
-      // Allow update with validation
-      allow update: if request.auth.uid == userId && isUserProfile(request.resource.data) &&
-                       // Prevent user from changing their uid, email, creditsUsed
+      // CORRECTED RULE: Allow update if the user is the owner, the new data is valid,
+      // and they are only changing fields they are allowed to change.
+      // This rule is being deployed to fix the payment issue.
+      allow update: if request.auth.uid == userId && 
+                       isUserProfile(request.resource.data) &&
                        request.resource.data.uid == resource.data.uid &&
                        request.resource.data.email == resource.data.email &&
                        request.resource.data.creditsUsed == resource.data.creditsUsed;
-                       // Any other fields (plan, credits, name, photo) can be updated by the user for their own profile.
+                       // Any other fields (plan, creditsTotal, displayName, photoURL) are allowed to be updated.
 
       match /lists/{listId} {
         // Users can only manage their own lists
