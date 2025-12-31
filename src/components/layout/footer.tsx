@@ -4,6 +4,7 @@
 import Logo from '@/components/logo'
 import Link from 'next/link'
 import { NewsletterForm } from './newsletter-form';
+import { ThemeToggle } from '../theme-toggle';
 
 const links = [
     {
@@ -67,7 +68,10 @@ export default function Footer() {
                     className="mx-auto my-12 block size-fit">
                     <Logo />
                 </Link>
-                <span className="text-muted-foreground block text-center text-sm"> © {new Date().getFullYear()} Cleanmails, All rights reserved</span>
+                <div className="flex flex-col items-center gap-6">
+                    <ThemeToggle />
+                    <span className="text-muted-foreground block text-center text-sm"> © {new Date().getFullYear()} Cleanmails, All rights reserved</span>
+                </div>
             </div>
         </footer>
     )

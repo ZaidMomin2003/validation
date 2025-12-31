@@ -98,7 +98,7 @@ export async function generateStaticParams() {
 }
 
 const PromoCard = () => (
-    <Card className="my-12 bg-primary/10 border-primary/20 text-white">
+    <Card className="my-12 bg-card/10 border-border/20 text-foreground">
         <CardContent className="p-8 flex flex-col md:flex-row items-center gap-8">
             <Logo />
             <div className="flex-1">
@@ -146,7 +146,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
   };
 
   return (
-    <div className="bg-neutral-950 text-white landing-page">
+    <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
@@ -188,11 +188,11 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
                 </div>
 
                 <div 
-                    className="prose prose-invert prose-lg mx-auto max-w-none text-foreground/90 
+                    className="prose prose-lg dark:prose-invert mx-auto max-w-none 
                     prose-p:text-lg prose-p:leading-relaxed
                     prose-headings:text-foreground prose-h3:mt-8 prose-h3:mb-2 prose-h3:text-2xl prose-h3:font-bold prose-h3:leading-tight
                     prose-a:text-primary prose-a:no-underline hover:prose-a:underline
-                    prose-strong:text-foreground/90
+                    prose-strong:text-foreground
                     prose-ul:list-disc prose-ul:pl-6 prose-ul:space-y-2
                     prose-li:text-lg"
                     dangerouslySetInnerHTML={{ __html: post.content }} 
@@ -203,6 +203,6 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
         </article>
       </main>
       <Footer />
-    </div>
+    </>
   );
 }

@@ -12,7 +12,7 @@ import Footer from '@/components/layout/footer';
 import { Input } from '@/components/ui/input';
 
 const BlogCard = ({ post }: { post: BlogPost }) => (
-    <Link href={`/blogs/${post.slug}`} className="group block overflow-hidden rounded-2xl border border-white/10 bg-card/5 shadow-sm transition-all duration-300 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/10">
+    <Link href={`/blogs/${post.slug}`} className="group block overflow-hidden rounded-2xl border border-border bg-card/5 shadow-sm transition-all duration-300 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/10">
       <Image
         src={post.imageUrl}
         alt={post.title}
@@ -25,7 +25,7 @@ const BlogCard = ({ post }: { post: BlogPost }) => (
         <div className="flex gap-2">
             {post.tags.map(tag => <Badge key={tag} variant="secondary">{tag}</Badge>)}
         </div>
-        <h3 className="mt-4 text-xl font-semibold leading-tight text-white transition-colors group-hover:text-primary">
+        <h3 className="mt-4 text-xl font-semibold leading-tight text-foreground transition-colors group-hover:text-primary">
           {post.title}
         </h3>
         <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{post.description}</p>
@@ -50,7 +50,7 @@ export default function BlogPage() {
     const otherPosts = blogPosts.slice(1);
 
   return (
-    <div className="bg-neutral-950 text-white landing-page">
+    <>
       <HeroHeader />
       <main className="pt-20">
          <section className="py-16 md:py-24">
@@ -62,7 +62,7 @@ export default function BlogPage() {
                     </p>
                     <div className="mt-8 mx-auto max-w-md relative">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                        <Input placeholder="Search articles..." className="pl-10 h-12 bg-card/5 border-white/10" />
+                        <Input placeholder="Search articles..." className="pl-10 h-12 bg-card/5 border-border" />
                     </div>
                 </div>
 
@@ -82,7 +82,7 @@ export default function BlogPage() {
                             </div>
                             <div>
                                 <Badge variant="default" className="mb-4">Latest Post</Badge>
-                                <h2 className="text-3xl font-bold leading-tight tracking-tight text-white transition-colors group-hover:text-primary">
+                                <h2 className="text-3xl font-bold leading-tight tracking-tight text-foreground transition-colors group-hover:text-primary">
                                     {latestPost.title}
                                 </h2>
                                 <p className="mt-4 text-muted-foreground line-clamp-3">
@@ -91,7 +91,7 @@ export default function BlogPage() {
                                 <div className="mt-6 flex items-center gap-4 text-muted-foreground">
                                     <div className="flex items-center gap-2">
                                         <div className="text-sm">
-                                            <p className="font-semibold text-white">{latestPost.author}</p>
+                                            <p className="font-semibold text-foreground">{latestPost.author}</p>
                                             <p>{latestPost.date}</p>
                                         </div>
                                     </div>
@@ -111,6 +111,6 @@ export default function BlogPage() {
          </section>
       </main>
       <Footer />
-    </div>
+    </>
   );
 }

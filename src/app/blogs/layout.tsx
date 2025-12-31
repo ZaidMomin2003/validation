@@ -1,4 +1,5 @@
 
+import { ThemeProvider } from '@/components/theme-provider';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -31,5 +32,16 @@ export default function BlogLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <>{children}</>;
+  return (
+    <ThemeProvider
+        attribute="class"
+        defaultTheme="system"
+        enableSystem
+        disableTransitionOnChange
+    >
+        <div className="bg-background text-foreground">
+            {children}
+        </div>
+    </ThemeProvider>
+  );
 }
