@@ -306,7 +306,7 @@ export const validate = async (
         domainsToValidate.add(domain);
     }
     
-    // Step 2: Batch validate domains for MX records and catch-all status
+    // Step 2: Batch validate domains for MX records
     let apiValidationMap: Record<string, boolean> = {};
     if (domainsToValidate.size > 0) {
         try {
@@ -319,10 +319,11 @@ export const validate = async (
                 const result = await response.json();
                 apiValidationMap = result.validationMap;
             } else {
-                 throw new Error('Domain validation API failed');
+                 throw new Error('Domain validation API failed with status ' + response.status);
             }
         } catch (error) {
-             console.error("MX validation failed for all domains:", error);
+             console.error("API call to /api/validate-domains failed:", error);
+             // If the API call fails, mark all remaining emails as bad and exit.
              validRowsToProcess.forEach(item => {
                 bad++;
                 validatedData.push({ ...item.row, Status: 'Bad', Notes: 'Domain check failed', Category: 'Invalid' });
@@ -340,7 +341,7 @@ export const validate = async (
 
         const hasMx = apiValidationMap[domain];
 
-        if (hasMx === false) { // Explicitly check for false, as undefined means the API call might have failed for this domain
+        if (hasMx === false) { // Explicitly check for false, as undefined means it wasn't in the successful part of the API response
             status = 'Bad';
             notes = 'No MX Record';
             category = 'Invalid';
@@ -373,20 +374,27 @@ export const validate = async (
 
         validatedData.push({ ...row, Status: status, Notes: notes, Category: category });
         
-        if ((good + risky + bad) % 10 === 0 || (good + risky + bad) === total) {
+        if ((good + risky + bad) % 10 === 0) {
             onProgress({ good, risky, bad, total, data: validatedData });
         }
     }
 
-    // Final progress report
-    const finalValidatedData = [...validatedData];
-    const validatedEmails = new Set(validatedData.map(v => v[emailColumn]));
-    rows.forEach(r => {
-        if (!validatedEmails.has(r[emailColumn])) {
-            finalValidatedData.push({ ...r, Status: 'Bad', Notes: 'Unknown validation error', Category: 'Invalid' });
-        }
-    });
+    // Final progress report to ensure it always reaches 100%
+    const validatedCount = good + risky + bad;
+    if (validatedCount > 0 && validatedCount < total) {
+       // This handles cases where some rows were filtered out early (e.g. syntax errors)
+       // We need to ensure the final report includes all original rows.
+       const processedEmails = new Set(validatedData.map(v => v[emailColumn]));
+       rows.forEach(r => {
+           if (!processedEmails.has(r[emailColumn])) {
+               validatedData.push({ ...r, Status: 'Bad', Notes: 'Pre-validation failed', Category: 'Invalid' });
+           }
+       });
+    }
 
-    onProgress({ good, risky, bad, total, data: finalValidatedData });
-    return { good, risky, bad, total, data: finalValidatedData };
+    onProgress({ good, risky, bad, total, data: validatedData });
+    return { good, risky, bad, total, data: validatedData };
 };
+
+
+    
