@@ -31,8 +31,6 @@ const plans = [
       "500,000 Verifications/Year",
       "Bulk List Cleaning",
       "Unlimited Email Extraction",
-      "Priority Support",
-      "Lifetime Access & Updates",
     ],
     cta: "Get the Deal",
     isCurrent: false,
@@ -165,9 +163,14 @@ export default function PricingPage() {
         order_id: order.id,
         handler: async function (response: any) {
             const userDocRef = doc(db, 'users', user.uid);
+            
+            // Re-fetch the user object to get the latest state
+            const updatedUser = { ...user };
+
             const newPlanData = {
-              plan: plan.name,
-              creditsTotal: plan.credits,
+              ...updatedUser,
+              plan: plan.name === "Lifetime Deal" ? "Lifetime" : plan.name,
+              creditsTotal: user.creditsTotal ? user.creditsTotal + plan.credits : plan.credits,
             };
 
             updateDoc(userDocRef, newPlanData)
@@ -185,12 +188,6 @@ export default function PricingPage() {
                         requestResourceData: newPlanData,
                     });
                     errorEmitter.emit('permission-error', permissionError);
-                    
-                    toast({
-                        variant: 'destructive',
-                        title: 'Failed to Update Plan',
-                        description: 'Your payment was successful, but we failed to update your plan. Please contact support.',
-                    });
                 });
         },
         prefill: {
@@ -332,3 +329,5 @@ export default function PricingPage() {
     </main>
   );
 }
+
+    
