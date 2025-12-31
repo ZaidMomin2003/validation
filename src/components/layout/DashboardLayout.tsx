@@ -131,38 +131,42 @@ export default function DashboardLayout({
             </div>
           </SidebarHeader>
           <SidebarContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton href="/bulk-validate" isActive={pathname === '/bulk-validate'}>
-                  <FileUp />
-                  Clean and validate
-                  {pathname === '/bulk-validate' && <ChevronRight className="ml-auto h-4 w-4" />}
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton href="/extract-from-text" isActive={pathname === '/extract-from-text'}>
-                  <FileText />
-                  Extract from text
-                  {pathname === '/extract-from-text' && <ChevronRight className="ml-auto h-4 w-4" />}
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton href="/spam-checker" isActive={pathname === '/spam-checker'}>
-                  <ShieldAlert />
-                  <span className="flex-1">Spam Checker</span>
-                  <Badge variant="secondary" className="mr-auto">Free</Badge>
-                  {pathname === '/spam-checker' && <ChevronRight className="h-4 w-4" />}
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton href="/lists" isActive={pathname === '/lists'}>
-                  <History />
-                  Lists
-                  {pathname === '/lists' && <ChevronRight className="ml-auto h-4 w-4" />}
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarContent>
+            <SidebarGroup>
+                <SidebarGroupLabel>Tools</SidebarGroupLabel>
+                <SidebarMenu>
+                    <SidebarMenuItem>
+                        <SidebarMenuButton href="/bulk-validate" isActive={pathname === '/bulk-validate'}>
+                        <FileUp />
+                        Clean & Validate
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
+                    <SidebarMenuItem>
+                        <SidebarMenuButton href="/extract-from-text" isActive={pathname === '/extract-from-text'}>
+                        <FileText />
+                        Extract Emails
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
+                    <SidebarMenuItem>
+                        <SidebarMenuButton href="/spam-checker" isActive={pathname === '/spam-checker'}>
+                        <ShieldAlert />
+                        Spam Checker
+                        <Badge variant="secondary" className="ml-auto">Free</Badge>
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
+                </SidebarMenu>
+            </SidebarGroup>
+            <SidebarGroup>
+                <SidebarGroupLabel>Management</SidebarGroupLabel>
+                <SidebarMenu>
+                    <SidebarMenuItem>
+                        <SidebarMenuButton href="/lists" isActive={pathname === '/lists'}>
+                        <History />
+                        My Lists
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
+                </SidebarMenu>
+            </SidebarGroup>
+            </SidebarContent>
           <SidebarFooter className="mt-auto">
             <SidebarGroup>
               <SidebarGroupLabel>QUICK LINKS</SidebarGroupLabel>
