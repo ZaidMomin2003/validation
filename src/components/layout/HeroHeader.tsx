@@ -1,4 +1,3 @@
-
 'use client'
 import Link from 'next/link'
 import Logo from '@/components/logo'
@@ -7,7 +6,7 @@ import React from 'react'
 import { cn } from '@/lib/utils'
 import { useScroll } from 'framer-motion'
 import { useAuth } from '@/hooks/useAuth'
-import { ArrowRight, PartyPopper } from 'lucide-react'
+import { PartyPopper } from 'lucide-react'
 
 export const HeroHeader = () => {
     const [scrolled, setScrolled] = React.useState(false)
@@ -28,8 +27,8 @@ export const HeroHeader = () => {
                 <Link href="/pricing" className="group">
                     <div className="mx-auto flex max-w-7xl items-center justify-center px-4 py-1.5 text-sm">
                         <PartyPopper className="mr-2 h-4 w-4" />
-                        <span className="font-semibold md:hidden">Limited Time: Snag the $69 Lifetime Deal!</span>
-                        <span className="hidden font-semibold md:inline">Limited Time: Snag the $69 Lifetime Deal before it's gone!</span>
+                        <span className="font-semibold md:hidden">New Year Offer: $69 Lifetime Deal!</span>
+                        <span className="hidden font-semibold md:inline">New Year Special: Grab the $69 Lifetime Deal now!</span>
                     </div>
                 </Link>
             </div>

@@ -104,7 +104,7 @@ export default function PricingSection() {
                                 <div className={cn("mt-4 text-xs font-semibold transition-opacity duration-300 min-h-[56px]", plan === 'pro' ? 'opacity-100' : 'opacity-0')}>
                                     {plan === 'pro' ? (
                                         <div className='space-y-2'>
-                                            <p className='text-amber-500'>Offer ends in:</p>
+                                            <p className='text-amber-500'>New Year Offer! Ends in:</p>
                                             <div className="flex justify-center items-center gap-4 text-amber-400">
                                                 <TimerBox value={timeLeft.days} label="Days" />
                                                 <span className="text-2xl font-bold -translate-y-1">:</span>
