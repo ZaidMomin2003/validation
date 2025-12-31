@@ -61,17 +61,13 @@ service cloud.firestore {
                        request.resource.data.creditsUsed == 0;
 
       // Allow update with validation
-      allow update: if request.auth.uid == userId && isUserProfile(request.resource.data) &&
-                       // Prevent user from changing their uid, email, creditsUsed
+      allow update: if request.auth.uid == userId &&
+                       isUserProfile(request.resource.data) &&
+                       // Prevent user from changing their uid, email, and creditsUsed
                        request.resource.data.uid == resource.data.uid &&
                        request.resource.data.email == resource.data.email &&
-                       request.resource.data.creditsUsed == resource.data.creditsUsed &&
-                       // Allow displayName and photoURL to be changed
-                       // Allow plan and creditsTotal to be changed (for upgrades)
-                       (request.resource.data.plan != resource.data.plan ||
-                        request.resource.data.creditsTotal != resource.data.creditsTotal ||
-                        request.resource.data.displayName != resource.data.displayName ||
-                        request.resource.data.photoURL != resource.data.photoURL);
+                       request.resource.data.creditsUsed == resource.data.creditsUsed;
+                       // Any other fields (plan, creditsTotal, displayName, photoURL) can be updated.
 
       match /lists/{listId} {
         // Users can only manage their own lists

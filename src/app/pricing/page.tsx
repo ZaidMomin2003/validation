@@ -12,6 +12,8 @@ import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '@/firebase/firebaseClient';
+import { errorEmitter } from '@/firebase/error-emitter';
+import { FirestorePermissionError } from '@/firebase/errors';
 
 declare global {
   interface Window {
@@ -162,26 +164,34 @@ export default function PricingPage() {
         description: `Payment for ${plan.name}`,
         order_id: order.id,
         handler: async function (response: any) {
-          try {
-             // Update user's plan in Firestore
             const userDocRef = doc(db, 'users', user.uid);
-            await updateDoc(userDocRef, {
+            const newPlanData = {
               plan: plan.name,
               creditsTotal: plan.credits,
-            });
+            };
 
-            toast({
-                title: 'Payment Successful!',
-                description: `Thank you for your purchase. Your ${plan.name} is now active.`,
-            });
-            router.push('/lists');
-          } catch (error: any) {
-             toast({
-                variant: 'destructive',
-                title: 'Failed to Update Plan',
-                description: 'Your payment was successful, but we failed to update your plan. Please contact support.',
-            });
-          }
+            updateDoc(userDocRef, newPlanData)
+                .then(() => {
+                    toast({
+                        title: 'Payment Successful!',
+                        description: `Thank you for your purchase. Your ${plan.name} is now active.`,
+                    });
+                    router.push('/lists');
+                })
+                .catch((serverError: any) => {
+                    const permissionError = new FirestorePermissionError({
+                        path: userDocRef.path,
+                        operation: 'update',
+                        requestResourceData: newPlanData,
+                    });
+                    errorEmitter.emit('permission-error', permissionError);
+                    
+                    toast({
+                        variant: 'destructive',
+                        title: 'Failed to Update Plan',
+                        description: 'Your payment was successful, but we failed to update your plan. Please contact support.',
+                    });
+                });
         },
         prefill: {
           name: user.displayName || 'Cleanmails User',
