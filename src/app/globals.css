@@ -71,7 +71,7 @@
     --sidebar-ring: 212.7 26.8% 83.9%;
   }
 
-  .dark .landing-page {
+  .dark.landing-page {
     --background: 0 0% 0%;
     --foreground: 0 0% 98%;
     --card: 0 0% 8%;
@@ -86,15 +86,15 @@
     --primary-foreground: 210 40% 98%;
   }
 
-  .dark .landing-page .bg-card\/5 {
+  .dark.landing-page .bg-card\/5 {
     background-color: hsla(0, 0%, 8%, 1); /* Equivalent to card */
   }
 
-  .dark .landing-page .bg-neutral-950 {
+  .dark.landing-page .bg-neutral-950 {
     background-color: hsl(var(--background));
   }
 
-  .dark .landing-page .text-white {
+  .dark.landing-page .text-white {
     color: hsl(var(--foreground));
   }
 }

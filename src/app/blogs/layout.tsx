@@ -34,12 +34,12 @@ export default function BlogLayout({
 }) {
   return (
     <ThemeProvider
-        attribute="class"
-        defaultTheme="system"
-        enableSystem
-        disableTransitionOnChange
+      attribute="class"
+      defaultTheme="dark"
+      enableSystem={false}
+      disableTransitionOnChange
     >
-        <div className="bg-background text-foreground">
+        <div className="dark landing-page bg-background text-foreground">
             {children}
         </div>
     </ThemeProvider>

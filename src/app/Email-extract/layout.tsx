@@ -14,11 +14,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <ThemeProvider
       attribute="class"
-      defaultTheme="system"
-      enableSystem
+      defaultTheme="dark"
+      enableSystem={false}
       disableTransitionOnChange
     >
-      <div className="bg-background text-foreground">
+      <div className="dark landing-page bg-background text-foreground">
           <HeroHeader />
           <main className='pt-20'>
               {children}

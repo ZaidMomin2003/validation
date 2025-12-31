@@ -26,11 +26,11 @@ export default function Home() {
   return (
     <ThemeProvider
       attribute="class"
-      defaultTheme="system"
-      enableSystem
+      defaultTheme="dark"
+      enableSystem={false}
       disableTransitionOnChange
     >
-      <div className="bg-background text-foreground">
+      <div className="dark landing-page bg-background text-foreground">
         <HeroHeader />
         <HeroSection />
         <div className="relative overflow-hidden">
