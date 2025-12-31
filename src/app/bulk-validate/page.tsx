@@ -14,7 +14,7 @@ import * as XLSX from 'xlsx';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/useAuth';
 import { addDoc, collection, doc, updateDoc } from 'firebase/firestore';
-import { db } from '@/firebase/firebaseClient';
+import { useFirestore } from '@/firebase/provider';
 import { useRouter } from 'next/navigation';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
@@ -35,6 +35,8 @@ import {
 import Link from 'next/link';
 import { useCollection } from '@/firebase/hooks';
 import { query } from 'firebase/firestore';
+import { errorEmitter } from '@/firebase/error-emitter';
+import { FirestorePermissionError } from '@/firebase/errors';
 
 
 const PREVIEW_ROW_COUNT = 8;
@@ -54,6 +56,7 @@ interface CleanedData {
 
 export default function BulkValidatePage() {
     const { user } = useAuth();
+    const db = useFirestore();
     const router = useRouter();
     const [files, setFiles] = React.useState<File[]>([]);
     const [tableData, setTableData] = React.useState<TableData | null>(null);
@@ -68,9 +71,9 @@ export default function BulkValidatePage() {
     const { toast } = useToast();
 
     const listsQuery = React.useMemo(() => {
-        if (!user) return null;
+        if (!user || !db) return null;
         return query(collection(db, `users/${user.uid}/lists`));
-    }, [user]);
+    }, [user, db]);
 
     const { data: lists } = useCollection<List>(listsQuery);
 
@@ -242,16 +245,17 @@ export default function BulkValidatePage() {
     };
     
     const handleSaveCleanedList = async () => {
-        if (!user || !cleanedData || !tableData) return;
+        if (!user || !cleanedData || !tableData || !db) return;
         
         setIsProcessing(true);
 
+        const listsCollection = collection(db, `users/${user.uid}/lists`);
         const listData: List = {
             name: `Cleaned - ${tableData.fileName}`,
             createdAt: Date.now(),
             progress: 100, 
             emailCount: cleanedData.rows.length,
-            good: cleanedData.rows.length, // All are considered 'good' post-cleaning, pre-validation
+            good: cleanedData.rows.length,
             risky: 0,
             bad: 0,
             userId: user.uid,
@@ -259,33 +263,35 @@ export default function BulkValidatePage() {
             status: 'Completed'
         };
 
-        try {
-            await addDoc(collection(db, `users/${user.uid}/lists`), listData);
-            toast({
-                title: 'List cleaned and saved!',
-                description: `${listData.name} has been added to your lists.`,
+        addDoc(listsCollection, listData)
+            .then(() => {
+                toast({
+                    title: 'List cleaned and saved!',
+                    description: `${listData.name} has been added to your lists.`,
+                });
+                router.push('/lists');
+            })
+            .catch((serverError) => {
+                 const permissionError = new FirestorePermissionError({
+                    path: listsCollection.path,
+                    operation: 'create',
+                    requestResourceData: listData,
+                });
+                errorEmitter.emit('permission-error', permissionError);
+            })
+            .finally(() => {
+                setIsProcessing(false);
             });
-            router.push('/lists');
-        } catch (error: any) {
-            toast({
-                variant: 'destructive',
-                title: 'Error saving list',
-                description: error.message || 'Could not save the cleaned list.',
-            });
-        } finally {
-            setIsProcessing(false);
-        }
     };
     
     const handleValidateAction = async (bypassCreditCheck = false) => {
-        if (!user || !tableData || !emailColumn) return;
+        if (!user || !tableData || !emailColumn || !db) return;
 
         const isFreePlan = user.plan === 'Free';
         const emailsToProcess = tableData.rows;
         let finalEmails = emailsToProcess;
 
         if (isFreePlan && !bypassCreditCheck && emailsToProcess.length > creditsLeft) {
-            // Trigger the alert dialog instead of processing
             document.getElementById('credit-limit-trigger')?.click();
             return;
         }
@@ -302,8 +308,9 @@ export default function BulkValidatePage() {
 
         const dataToProcess = { ...tableData, rows: finalEmails };
 
-        // 1. Create initial list document in Firestore
         const dataObjects = convertDataToObjects(dataToProcess);
+        
+        const listsCollection = collection(db, `users/${user.uid}/lists`);
         const listData: List = {
             name: tableData.fileName,
             createdAt: Date.now(),
@@ -314,39 +321,39 @@ export default function BulkValidatePage() {
             status: 'Processing'
         };
 
-        try {
-            const docRef = await addDoc(collection(db, `users/${user.uid}/lists`), listData);
-            
-            router.push('/lists');
-    
-            validate(dataObjects, emailColumn, async ({ good, risky, bad, total, data }) => {
-                const progress = Math.round(((good + risky + bad) / total) * 100);
-                const isCompleted = progress === 100;
-                
-                const updateData: Partial<List> = { good, risky, bad, progress };
+        addDoc(listsCollection, listData)
+            .then((docRef) => {
+                router.push('/lists');
+        
+                validate(dataObjects, emailColumn, async ({ good, risky, bad, total, data }) => {
+                    const progress = Math.round(((good + risky + bad) / total) * 100);
+                    const isCompleted = progress === 100;
+                    
+                    const updateData: Partial<List> = { good, risky, bad, progress };
 
-                if (isCompleted) {
-                    updateData.data = data;
-                    updateData.status = 'Completed';
-                }
-                
-                await updateDoc(doc(db, `users/${user.uid}/lists`, docRef.id), updateData);
-            }).catch(async (error) => {
-                console.error("Validation process failed:", error);
-                 await updateDoc(doc(db, `users/${user.uid}/lists`, docRef.id), {
-                    status: 'Failed',
-                    progress: 100
+                    if (isCompleted) {
+                        updateData.data = data;
+                        updateData.status = 'Completed';
+                    }
+                    
+                    await updateDoc(doc(db, `users/${user.uid}/lists`, docRef.id), updateData);
+                }).catch(async (error) => {
+                    console.error("Validation process failed:", error);
+                    await updateDoc(doc(db, `users/${user.uid}/lists`, docRef.id), {
+                        status: 'Failed',
+                        progress: 100
+                    });
                 });
+            })
+            .catch((serverError) => {
+                const permissionError = new FirestorePermissionError({
+                    path: listsCollection.path,
+                    operation: 'create',
+                    requestResourceData: listData,
+                });
+                errorEmitter.emit('permission-error', permissionError);
+                setIsProcessing(false);
             });
-
-        } catch (error: any) {
-            toast({
-                variant: 'destructive',
-                title: 'Error starting validation',
-                description: error.message || 'Could not create the list for validation.',
-            });
-            setIsProcessing(false);
-        }
     };
 
     const renderTablePreview = (data: {headers: string[], rows: any[][]}, selectedColumn: string | null) => {

@@ -7,11 +7,11 @@ service cloud.firestore {
     function isUserProfile(data) {
       return data.uid is string &&
              data.email is string &&
-             (!data.contains_key('displayName') || data.displayName is string || data.displayName == null) &&
-             (!data.contains_key('photoURL') || data.photoURL is string || data.photoURL == null) &&
-             data.plan is string && (data.plan == 'Free' || data.plan == 'Pay as you go' || data.plan == 'Lifetime Deal') &&
-             data.creditsUsed is number &&
-             data.creditsTotal is number;
+             (!('displayName' in data) || data.displayName is string || data.displayName == null) &&
+             (!('photoURL' in data) || data.photoURL is string || data.photoURL == null) &&
+             'plan' in data && (data.plan == 'Free' || data.plan == 'Pay-as-you-go' || data.plan == 'Lifetime Deal') &&
+             'creditsUsed' in data && data.creditsUsed is number &&
+             'creditsTotal' in data && data.creditsTotal is number;
     }
     
     function isList(data) {
@@ -19,17 +19,17 @@ service cloud.firestore {
                data.createdAt is number &&
                data.emailCount is number &&
                data.userId is string && data.userId == request.auth.uid &&
-               (!data.contains_key('progress') || data.progress is number) &&
-               (!data.contains_key('good') || data.good is number) &&
-               (!data.contains_key('risky') || data.risky is number) &&
-               (!data.contains_key('bad') || data.bad is number) &&
-               (!data.contains_key('data') || data.data is list) &&
-               (!data.contains_key('status') || data.status is string);
+               (!('progress' in data) || data.progress is number) &&
+               (!('good' in data) || data.good is number) &&
+               (!('risky' in data) || data.risky is number) &&
+               (!('bad' in data) || data.bad is number) &&
+               (!('data' in data) || data.data is list) &&
+               (!('status' in data) || data.status is string);
     }
 
     function isNewsletterSubscriber(data) {
       return data.email is string &&
-             data.email.matches('.+@.+\\..+') &&
+             data.email.matches('.+@.+\..+') &&
              data.subscribedAt is number;
     }
 
