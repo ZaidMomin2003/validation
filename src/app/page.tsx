@@ -95,7 +95,7 @@ export default function Home() {
         </div>
       </div>
       <Dialog open={showPromo} onOpenChange={setShowPromo}>
-        <DialogContent className="w-11/12 max-w-md rounded-2xl bg-card/80 dark:bg-zinc-900/80 backdrop-blur-lg border-primary/20 text-white shadow-2xl">
+        <DialogContent className="dark w-11/12 max-w-md rounded-2xl bg-card/80 dark:bg-zinc-900/80 backdrop-blur-lg border-primary/20 text-white shadow-2xl">
             <DialogHeader>
                  <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10">
                     <PartyPopper className="h-8 w-8 text-primary" />
