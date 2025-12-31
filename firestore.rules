@@ -14,6 +14,7 @@ service cloud.firestore {
              'creditsTotal' in data && data.creditsTotal is number;
     }
 
+    // Validates the initial creation of a list document
     function isListCreate(data) {
       return data.name is string &&
              data.createdAt is number &&
@@ -27,6 +28,7 @@ service cloud.firestore {
              !('data' in data); // data field must not exist on create
     }
 
+    // Validates updates to a list document
     function isListUpdate(data) {
       return data.name is string &&
              data.createdAt is number &&
@@ -47,8 +49,10 @@ service cloud.firestore {
     }
 
     match /users/{userId} {
+      // Users can only read and write their own profile
       allow read: if request.auth.uid == userId;
       
+      // Allow creation only if the data is valid and required fields are present
       allow create: if request.auth.uid == userId &&
                        isUserProfile(request.resource.data) &&
                        request.resource.data.uid == userId &&
@@ -56,23 +60,30 @@ service cloud.firestore {
                        request.resource.data.creditsTotal == 1000 &&
                        request.resource.data.creditsUsed == 0;
 
-      allow update: if request.auth.uid == userId && 
-                       isUserProfile(request.resource.data) &&
+      // Allow update with validation
+      allow update: if request.auth.uid == userId && isUserProfile(request.resource.data) &&
                        // Prevent user from changing their uid, email, creditsUsed
                        request.resource.data.uid == resource.data.uid &&
                        request.resource.data.email == resource.data.email &&
                        request.resource.data.creditsUsed == resource.data.creditsUsed;
-                       // Any other fields can be updated by the user for their own profile.
+                       // Any other fields (plan, credits, name, photo) can be updated by the user for their own profile.
 
       match /lists/{listId} {
+        // Users can only manage their own lists
         allow read, delete: if request.auth.uid == userId;
+
+        // Use isListCreate for creation
         allow create: if request.auth.uid == userId && isListCreate(request.resource.data);
+
+        // Use isListUpdate for updates
         allow update: if request.auth.uid == userId && isListUpdate(request.resource.data) &&
                        request.resource.data.userId == resource.data.userId;
       }
     }
      match /subscribers/{subscriberId} {
+      // Anyone can create a subscription
       allow create: if isNewsletterSubscriber(request.resource.data);
+      // No one can read, update, or delete subscriber emails from the client
       allow read, update, delete: if false;
     }
   }
