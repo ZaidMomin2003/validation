@@ -13,7 +13,11 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: 'Cleanmails | Instant Email Validation & Cleaning Service',
+  metadataBase: new URL('https://cleanmails.com'),
+  title: {
+    default: 'Cleanmails | Instant Email Validation & Cleaning Service',
+    template: '%s | Cleanmails',
+  },
   description: 'Clean, verify, and protect your email lists with Cleanmails. Reduce bounce rates, remove invalid addresses, and improve sender reputation. Try for free.',
   openGraph: {
     title: 'Cleanmails | Instant Email Validation & Cleaning Service',
@@ -22,9 +26,10 @@ export const metadata: Metadata = {
     siteName: 'Cleanmails',
     images: [
       {
-        url: 'https://cleanmails.com/og-image.png', // Replace with your actual OG image URL
+        url: '/og-image.png', // Hosted in /public
         width: 1200,
         height: 630,
+        alt: 'Cleanmails an Instant Email Validation & Cleaning Service',
       },
     ],
     locale: 'en_US',
@@ -34,7 +39,22 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Cleanmails | Instant Email Validation & Cleaning Service',
     description: 'Stop bounces and improve your email deliverability. Fast, affordable, and accurate email verification.',
-    // images: ['https://cleanmails.com/og-image.png'], // Replace with your actual OG image URL
+    images: ['/og-image.png'],
+    creator: '@cleanmails', // Add your Twitter handle
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  alternates: {
+    canonical: 'https://cleanmails.com',
   },
 };
 

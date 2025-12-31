@@ -27,9 +27,32 @@ export async function generateMetadata(
 
   if (!post) {
     return {
-      title: 'Post Not Found',
+      title: 'Post Not Found | Cleanmails',
+      description: 'The blog post you are looking for could not be found.',
     }
   }
+
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description: post.description,
+    image: post.imageUrl,
+    author: {
+      '@type': 'Person',
+      name: post.author,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Cleanmails',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://cleanmails.com/logo.png', // You should create this logo image
+      },
+    },
+    datePublished: new Date('2025-12-23T12:00:00Z').toISOString(),
+    dateModified: new Date('2025-12-23T12:00:00Z').toISOString(),
+  };
 
   return {
     title: `${post.title} | Cleanmails Blog`,
@@ -49,13 +72,20 @@ export async function generateMetadata(
       locale: 'en_US',
       type: 'article',
       authors: [post.author],
-      publishedTime: new Date('2025-12-23T12:00:00Z').toISOString(), // Placeholder, ideally from blog data
+      publishedTime: new Date('2025-12-23T12:00:00Z').toISOString(),
     },
     twitter: {
       card: 'summary_large_image',
       title: `${post.title} | Cleanmails Blog`,
       description: post.description,
       images: [post.imageUrl],
+      creator: '@cleanmails', // Add your Twitter handle
+    },
+    alternates: {
+      canonical: `https://cleanmails.com/blogs/${post.slug}`,
+    },
+    other: {
+      'script[type="application/ld+json"]': JSON.stringify(structuredData),
     },
   }
 }
@@ -93,8 +123,34 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
     notFound();
   }
 
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description: post.description,
+    image: post.imageUrl,
+    author: {
+      '@type': 'Person',
+      name: post.author,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Cleanmails',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://cleanmails.com/logo.png', // You should create this logo image
+      },
+    },
+    datePublished: new Date('2025-12-23T12:00:00Z').toISOString(),
+    dateModified: new Date('2025-12-23T12:00:00Z').toISOString(),
+  };
+
   return (
     <div className="bg-neutral-950 text-white landing-page">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
       <HeroHeader />
       <main className="pt-20">
         <article className="py-16 md:py-24">
