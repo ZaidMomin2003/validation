@@ -311,7 +311,7 @@ export default function BulkValidatePage() {
         const dataObjects = convertDataToObjects(dataToProcess);
         
         const listsCollection = collection(db, `users/${user.uid}/lists`);
-        const listData: List = {
+        const listData: Partial<List> = {
             name: tableData.fileName,
             createdAt: Date.now(),
             progress: 0,
@@ -711,5 +711,7 @@ export default function BulkValidatePage() {
   </main>
   );
 }
+
+    
 
     
