@@ -273,7 +273,7 @@ export default function ListsPage() {
             <Card
               key={stat.title}
               className={cn(
-                stat.title === 'Valid Emails' && 'bg-gray-900 text-white dark:bg-card dark:text-card-foreground'
+                stat.title === 'Valid Emails' && 'bg-gray-900 text-white dark:bg-white dark:text-black'
               )}
             >
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -282,11 +282,9 @@ export default function ListsPage() {
                 </CardTitle>
                 <stat.icon
                   className={cn(
-                    'h-4 w-4',
-                    stat.title === 'Valid Emails'
-                      ? 'text-green-500'
-                      : 'text-muted-foreground',
-                    stat.color
+                    'h-4 w-4 text-muted-foreground',
+                    stat.color,
+                    stat.title === 'Valid Emails' && 'dark:text-green-500'
                   )}
                 />
               </CardHeader>
@@ -300,10 +298,8 @@ export default function ListsPage() {
                 </div>
                 <p
                   className={cn(
-                    'text-xs',
-                    stat.title === 'Valid Emails'
-                      ? 'text-gray-400'
-                      : 'text-muted-foreground'
+                    'text-xs text-muted-foreground',
+                     stat.title === 'Valid Emails' && 'dark:text-gray-500'
                   )}
                 >
                   {stat.description}
