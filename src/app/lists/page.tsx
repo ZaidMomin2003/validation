@@ -273,7 +273,7 @@ export default function ListsPage() {
             <Card
               key={stat.title}
               className={cn(
-                stat.title === 'Valid Emails' && 'bg-white text-black'
+                stat.title === 'Valid Emails' && 'bg-gray-900 text-white dark:bg-card dark:text-card-foreground'
               )}
             >
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -302,7 +302,7 @@ export default function ListsPage() {
                   className={cn(
                     'text-xs',
                     stat.title === 'Valid Emails'
-                      ? 'text-gray-600'
+                      ? 'text-gray-400'
                       : 'text-muted-foreground'
                   )}
                 >
