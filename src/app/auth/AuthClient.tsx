@@ -17,7 +17,6 @@ import { useToast } from '@/hooks/use-toast';
 import { Loader2, Eye, EyeOff } from 'lucide-react';
 import { useAuthContext } from '@/firebase/provider';
 import { LogoIcon } from '@/components/logo-icon';
-import { ThemeToggle } from '@/components/theme-toggle';
 
 export default function AuthClient() {
     const router = useRouter();
@@ -109,10 +108,7 @@ export default function AuthClient() {
     };
 
     return (
-        <div className="flex min-h-screen w-full flex-col bg-background text-foreground">
-            <div className="absolute top-4 right-4">
-                <ThemeToggle />
-            </div>
+        <div className="dark landing-page bg-background text-foreground flex min-h-screen w-full flex-col">
             <main className="flex flex-1 flex-col items-center justify-center px-6 pb-20">
                 <div className="w-full max-w-sm">
                     <div className="text-center mb-8">
@@ -134,7 +130,7 @@ export default function AuthClient() {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
-                            className="h-12 rounded-xl border-border bg-background px-4 text-base placeholder:text-muted-foreground"
+                            className="h-12 rounded-xl border-border bg-transparent px-4 text-base placeholder:text-muted-foreground"
                         />
                         <div className="relative">
                             <Input 
@@ -143,7 +139,7 @@ export default function AuthClient() {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
-                                className="h-12 rounded-xl border-border bg-background px-4 text-base placeholder:text-muted-foreground"
+                                className="h-12 rounded-xl border-border bg-transparent px-4 text-base placeholder:text-muted-foreground"
                             />
                             <Button
                                 type="button"
@@ -163,7 +159,7 @@ export default function AuthClient() {
                                     value={confirmPassword}
                                     onChange={(e) => setConfirmPassword(e.target.value)}
                                     required
-                                    className="h-12 rounded-xl border-border bg-background px-4 text-base placeholder:text-muted-foreground"
+                                    className="h-12 rounded-xl border-border bg-transparent px-4 text-base placeholder:text-muted-foreground"
                                 />
                                 <Button
                                     type="button"
@@ -205,7 +201,7 @@ export default function AuthClient() {
                     </div>
 
                     <div className="space-y-4">
-                        <Button onClick={handleGoogleSignIn} variant="outline" className="h-12 w-full rounded-full font-semibold" disabled={isLoading}>
+                        <Button onClick={handleGoogleSignIn} variant="outline" className="h-12 w-full rounded-full font-semibold border-border bg-transparent hover:bg-white/5" disabled={isLoading}>
                             {isGoogleLoading ? (
                                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                             ) : (

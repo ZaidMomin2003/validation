@@ -50,7 +50,7 @@ export default function ForgotPasswordClient() {
     };
 
     return (
-        <section className="flex min-h-screen bg-zinc-50 px-4 py-16 md:py-32 dark:bg-transparent">
+        <section className="dark landing-page flex min-h-screen bg-background text-foreground px-4 py-16 md:py-32">
             <div className="m-auto h-fit w-full max-w-sm">
                 <div className="p-8 pb-6 text-center">
                      <Link href="/" aria-label="go home" className="inline-block">
@@ -66,7 +66,7 @@ export default function ForgotPasswordClient() {
                     </p>
                 </div>
                 
-                <div className="bg-card rounded-lg border p-6 shadow-md">
+                <div className="bg-card rounded-lg border p-6 shadow-md border-border">
                     {emailSent ? (
                         <div className="text-center">
                              <Button asChild className="w-full">
@@ -90,6 +90,7 @@ export default function ForgotPasswordClient() {
                                     value={email} 
                                     onChange={(e) => setEmail(e.target.value)}
                                     placeholder="you@example.com"
+                                    className="bg-transparent border-border"
                                 />
                             </div>
 
