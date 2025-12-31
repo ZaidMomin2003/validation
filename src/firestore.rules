@@ -20,12 +20,12 @@ service cloud.firestore {
              data.createdAt is number &&
              data.emailCount is number &&
              data.userId is string && data.userId == request.auth.uid &&
-             data.progress is number && data.progress == 0 &&
-             data.good is number && data.good == 0 &&
-             data.risky is number && data.risky == 0 &&
-             data.bad is number && data.bad == 0 &&
-             data.status is string &&
-             !('data' in request.resource.data); // data field must not exist on create
+             data.progress == 0 &&
+             data.good == 0 &&
+             data.risky == 0 &&
+             data.bad == 0 &&
+             data.status == 'Processing' &&
+             !('data' in data); // data field must not exist on create
     }
 
     // Validates updates to a list document
@@ -34,11 +34,11 @@ service cloud.firestore {
              data.createdAt is number &&
              data.emailCount is number &&
              data.userId is string && data.userId == request.auth.uid &&
-             (!('progress' in data) || data.progress is number) &&
-             (!('good' in data) || data.good is number) &&
-             (!('risky' in data) || data.risky is number) &&
-             (!('bad' in data) || data.bad is number) &&
-             (!('status' in data) || data.status is string) &&
+             'progress' in data && data.progress is number &&
+             'good' in data && data.good is number &&
+             'risky' in data && data.risky is number &&
+             'bad' in data && data.bad is number &&
+             'status' in data && data.status is string &&
              (!('data' in data) || data.data is list);
     }
     
@@ -93,5 +93,3 @@ service cloud.firestore {
     }
   }
 }
-
-    
