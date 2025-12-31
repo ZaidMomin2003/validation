@@ -433,7 +433,7 @@ export default function ListsPage() {
                               <Download className="mr-2 h-4 w-4" />
                               Download All
                             </DropdownMenuItem>
-                            <DropdownMenuSeparator />
+                            {/* <DropdownMenuSeparator />
                              <AlertDialog>
                                 <AlertDialogTrigger asChild>
                                   <Button variant="ghost" className="w-full justify-start text-red-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 px-2 py-1.5 text-sm h-auto font-normal relative flex cursor-default select-none items-center rounded-sm outline-none transition-colors data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
@@ -458,7 +458,7 @@ export default function ListsPage() {
                                     </AlertDialogAction>
                                   </AlertDialogFooter>
                                 </AlertDialogContent>
-                              </AlertDialog>
+                              </AlertDialog> */}
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </TableCell>
