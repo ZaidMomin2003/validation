@@ -268,9 +268,8 @@ export const validate = async (
     let risky = 0;
     let bad = 0;
     const total = rows.length;
-    const validatedData: Record<string, any>[] = [];
+    let validatedData: Record<string, any>[] = [];
 
-    // Step 1: Pre-validation checks (syntax, empty, typo) and domain collection
     const validRowsToProcess: { row: Record<string, any>; email: string; domain: string }[] = [];
     const domainsToValidate = new Set<string>();
 
@@ -306,7 +305,6 @@ export const validate = async (
         domainsToValidate.add(domain);
     }
     
-    // Step 2: Batch validate domains for MX records
     let apiValidationMap: Record<string, boolean> = {};
     if (domainsToValidate.size > 0) {
         try {
@@ -323,78 +321,78 @@ export const validate = async (
             }
         } catch (error) {
              console.error("API call to /api/validate-domains failed:", error);
-             // If the API call fails, mark all remaining emails as bad and exit.
+             // If API fails, mark all remaining as bad
              validRowsToProcess.forEach(item => {
                 bad++;
                 validatedData.push({ ...item.row, Status: 'Bad', Notes: 'Domain check failed', Category: 'Invalid' });
              });
-             onProgress({ good, risky, bad, total, data: validatedData });
-             return { good, risky, bad, total, data: validatedData };
+             // Add already processed items
+             const finalData = [...validatedData];
+             onProgress({ good, risky, bad, total, data: finalData });
+             return { good, risky, bad, total, data: finalData };
         }
     }
 
-    // Step 3: Final classification
     for (const { row, email, domain } of validRowsToProcess) {
         let status: 'Good' | 'Risky' | 'Bad' = 'Good';
         let notes = '';
         let category = FREE_DOMAINS.has(domain) ? 'Free' : 'Business';
 
         const hasMx = apiValidationMap[domain];
-
-        if (hasMx === false) { // Explicitly check for false, as undefined means it wasn't in the successful part of the API response
+        if (hasMx === false) { // Domain is confirmed to be invalid
             status = 'Bad';
             notes = 'No MX Record';
             category = 'Invalid';
-        } else if (DISPOSABLE_DOMAINS.has(domain)) {
+        } else if (hasMx === undefined) { // API failed for this domain or in general
             status = 'Bad';
-            notes = 'Disposable domain';
+            notes = 'Domain check failed';
             category = 'Invalid';
-        } else {
-            const prefix = getPrefixFromEmail(email);
-            if (prefix && ROLE_BASED_PREFIXES.has(prefix)) {
-                status = 'Risky';
-                notes = 'Role-based email';
+        } else { // Domain is valid, proceed with other checks
+            if (DISPOSABLE_DOMAINS.has(domain)) {
+                status = 'Bad';
+                notes = 'Disposable domain';
+                category = 'Invalid';
+            } else {
+                const prefix = getPrefixFromEmail(email);
+                if (prefix && ROLE_BASED_PREFIXES.has(prefix)) {
+                    status = 'Risky';
+                    notes = 'Role-based email';
+                } else if (prefix && commonCatchAllPrefixes.includes(prefix)) {
+                    status = 'Risky';
+                    notes = 'Potential catch-all (role-based)';
+                }
             }
         }
         
-        if (status === 'Good') {
-            // This is a simplified catch-all check based on common patterns.
-            // A true catch-all check requires an SMTP connection.
-            const commonCatchAllPrefixes = ['info', 'contact', 'support', 'sales', 'admin'];
-            const prefix = getPrefixFromEmail(email);
-            if (prefix && commonCatchAllPrefixes.includes(prefix)) {
-                 status = 'Risky';
-                 notes = 'Potential catch-all (role-based)';
-            }
-        }
-
         if (status === 'Good') good++;
         else if (status === 'Risky') risky++;
         else bad++;
 
         validatedData.push({ ...row, Status: status, Notes: notes, Category: category });
         
-        if ((good + risky + bad) % 10 === 0) {
+        if ((good + risky + bad) % 10 === 0 || (good + risky + bad) === total) {
             onProgress({ good, risky, bad, total, data: validatedData });
         }
     }
 
-    // Final progress report to ensure it always reaches 100%
-    const validatedCount = good + risky + bad;
-    if (validatedCount > 0 && validatedCount < total) {
-       // This handles cases where some rows were filtered out early (e.g. syntax errors)
-       // We need to ensure the final report includes all original rows.
-       const processedEmails = new Set(validatedData.map(v => v[emailColumn]));
-       rows.forEach(r => {
-           if (!processedEmails.has(r[emailColumn])) {
-               validatedData.push({ ...r, Status: 'Bad', Notes: 'Pre-validation failed', Category: 'Invalid' });
-           }
-       });
+    // This ensures a final progress update is always sent
+    if (validatedData.length < total) {
+        // This handles rows that were filtered out at the very beginning
+        const processedEmails = new Set(validatedData.map(v => v[emailColumn]));
+        rows.forEach(r => {
+            if (!processedEmails.has(r[emailColumn])) {
+                 // These were already accounted for in the 'bad' count at the start
+                 // but we need them in the final dataset.
+                 // Let's find them in the initial validatedData if they exist
+                 if(!validatedData.find(vd => vd[emailColumn] === r[emailColumn])) {
+                    validatedData.push({ ...r, Status: 'Bad', Notes: 'Pre-validation failed', Category: 'Invalid' });
+                 }
+            }
+        });
     }
 
     onProgress({ good, risky, bad, total, data: validatedData });
     return { good, risky, bad, total, data: validatedData };
 };
 
-
-    
+const commonCatchAllPrefixes = ['info', 'contact', 'support', 'sales', 'admin'];
