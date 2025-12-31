@@ -10,7 +10,7 @@ import Link from "next/link";
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
-import { doc, updateDoc } from 'firebase/firestore';
+import { doc, updateDoc, getDoc } from 'firebase/firestore';
 import { db } from '@/firebase/firebaseClient';
 import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError } from '@/firebase/errors';
@@ -164,13 +164,17 @@ export default function PricingPage() {
         handler: async function (response: any) {
             const userDocRef = doc(db, 'users', user.uid);
             
-            // Re-fetch the user object to get the latest state
-            const updatedUser = { ...user };
+            // Re-fetch the user document from Firestore to get the latest state
+             const userDocSnap = await getDoc(userDocRef);
+             if (!userDocSnap.exists()) {
+                throw new Error("User document not found.");
+             }
+             const currentUserData = userDocSnap.data();
 
             const newPlanData = {
-              ...updatedUser,
-              plan: plan.name === "Lifetime Deal" ? "Lifetime" : plan.name,
-              creditsTotal: user.creditsTotal ? user.creditsTotal + plan.credits : plan.credits,
+              ...currentUserData, // Use the fresh data from Firestore
+              plan: plan.name === "Lifetime Deal" ? "Lifetime" : "Pay as you go",
+              creditsTotal: (currentUserData.creditsTotal || 0) + plan.credits,
             };
 
             updateDoc(userDocRef, newPlanData)
