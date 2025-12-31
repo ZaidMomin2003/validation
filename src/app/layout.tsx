@@ -77,10 +77,17 @@ export default function RootLayout({
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
       </head>
       <body className={`${inter.variable} font-body antialiased`}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
           <FirebaseProvider>
             {children}
             <Toaster />
           </FirebaseProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
