@@ -8,60 +8,61 @@ import { Separator } from '@/components/ui/separator';
 
 const builtFeatures = [
   {
+    name: 'Free Spam Checker',
+    description: 'Analyze your email content for spam trigger words before you send to improve deliverability. Free for everyone.',
+    version: 'v1.7.0',
+  },
+  {
+    name: 'Free Email Extractor',
+    description: 'A new tool to instantly pull all email addresses from any block of text. No sign-up required to get started.',
+    version: 'v1.7.0',
+  },
+  {
     name: 'Advanced Security Hardening',
-    description: 'Implemented strict data validation in Firestore and secured payment APIs to prevent tampering.',
+    description: 'Implemented stricter data validation and secured APIs to ensure your data is always protected.',
     version: 'v1.6.0',
   },
   {
-    name: 'Vercel-Inspired Dark Theme',
-    description: 'A complete redesign of the dashboard\'s dark mode for a sleeker, more modern UI.',
+    name: 'Modern Dark Theme',
+    description: 'The dashboard and landing pages have been redesigned with a sleeker, more modern dark mode for a better user experience.',
     version: 'v1.5.0',
   },
   {
     name: 'Password Visibility Toggle',
-    description: 'Added an eye icon to password fields, allowing users to see what they are typing.',
-    version: 'v1.5.0',
-  },
-  {
-    name: 'Pricing Page Countdown',
-    description: 'A live countdown timer was added to the Lifetime Deal to create urgency.',
+    description: 'Added an eye icon to password fields, allowing you to see what you are typing to prevent mistakes.',
     version: 'v1.5.0',
   },
   {
     name: 'Support & Feedback Forms',
-    description: 'Dedicated forms for users to submit support requests and feedback.',
+    description: 'Dedicated forms for you to submit support requests and share your valuable feedback with us directly.',
     version: 'v1.4.0',
   },
   {
     name: 'Profile & Password Management',
-    description: 'Users can update their name, change their password, and delete their account.',
+    description: 'You can now update your name, change your password, and manage your account details from your profile page.',
     version: 'v1.3.0',
   },
   {
     name: 'Bulk Email Validation',
-    description: 'Upload CSV or XLSX files to validate your email lists.',
+    description: 'Upload CSV or XLSX files to validate your email lists in bulk, with detailed downloadable reports.',
     version: 'v1.2.0',
   },
   {
     name: 'Real-time List Management',
-    description: 'Your email lists are now synced across all devices using Firestore.',
+    description: 'Your email lists are now synced across all devices using Firestore, so you always have the latest version.',
     version: 'v1.1.0',
   },
   {
     name: 'Secure User Authentication',
-    description: 'Sign up and sign in using Email & Password or Google.',
+    description: 'Sign up and sign in securely using your Email & Password or your Google account.',
     version: 'v1.0.0',
   },
 ];
 
 const inProgressFeatures = [
   {
-    name: 'Admin Dashboard Security',
-    description: 'Securing administrator credentials using server-side authentication.',
-  },
-  {
     name: 'Real-time Validation Progress',
-    description: 'See the progress of your list validation update in real-time without refreshing.',
+    description: 'See your list validation update in real-time without needing to refresh the page.',
   },
   {
     name: 'Public API Access',
@@ -86,7 +87,7 @@ export default function ChangelogPage() {
             Changelog
           </h1>
           <p className="mt-2 text-muted-foreground">
-            Stay updated with the latest features, improvements, and bug fixes we've rolled out.
+            Stay updated with the latest features, improvements, and bug fixes we've rolled out for you.
           </p>
         </div>
 
