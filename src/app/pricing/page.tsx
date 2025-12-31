@@ -139,6 +139,15 @@ export default function PricingPage() {
       setIsLoading(null);
       return;
     }
+    
+    const userDocRef = doc(db, 'users', user.uid);
+    const userDocSnap = await getDoc(userDocRef);
+    if (!userDocSnap.exists()) {
+        toast({ variant: 'destructive', title: 'Error', description: 'User profile not found.' });
+        setIsLoading(null);
+        return;
+    }
+    const currentUserData = userDocSnap.data();
 
     try {
       const orderResponse = await fetch('/api/create-order', {
@@ -162,17 +171,9 @@ export default function PricingPage() {
         description: `Payment for ${plan.name}`,
         order_id: order.id,
         handler: async function (response: any) {
-            const userDocRef = doc(db, 'users', user.uid);
-            
-            // Re-fetch the user document from Firestore to get the latest state
-             const userDocSnap = await getDoc(userDocRef);
-             if (!userDocSnap.exists()) {
-                throw new Error("User document not found.");
-             }
-             const currentUserData = userDocSnap.data();
 
             const newPlanData = {
-              ...currentUserData, // Use the fresh data from Firestore
+              ...currentUserData,
               plan: plan.name === "Lifetime Deal" ? "Lifetime" : "Pay as you go",
               creditsTotal: (currentUserData.creditsTotal || 0) + plan.credits,
             };
@@ -189,9 +190,17 @@ export default function PricingPage() {
                     const permissionError = new FirestorePermissionError({
                         path: userDocRef.path,
                         operation: 'update',
-                        requestResourceData: newPlanData,
+                        requestResourceData: {
+                          plan: newPlanData.plan,
+                          creditsTotal: newPlanData.creditsTotal,
+                        },
                     });
                     errorEmitter.emit('permission-error', permissionError);
+                     toast({
+                        variant: "destructive",
+                        title: "Update Failed",
+                        description: "Your payment was successful, but we failed to update your plan. Please contact support.",
+                    });
                 });
         },
         prefill: {
