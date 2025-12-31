@@ -10,7 +10,7 @@ import Link from "next/link";
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
-import { doc, updateDoc, getDoc } from 'firebase/firestore';
+import { doc, updateDoc, getDoc, DocumentData } from 'firebase/firestore';
 import { db } from '@/firebase/firebaseClient';
 import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError } from '@/firebase/errors';
@@ -122,7 +122,7 @@ export default function PricingPage() {
   };
 
   const handlePayment = async (plan: typeof plans[0]) => {
-    if (!user) {
+    if (!user || !db) {
         router.push('/auth');
         return;
     }
@@ -140,14 +140,20 @@ export default function PricingPage() {
       return;
     }
     
+    // Fetch the latest user data before initiating payment
     const userDocRef = doc(db, 'users', user.uid);
-    const userDocSnap = await getDoc(userDocRef);
-    if (!userDocSnap.exists()) {
-        toast({ variant: 'destructive', title: 'Error', description: 'User profile not found.' });
+    let currentUserData: DocumentData;
+    try {
+        const userDocSnap = await getDoc(userDocRef);
+        if (!userDocSnap.exists()) {
+            throw new Error('User profile not found.');
+        }
+        currentUserData = userDocSnap.data();
+    } catch(e) {
+        toast({ variant: 'destructive', title: 'Error', description: 'Could not retrieve user profile.' });
         setIsLoading(null);
         return;
     }
-    const currentUserData = userDocSnap.data();
 
     try {
       const orderResponse = await fetch('/api/create-order', {
@@ -172,9 +178,10 @@ export default function PricingPage() {
         order_id: order.id,
         handler: async function (response: any) {
 
+            // Construct the update data based on the fetched currentUserData
             const newPlanData = {
-              ...currentUserData,
-              plan: plan.name === "Lifetime Deal" ? "Lifetime" : "Pay as you go",
+              ...currentUserData, // preserve all existing fields
+              plan: plan.name === "Lifetime Deal" ? "Lifetime" : "Pay-as-you-go",
               creditsTotal: (currentUserData.creditsTotal || 0) + plan.credits,
             };
 
@@ -187,13 +194,11 @@ export default function PricingPage() {
                     router.push('/lists');
                 })
                 .catch((serverError: any) => {
+                    // This error handling is crucial for debugging security rule issues.
                     const permissionError = new FirestorePermissionError({
                         path: userDocRef.path,
                         operation: 'update',
-                        requestResourceData: {
-                          plan: newPlanData.plan,
-                          creditsTotal: newPlanData.creditsTotal,
-                        },
+                        requestResourceData: newPlanData,
                     });
                     errorEmitter.emit('permission-error', permissionError);
                      toast({
@@ -342,5 +347,3 @@ export default function PricingPage() {
     </main>
   );
 }
-
-    
