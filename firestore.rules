@@ -9,7 +9,7 @@ service cloud.firestore {
              data.email is string &&
              (!('displayName' in data) || data.displayName is string || data.displayName == null) &&
              (!('photoURL' in data) || data.photoURL is string || data.photoURL == null) &&
-             'plan' in data && (data.plan == 'Free' || data.plan == 'Pay-as-you-go' || data.plan == 'Lifetime Deal') &&
+             'plan' in data && (data.plan == 'Free' || data.plan == 'Pay-as-you-go' || data.plan == 'Lifetime Deal' || data.plan == 'Lifetime') &&
              'creditsUsed' in data && data.creditsUsed is number &&
              'creditsTotal' in data && data.creditsTotal is number;
     }
