@@ -30,14 +30,6 @@ import {
   MoreHorizontal,
 } from 'lucide-react';
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
-import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -273,7 +265,9 @@ export default function ListsPage() {
             <Card
               key={stat.title}
               className={cn(
-                stat.title === 'Valid Emails' && 'bg-gray-900 text-white dark:bg-white dark:text-black'
+                stat.title === 'Valid Emails' &&
+                  'bg-gray-900 text-white dark:bg-white dark:text-black',
+                stat.title === 'Total Validated' && 'bg-yellow-400 text-black'
               )}
             >
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -284,7 +278,8 @@ export default function ListsPage() {
                   className={cn(
                     'h-4 w-4 text-muted-foreground',
                     stat.color,
-                    stat.title === 'Valid Emails' && 'dark:text-green-500'
+                    stat.title === 'Valid Emails' && 'dark:text-green-500',
+                    stat.title === 'Total Validated' && 'text-black/70'
                   )}
                 />
               </CardHeader>
@@ -299,7 +294,8 @@ export default function ListsPage() {
                 <p
                   className={cn(
                     'text-xs text-muted-foreground',
-                     stat.title === 'Valid Emails' && 'dark:text-gray-500'
+                     stat.title === 'Valid Emails' && 'dark:text-gray-500',
+                     stat.title === 'Total Validated' && 'text-black/70'
                   )}
                 >
                   {stat.description}
