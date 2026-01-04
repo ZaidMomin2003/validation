@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -41,7 +42,7 @@ const ExtractorUI = () => (
         transition={{ duration: 0.3 }}
         className="w-full h-full p-4 bg-zinc-900/50 rounded-lg border border-zinc-700/50 flex flex-col justify-center"
     >
-        <div className="w-full h-48 bg-zinc-800/60 rounded p-2 text-sm text-zinc-400 overflow-hidden">
+        <div className="w-full h-64 bg-zinc-800/60 rounded p-2 text-base text-zinc-400 overflow-hidden">
             <p>Paste your unstructured or scraped text here. For example, you can reach our team at <mark className="bg-primary/20 text-primary-foreground rounded-sm px-0.5">contact@example.com</mark>. For support inquiries, please use <mark className="bg-primary/20 text-primary-foreground rounded-sm px-0.5">support@example.com</mark>. Our developer is <mark className="bg-primary/20 text-primary-foreground rounded-sm px-0.5">dev-team@corp.net</mark>.</p>
         </div>
         <div className="flex justify-center my-3">
@@ -65,13 +66,20 @@ const SpamCheckUI = () => (
         className="w-full h-full p-4 bg-zinc-900/50 rounded-lg border border-zinc-700/50 flex flex-col"
     >
         <p className="text-sm text-zinc-300">Subject: <mark className="bg-destructive/20 text-red-300 rounded-sm px-0.5">Act now</mark>! <mark className="bg-destructive/20 text-red-300 rounded-sm px-0.5">Limited time</mark> offer!</p>
-        <div className="w-full h-full mt-2 bg-zinc-800/60 rounded p-2 text-xs text-zinc-400 overflow-hidden">
-            <p>Don't miss this <mark className="bg-destructive/20 text-red-300 rounded-sm px-0.5">amazing</mark> deal. Get a <mark className="bg-destructive/20 text-red-300 rounded-sm px-0.5">free gift</mark> with your purchase. <mark className="bg-destructive/20 text-red-300 rounded-sm px-0.5">Click here</mark> to claim your <mark className="bg-destructive/20 text-red-300 rounded-sm px-0.5">prize</mark>.</p>
+        <div className="w-full h-full mt-2 bg-zinc-800/60 rounded p-2 text-xs text-zinc-400 overflow-auto">
+            <p>Dear Friend,</p>
+            <br />
+            <p>Don't miss this <mark className="bg-destructive/20 text-red-300 rounded-sm px-0.5">amazing</mark> deal. This is a <mark className="bg-destructive/20 text-red-300 rounded-sm px-0.5">once in a lifetime</mark> opportunity to get a <mark className="bg-destructive/20 text-red-300 rounded-sm px-0.5">free gift</mark> with your purchase. Our product is <mark className="bg-destructive/20 text-red-300 rounded-sm px-0.5">guaranteed</mark> to change your life!</p>
+            <br />
+            <p>This is not <mark className="bg-destructive/20 text-red-300 rounded-sm px-0.5">spam</mark>. <mark className="bg-destructive/20 text-red-300 rounded-sm px-0.5">Click here</mark> to claim your <mark className="bg-destructive/20 text-red-300 rounded-sm px-0.5">prize</mark> and see the <mark className="bg-destructive/20 text-red-300 rounded-sm px-0.5">unbelievable</mark> results for yourself. This is a <mark className="bg-destructive/20 text-red-300 rounded-sm px-0.5">risk-free</mark> offer with no hidden charges.</p>
+             <br />
+             <p>Sincerely,</p>
+             <p>The Marketing Team</p>
         </div>
         <div className="mt-3">
-            <p className="text-xs text-red-400 text-center">6 Spam Words Detected</p>
+            <p className="text-xs text-red-400 text-center">10 Spam Words Detected</p>
             <div className="w-full bg-zinc-800 rounded-full h-1.5 mt-1">
-                <div className="bg-red-500 h-1.5 rounded-full" style={{width: '40%'}}></div>
+                <div className="bg-red-500 h-1.5 rounded-full" style={{width: '65%'}}></div>
             </div>
         </div>
     </motion.div>
@@ -156,7 +164,7 @@ export function ToolsShowcase() {
         </div>
         
         <div className="mt-16 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
-            <div className="relative h-[28rem] rounded-2xl bg-zinc-900 p-2 border border-zinc-800">
+            <div className="relative h-[32rem] rounded-2xl bg-zinc-900 p-2 border border-zinc-800">
                 <div className="w-full h-full rounded-lg bg-dot-white/[0.1]">
                     <AnimatePresence mode="wait">
                        {activeTool.id === 'extractor' && <ExtractorUI />}
