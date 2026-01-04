@@ -24,7 +24,7 @@ declare global {
 const plans = [
   {
     name: "Lifetime Deal",
-    price: 69,
+    price: 29,
     credits: 500000,
     description: "For power users and businesses. Limited time offer!",
     features: [
