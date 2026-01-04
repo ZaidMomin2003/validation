@@ -34,17 +34,15 @@ const ExtractorUI = () => (
         className="w-full h-full p-4 bg-zinc-900/50 rounded-lg border border-zinc-700/50 flex flex-col justify-center"
     >
         <div className="w-full h-32 bg-zinc-800/60 rounded p-2 text-xs text-zinc-400 overflow-hidden">
-            <p>From: sales@example.com</p>
-            <p>To: <mark className="bg-primary/20 text-primary-foreground rounded-sm px-0.5">jane.doe@web.com</mark></p>
-            <p className="mt-2">Also, please cc <mark className="bg-primary/20 text-primary-foreground rounded-sm px-0.5">support@company.co</mark> and the new manager <mark className="bg-primary/20 text-primary-foreground rounded-sm px-0.5">manager-_01@corp.net</mark>.</p>
+            <p>Paste your unstructured or scraped text here. For example, you can reach our team at <mark className="bg-primary/20 text-primary-foreground rounded-sm px-0.5">contact@example.com</mark>. For support inquiries, please use <mark className="bg-primary/20 text-primary-foreground rounded-sm px-0.5">support@example.com</mark>. Our developer is <mark className="bg-primary/20 text-primary-foreground rounded-sm px-0.5">dev-team@corp.net</mark>.</p>
         </div>
         <div className="flex justify-center my-3">
             <div className="w-px h-6 bg-gradient-to-b from-primary/50 to-transparent"></div>
         </div>
         <div className="w-full bg-zinc-800/60 rounded p-2 text-xs flex flex-wrap gap-1">
-            <Badge variant="secondary">jane.doe@web.com</Badge>
-            <Badge variant="secondary">support@company.co</Badge>
-            <Badge variant="secondary">manager-_01@corp.net</Badge>
+            <Badge variant="secondary">contact@example.com</Badge>
+            <Badge variant="secondary">support@example.com</Badge>
+            <Badge variant="secondary">dev-team@corp.net</Badge>
         </div>
     </motion.div>
 )
