@@ -85,8 +85,8 @@ export default function PricingSection() {
                                 </div>
                                 <div className="mt-4 text-xs font-semibold transition-opacity duration-300 min-h-[56px]">
                                     <div className='space-y-2'>
-                                        <p className='text-amber-500'>New Year Offer! Ends in:</p>
-                                        <div className="flex justify-center items-center gap-4 text-amber-500">
+                                        <p className='text-blue-500'>New Year Offer! Ends in:</p>
+                                        <div className="flex justify-center items-center gap-4 text-blue-500">
                                             <TimerBox value={timeLeft.days} label="Days" />
                                             <span className="text-2xl font-bold -translate-y-1">:</span>
                                             <TimerBox value={timeLeft.hours} label="Hours" />
