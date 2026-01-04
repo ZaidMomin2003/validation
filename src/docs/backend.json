@@ -42,7 +42,7 @@
     },
     "List": {
       "title": "List",
-      "description": "Represents a user's email list for validation.",
+      "description": "Represents a user's cleaned email list.",
       "type": "object",
       "properties": {
         "name": {
@@ -53,25 +53,9 @@
           "type": "number",
           "description": "Timestamp of when the list was created."
         },
-        "progress": {
-          "type": "number",
-          "description": "Validation progress percentage."
-        },
         "emailCount": {
           "type": "number",
           "description": "Total number of emails in the list."
-        },
-        "good": {
-          "type": "number",
-          "description": "Number of valid emails."
-        },
-        "risky": {
-          "type": "number",
-          "description": "Number of risky emails."
-        },
-        "bad": {
-          "type": "number",
-          "description": "Number of invalid emails."
         },
         "userId": {
           "type": "string",
@@ -82,7 +66,7 @@
           "description": "The full dataset of the list, with each object being a row."
         }
       },
-      "required": ["name", "createdAt", "emailCount", "userId"]
+      "required": ["name", "createdAt", "emailCount", "userId", "data"]
     },
     "NewsletterSubscriber": {
       "title": "Newsletter Subscriber",
@@ -116,7 +100,7 @@
       "schema": {
         "$ref": "#/entities/List"
       },
-      "description": "Stores the email lists for each user, including the full data."
+      "description": "Stores the cleaned email lists for each user."
     },
     "/subscribers/{subscriberId}": {
       "schema": {

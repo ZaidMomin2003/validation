@@ -9,37 +9,18 @@ service cloud.firestore {
              data.email is string &&
              (!('displayName' in data) || data.displayName is string || data.displayName == null) &&
              (!('photoURL' in data) || data.photoURL is string || data.photoURL == null) &&
-             'plan' in data && (data.plan == 'Free' || data.plan == 'Pay-as-you-go' || data.plan == 'Lifetime Deal') &&
+             'plan' in data && (data.plan == 'Free' || data.plan == 'Pay-as-you-go' || data.plan == 'Lifetime Deal' || data.plan == 'Lifetime') &&
              'creditsUsed' in data && data.creditsUsed is number &&
              'creditsTotal' in data && data.creditsTotal is number;
     }
 
-    // Validates the initial creation of a list document
+    // Validates the creation of a cleaned list document
     function isListCreate(data) {
       return data.name is string &&
              data.createdAt is number &&
              data.emailCount is number &&
              data.userId is string && data.userId == request.auth.uid &&
-             data.progress == 0 &&
-             data.good == 0 &&
-             data.risky == 0 &&
-             data.bad == 0 &&
-             data.status == 'Processing' &&
-             !('data' in data); // data field must not exist on create
-    }
-
-    // Validates updates to a list document
-    function isListUpdate(data) {
-      return data.name is string &&
-             data.createdAt is number &&
-             data.emailCount is number &&
-             data.userId is string && data.userId == request.auth.uid &&
-             'progress' in data && data.progress is number &&
-             'good' in data && data.good is number &&
-             'risky' in data && data.risky is number &&
-             'bad' in data && data.bad is number &&
-             'status' in data && data.status is string &&
-             (!('data' in data) || data.data is list);
+             data.data is list;
     }
     
     function isNewsletterSubscriber(data) {
@@ -77,9 +58,8 @@ service cloud.firestore {
         // Use isListCreate for creation
         allow create: if request.auth.uid == userId && isListCreate(request.resource.data);
 
-        // Use isListUpdate for updates
-        allow update: if request.auth.uid == userId && isListUpdate(request.resource.data) &&
-                       request.resource.data.userId == resource.data.userId;
+        // Updates are not allowed from the client for now to keep data integral
+        allow update: if false;
       }
     }
      match /subscribers/{subscriberId} {

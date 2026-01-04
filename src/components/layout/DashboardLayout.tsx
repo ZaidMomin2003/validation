@@ -84,9 +84,8 @@ export default function DashboardLayout({
   const usedCredits = React.useMemo(() => {
     if (!lists) return 0;
     return lists.reduce((acc, list) => {
-        if (list.status === 'Completed' || list.name.startsWith('Cleaned -')) {
-             return acc + (list.emailCount || 0);
-        }
+        // This logic might need adjustment depending on how you track credit usage for cleaning.
+        // For now, let's assume cleaning doesn't consume credits from the total.
         return acc;
     }, 0);
   }, [lists]);
@@ -137,7 +136,7 @@ export default function DashboardLayout({
                     <SidebarMenuItem>
                         <SidebarMenuButton href="/bulk-validate" isActive={pathname === '/bulk-validate'}>
                         <FileUp />
-                        Clean & Validate
+                        Clean List
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                     <SidebarMenuItem>
@@ -151,17 +150,6 @@ export default function DashboardLayout({
                         <ShieldAlert />
                         Spam Checker
                         <Badge variant="secondary" className="ml-auto">Free</Badge>
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
-                </SidebarMenu>
-            </SidebarGroup>
-            <SidebarGroup>
-                <SidebarGroupLabel>Management</SidebarGroupLabel>
-                <SidebarMenu>
-                    <SidebarMenuItem>
-                        <SidebarMenuButton href="/lists" isActive={pathname === '/lists'}>
-                        <History />
-                        My Lists
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>
