@@ -6,10 +6,9 @@ import { BentoGridThirdDemo } from '@/components/layout/feature-section';
 import { FaqSection } from '@/components/layout/faq-section';
 import PricingSection from '@/components/layout/pricing-section';
 import { LinkPreviewDemo } from '@/components/layout/link-preview-demo';
-import HowItWorksSection from '@/components/layout/how-it-works-section';
 import Footer from '@/components/layout/footer';
 import ContactUsSection from '@/components/layout/contact-us-section';
-import {useEffect, useState} from 'react';
+import {useEffect, useState}from 'react';
 import {initParticlesEngine} from '@tsparticles/react';
 import {loadSlim} from '@tsparticles/slim';
 import ParallaxScrollDemo from '@/components/layout/parallax-scroll-demo';
@@ -80,7 +79,6 @@ export default function Home() {
           />
           <LinkPreviewDemo />
           <ToolsShowcase />
-          <HowItWorksSection />
           <StatsSection />
           <div className="py-20">
             <BentoGridThirdDemo />
