@@ -26,7 +26,7 @@ export function FaqSection() {
       id: 'item-3',
       question: 'Is it safe to upload my email lists?',
       answer:
-        'Absolutely. Your data is processed securely and is never shared. All uploaded lists are stored privately in your account using Firestore\'s robust security rules, and you can delete them at any time.',
+        "Absolutely. Your data is processed securely and is never shared. All uploaded lists are stored privately in your account using Firestore's robust security rules, and you can delete them at any time.",
     },
     {
       id: 'item-4',
@@ -58,21 +58,21 @@ export function FaqSection() {
           <Accordion
             type="single"
             collapsible
-            className="bg-card ring-muted w-full rounded-2xl border px-8 py-3 shadow-sm ring-4 dark:ring-0"
-          >
+            className="bg-muted dark:bg-muted/50 w-full rounded-2xl p-1">
             {faqItems.map((item) => (
-              <AccordionItem
-                key={item.id}
-                value={item.id}
-                className="border-dashed"
-              >
-                <AccordionTrigger className="cursor-pointer text-base hover:no-underline">
-                  {item.question}
-                </AccordionTrigger>
-                <AccordionContent>
-                  <p className="text-base">{item.answer}</p>
-                </AccordionContent>
-              </AccordionItem>
+                <div
+                    className="group"
+                    key={item.id}>
+                    <AccordionItem
+                        value={item.id}
+                        className="data-[state=open]:bg-card dark:data-[state=open]:bg-muted peer rounded-xl border-none px-7 py-1 data-[state=open]:border-none data-[state=open]:shadow-sm">
+                        <AccordionTrigger className="cursor-pointer text-base hover:no-underline">{item.question}</AccordionTrigger>
+                        <AccordionContent>
+                            <p className="text-base">{item.answer}</p>
+                        </AccordionContent>
+                    </AccordionItem>
+                    <hr className="mx-7 border-dashed group-last:hidden peer-data-[state=open]:opacity-0" />
+                </div>
             ))}
           </Accordion>
 
