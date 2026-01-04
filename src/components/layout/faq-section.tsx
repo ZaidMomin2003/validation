@@ -32,7 +32,7 @@ export function FaqSection() {
       id: 'item-4',
       question: 'How does the pricing work?',
       answer:
-        'We offer two simple plans. The Pro Plan is a yearly subscription for $69 that gives you 500,000 verification credits annually. The Pay-as-you-go plan is a one-time purchase of $9 for 50,000 credits that never expire.',
+        'We offer a generous free tier to get you started. For more volume, we have simple, transparent pricing with a Lifetime Deal and Pay-as-you-go options. Visit our pricing page for more details.',
     },
     {
       id: 'item-5',
@@ -46,7 +46,7 @@ export function FaqSection() {
     <section className="py-16 md:py-24">
       <div className="mx-auto max-w-5xl px-4 md:px-6">
         <div className="mx-auto max-w-xl text-center">
-          <h2 className="text-balance text-3xl font-bold text-gray-200 md:text-4xl lg:text-5xl">
+          <h2 className="text-balance text-3xl font-bold md:text-4xl lg:text-5xl">
             Frequently Asked Questions
           </h2>
           <p className="text-muted-foreground mt-4 text-balance">
@@ -65,10 +65,10 @@ export function FaqSection() {
                     key={item.id}>
                     <AccordionItem
                         value={item.id}
-                        className="data-[state=open]:bg-card dark:data-[state=open]:bg-muted peer rounded-xl border-none px-7 py-1 data-[state=open]:border-none data-[state=open]:shadow-sm">
-                        <AccordionTrigger className="cursor-pointer text-base hover:no-underline">{item.question}</AccordionTrigger>
+                        className="data-[state=open]:bg-card dark:data-[state=open]:bg-muted peer rounded-xl border-none data-[state=open]:border-none data-[state=open]:shadow-sm">
+                        <AccordionTrigger className="flex w-full cursor-pointer items-center justify-between p-4 text-left text-base hover:no-underline">{item.question}</AccordionTrigger>
                         <AccordionContent>
-                            <p className="text-base">{item.answer}</p>
+                            <p className="text-base px-4 pb-4">{item.answer}</p>
                         </AccordionContent>
                     </AccordionItem>
                     <hr className="mx-7 border-dashed group-last:hidden peer-data-[state=open]:opacity-0" />
