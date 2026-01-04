@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { CheckCircle, FileInput, Mail, ScanText } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -123,9 +123,28 @@ const CleanerUI = () => (
 
 export function ToolsShowcase() {
     const [activeTool, setActiveTool] = useState(tools[0]);
+    const [isHovered, setIsHovered] = useState(false);
+
+    useEffect(() => {
+        if (isHovered) return;
+
+        const interval = setInterval(() => {
+            setActiveTool(prevTool => {
+                const currentIndex = tools.findIndex(t => t.id === prevTool.id);
+                const nextIndex = (currentIndex + 1) % tools.length;
+                return tools[nextIndex];
+            });
+        }, 5000); // Change tool every 5 seconds
+
+        return () => clearInterval(interval);
+    }, [isHovered]);
 
   return (
-    <section className="py-16 md:py-24 text-white">
+    <section 
+        className="py-16 md:py-24 text-white"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+    >
       <div className="mx-auto max-w-5xl px-4 md:px-6">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-balance text-3xl font-bold md:text-4xl">
