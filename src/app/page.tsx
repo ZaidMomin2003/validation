@@ -12,6 +12,7 @@ import StatsSection from '@/components/layout/stats-section';
 import BlogShowcase from '@/components/layout/blog-showcase';
 import { ToolsShowcase } from '@/components/layout/tools-showcase';
 import { ThemeProvider } from '@/components/theme-provider';
+import FaqSection from '@/components/layout/faq-section';
 
 export default function Home() {
 
@@ -61,6 +62,7 @@ export default function Home() {
           <ToolsShowcase />
           <StatsSection />
           <PricingSection />
+          <FaqSection />
           <BlogShowcase />
           <ContactUsSection />
           <Footer />
