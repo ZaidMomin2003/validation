@@ -67,10 +67,10 @@ export default function PricingSection() {
                                 <div className='mt-8'>
                                     <div className="flex items-center justify-center gap-2">
                                         <Star className="h-6 w-6 text-amber-400" />
-                                        <h3 className="text-2xl font-semibold">Lifetime Deal</h3>
+                                        <h3 className="text-2xl font-semibold text-gray-900">Lifetime Deal</h3>
                                     </div>
                                     <p className="mt-2 text-lg text-gray-500">For power users and businesses</p>
-                                    <span className="mb-6 mt-4 inline-block text-6xl font-bold">
+                                    <span className="mb-6 mt-4 inline-block text-6xl font-bold text-gray-900">
                                         <span className="text-4xl">$</span>29
                                         <span className="text-lg font-normal text-gray-400 line-through opacity-70 ml-2">$99</span>
                                     </span>
@@ -85,8 +85,8 @@ export default function PricingSection() {
                                 </div>
                                 <div className="mt-4 text-xs font-semibold transition-opacity duration-300 min-h-[56px]">
                                     <div className='space-y-2'>
-                                        <p className='text-blue-500'>New Year Offer! Ends in:</p>
-                                        <div className="flex justify-center items-center gap-4 text-blue-500">
+                                        <p className='text-indigo-600'>New Year Offer! Ends in:</p>
+                                        <div className="flex justify-center items-center gap-4 text-indigo-600">
                                             <TimerBox value={timeLeft.days} label="Days" />
                                             <span className="text-2xl font-bold -translate-y-1">:</span>
                                             <TimerBox value={timeLeft.hours} label="Hours" />
@@ -101,7 +101,7 @@ export default function PricingSection() {
                             <div className="relative pt-12 md:pt-0 md:pl-12">
                                 <ul
                                     role="list"
-                                    className="space-y-4">
+                                    className="space-y-4 text-gray-700">
                                     {features.pro.map((item, index) => (
                                         <li
                                             key={index}
