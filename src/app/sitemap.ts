@@ -1,3 +1,4 @@
+
 import { MetadataRoute } from 'next';
 import { blogPosts } from '@/lib/blog-data';
 
@@ -14,11 +15,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/delivery',
     '/extract-from-text',
     '/feedback',
-    '/lists',
+    '/generate-leads',
     '/pricing',
     '/privacy',
     '/profile',
-    '/single-email',
     '/spam-checker',
     '/subscription',
     '/support',

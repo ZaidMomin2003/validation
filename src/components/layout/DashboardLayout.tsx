@@ -18,6 +18,7 @@ import {
   LifeBuoy,
   FileText,
   ShieldAlert,
+  Rocket,
 } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -176,17 +177,17 @@ export default function DashboardLayout({
               </SidebarMenu>
             </SidebarGroup>
              <div className="p-2">
-                <div className="rounded-lg bg-sidebar-accent p-4 border border-sidebar-border">
-                    <div className="mb-3">
-                        <p className="text-sm font-medium text-sidebar-accent-foreground">
-                            {planName === 'Free' ? 'Monthly Credits' : `${planName} Credits`}
-                        </p>
-                        <div className="text-xs text-muted-foreground">
-                            {listsLoading ? <Skeleton className="h-4 w-20" /> : `${usedCredits.toLocaleString()} / ${totalCredits.toLocaleString()} used`}
+                <Link href="/generate-leads">
+                    <div className="group rounded-lg bg-gradient-to-br from-primary/80 to-primary/60 p-4 text-primary-foreground transition-all hover:from-primary/90 hover:to-primary/70">
+                        <div className="flex items-center gap-3">
+                             <Rocket className="h-5 w-5 transition-transform group-hover:rotate-12" />
+                            <p className="text-sm font-semibold">
+                                Generate Leads
+                            </p>
                         </div>
+                        <p className="text-xs text-primary-foreground/80 mt-1">New! Find leads for your business.</p>
                     </div>
-                    <Progress value={creditPercentage} className="h-2" />
-                </div>
+                </Link>
             </div>
             <SidebarSeparator />
             <ClientOnly>
