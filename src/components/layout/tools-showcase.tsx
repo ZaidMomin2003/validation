@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -22,7 +23,7 @@ const tools = [
     icon: <CheckCircle />,
     link: '/check-spam'
   },
-  {
+    {
     id: 'cleaner',
     title: 'List Cleaner',
     description: 'Upload a sheet with multiple emails crammed into one cell. We automatically unpivot your data, creating a clean, structured list with one email per row.',
@@ -83,21 +84,38 @@ const CleanerUI = () => (
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -20 }}
         transition={{ duration: 0.3 }}
-        className="w-full h-full p-4 bg-zinc-900/50 rounded-lg border border-zinc-700/50 flex flex-col justify-center text-xs"
+        className="w-full h-full p-4 bg-zinc-900/50 rounded-lg border border-zinc-700/50 flex flex-col justify-center text-xs font-mono"
     >
-        <div className="bg-zinc-800/60 rounded p-2 text-zinc-400 font-mono">
-            <p className="text-zinc-500"># messy-data.csv</p>
-            <p>Name,Emails</p>
-            <p>Company A,"<mark className="bg-primary/20 text-primary-foreground rounded-sm px-0.5">sales@a.com</mark>, <mark className="bg-primary/20 text-primary-foreground rounded-sm px-0.5">support@a.com</mark>"</p>
+        <div className="bg-zinc-800/60 rounded-lg p-2 text-zinc-400 shadow-inner">
+            <p className="text-zinc-500 text-center mb-1"># messy-data.csv</p>
+            <div className="grid grid-cols-[1fr_2fr] gap-x-2 text-zinc-300 border-b border-zinc-700/80 pb-1">
+                <p>Name</p><p>Emails</p>
+            </div>
+             <div className="grid grid-cols-[1fr_2fr] gap-x-2 mt-1">
+                <p>Company A</p><p>"<mark className="bg-primary/20 text-primary-foreground rounded-sm">sales@a.com</mark>, <mark className="bg-primary/20 text-primary-foreground rounded-sm">support@a.com</mark>"</p>
+            </div>
         </div>
-         <div className="flex justify-center my-2">
-            <div className="w-px h-4 bg-gradient-to-b from-primary/50 to-transparent"></div>
+         <div className="flex justify-center my-3">
+             <motion.div 
+                initial={{ rotate: 90, scale: 0.8 }}
+                animate={{ rotate: 0, scale: 1 }}
+                transition={{ delay: 0.3, type: 'spring', stiffness: 300, damping: 20 }}
+                className="w-px h-6 bg-gradient-to-b from-primary/80 to-transparent"
+             >
+                <div className="text-primary -translate-x-1/2 -translate-y-1/2 absolute left-1/2 top-1/2 rotate-90">➔</div>
+             </motion.div>
         </div>
-        <div className="bg-zinc-800/60 rounded p-2 text-zinc-400 font-mono">
-            <p className="text-zinc-500"># cleaned-data.csv</p>
-            <p>Name,Email</p>
-            <p>Company A,sales@a.com</p>
-            <p>Company A,support@a.com</p>
+        <div className="bg-zinc-800/60 rounded-lg p-2 text-zinc-400 shadow-inner">
+            <p className="text-zinc-500 text-center mb-1"># cleaned-data.csv</p>
+            <div className="grid grid-cols-[1fr_2fr] gap-x-2 text-zinc-300 border-b border-zinc-700/80 pb-1">
+                <p>Name</p><p>Email</p>
+            </div>
+            <div className="grid grid-cols-[1fr_2fr] gap-x-2 mt-1">
+                <p>Company A</p><p>sales@a.com</p>
+            </div>
+            <div className="grid grid-cols-[1fr_2fr] gap-x-2 mt-1">
+                <p>Company A</p><p>support@a.com</p>
+            </div>
         </div>
     </motion.div>
 );
@@ -119,7 +137,7 @@ export function ToolsShowcase() {
         </div>
         
         <div className="mt-16 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
-            <div className="relative h-80 rounded-2xl bg-zinc-900 p-2 border border-zinc-800">
+            <div className="relative h-96 rounded-2xl bg-zinc-900 p-2 border border-zinc-800">
                 <div className="w-full h-full rounded-lg bg-dot-white/[0.1]">
                     <AnimatePresence mode="wait">
                        {activeTool.id === 'extractor' && <ExtractorUI />}
