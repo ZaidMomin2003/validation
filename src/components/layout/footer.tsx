@@ -14,14 +14,6 @@ const links = [
         href: '/blogs',
     },
     {
-        title: 'Extract Emails',
-        href: '/Email-extract',
-    },
-    {
-        title: 'Spam Checker',
-        href: '/check-spam',
-    },
-    {
         title: 'Terms',
         href: '/terms',
     },
