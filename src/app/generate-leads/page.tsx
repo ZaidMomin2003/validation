@@ -133,20 +133,6 @@ export default function GenerateLeadsPage() {
           </form>
 
           <div className="space-y-6">
-            <Card className="bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-900/50">
-                <CardHeader>
-                    <CardTitle className="text-amber-900 dark:text-amber-200">Why search LinkedIn with Cleanmails?</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <ul className="space-y-2 text-sm text-amber-800 dark:text-amber-300 list-disc list-inside">
-                        <li>More than 100 Results</li>
-                        <li>See out of network connections</li>
-                        <li>Search by education & employer</li>
-                        <li>No registration required</li>
-                        <li>Completely free :)</li>
-                    </ul>
-                </CardContent>
-            </Card>
              <Card>
                 <CardHeader>
                     <CardTitle>Like this tool?</CardTitle>
