@@ -80,9 +80,6 @@ export default function Home() {
           <LinkPreviewDemo />
           <ToolsShowcase />
           <StatsSection />
-          <div className="py-20">
-            <BentoGridThirdDemo />
-          </div>
           <PricingSection />
           <FaqSection />
           <BlogShowcase />
