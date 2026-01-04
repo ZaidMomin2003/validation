@@ -42,7 +42,7 @@ const ExtractorUI = () => (
         transition={{ duration: 0.3 }}
         className="w-full h-full p-4 bg-zinc-900/50 rounded-lg border border-zinc-700/50 flex flex-col justify-center"
     >
-        <div className="w-full h-64 bg-zinc-800/60 rounded p-2 text-base text-zinc-400 overflow-hidden">
+        <div className="w-full h-80 bg-zinc-800/60 rounded p-2 text-base text-zinc-400 overflow-hidden">
             <p>Paste your unstructured or scraped text here. For example, you can reach our team at <mark className="bg-primary/20 text-primary-foreground rounded-sm px-0.5">contact@example.com</mark>. For support inquiries, please use <mark className="bg-primary/20 text-primary-foreground rounded-sm px-0.5">support@example.com</mark>. Our developer is <mark className="bg-primary/20 text-primary-foreground rounded-sm px-0.5">dev-team@corp.net</mark>.</p>
         </div>
         <div className="flex justify-center my-3">
@@ -183,7 +183,7 @@ export function ToolsShowcase() {
                             activeTool.id === tool.id ? 'bg-primary/10 border-primary/50' : 'border-transparent hover:bg-white/5'
                         )}
                     >
-                         <Link href={tool.link}>
+                        <div>
                             <div className="flex items-center gap-4">
                                 <div className={cn(
                                     "flex h-10 w-10 items-center justify-center rounded-lg border transition-colors",
@@ -196,7 +196,7 @@ export function ToolsShowcase() {
                             <p className="mt-2 text-sm text-muted-foreground">
                                 {tool.description}
                             </p>
-                        </Link>
+                        </div>
                     </div>
                ))}
             </div>
