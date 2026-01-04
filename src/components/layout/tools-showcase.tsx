@@ -22,6 +22,13 @@ const tools = [
     icon: <CheckCircle />,
     link: '/check-spam'
   },
+  {
+    id: 'cleaner',
+    title: 'List Cleaner',
+    description: 'Upload a sheet with multiple emails crammed into one cell. We automatically unpivot your data, creating a clean, structured list with one email per row.',
+    icon: <FileInput />,
+    link: '/bulk-validate',
+  },
 ];
 
 const ExtractorUI = () => (
@@ -69,6 +76,32 @@ const SpamCheckUI = () => (
     </motion.div>
 )
 
+const CleanerUI = () => (
+    <motion.div
+        key="cleaner"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -20 }}
+        transition={{ duration: 0.3 }}
+        className="w-full h-full p-4 bg-zinc-900/50 rounded-lg border border-zinc-700/50 flex flex-col justify-center text-xs"
+    >
+        <div className="bg-zinc-800/60 rounded p-2 text-zinc-400 font-mono">
+            <p className="text-zinc-500"># messy-data.csv</p>
+            <p>Name,Emails</p>
+            <p>Company A,"<mark className="bg-primary/20 text-primary-foreground rounded-sm px-0.5">sales@a.com</mark>, <mark className="bg-primary/20 text-primary-foreground rounded-sm px-0.5">support@a.com</mark>"</p>
+        </div>
+         <div className="flex justify-center my-2">
+            <div className="w-px h-4 bg-gradient-to-b from-primary/50 to-transparent"></div>
+        </div>
+        <div className="bg-zinc-800/60 rounded p-2 text-zinc-400 font-mono">
+            <p className="text-zinc-500"># cleaned-data.csv</p>
+            <p>Name,Email</p>
+            <p>Company A,sales@a.com</p>
+            <p>Company A,support@a.com</p>
+        </div>
+    </motion.div>
+);
+
 
 export function ToolsShowcase() {
     const [activeTool, setActiveTool] = useState(tools[0]);
@@ -91,6 +124,7 @@ export function ToolsShowcase() {
                     <AnimatePresence mode="wait">
                        {activeTool.id === 'extractor' && <ExtractorUI />}
                        {activeTool.id === 'spam-checker' && <SpamCheckUI />}
+                       {activeTool.id === 'cleaner' && <CleanerUI />}
                     </AnimatePresence>
                 </div>
             </div>
