@@ -232,7 +232,7 @@ export const countries = [
   { name: "United Kingdom", code: "GB" },
   { name: "United States", code: "US" },
   { name: "United States Minor Outlying Islands", code: "UM" },
-  { name´: "Uruguay", code: "UY" },
+  { name: "Uruguay", code: "UY" },
   { name: "Uzbekistan", code: "UZ" },
   { name: "Vanuatu", code: "VU" },
   { name: "Venezuela", code: "VE" },
