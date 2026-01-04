@@ -60,7 +60,7 @@ export default function PricingSection() {
                     <h2 className="text-balance text-3xl font-bold text-gray-200 md:text-4xl lg:text-5xl">Verify thousands of emails <Cover>At Sonic speed</Cover></h2>
                 </div>
                 <div className="mt-8 md:mt-20">
-                    <div className="bg-primary/10 relative rounded-3xl border border-primary/20 shadow-2xl shadow-blue-950/50">
+                    <div className="bg-white text-gray-800 relative rounded-3xl border border-primary/20 shadow-2xl shadow-blue-950/50">
                         <div className="grid items-center gap-12 divide-y divide-primary/20 p-8 sm:p-12 md:grid-cols-2 md:divide-x md:divide-y-0">
                             <div className="pb-12 text-center md:pb-0 md:pr-12">
 
@@ -69,10 +69,10 @@ export default function PricingSection() {
                                         <Star className="h-6 w-6 text-amber-400" />
                                         <h3 className="text-2xl font-semibold">Lifetime Deal</h3>
                                     </div>
-                                    <p className="mt-2 text-lg text-muted-foreground">For power users and businesses</p>
+                                    <p className="mt-2 text-lg text-gray-500">For power users and businesses</p>
                                     <span className="mb-6 mt-4 inline-block text-6xl font-bold">
                                         <span className="text-4xl">$</span>29
-                                        <span className="text-lg font-normal text-muted-foreground line-through opacity-70 ml-2">$99</span>
+                                        <span className="text-lg font-normal text-gray-400 line-through opacity-70 ml-2">$99</span>
                                     </span>
                                 </div>
 
@@ -86,7 +86,7 @@ export default function PricingSection() {
                                 <div className="mt-4 text-xs font-semibold transition-opacity duration-300 min-h-[56px]">
                                     <div className='space-y-2'>
                                         <p className='text-amber-500'>New Year Offer! Ends in:</p>
-                                        <div className="flex justify-center items-center gap-4 text-amber-400">
+                                        <div className="flex justify-center items-center gap-4 text-amber-500">
                                             <TimerBox value={timeLeft.days} label="Days" />
                                             <span className="text-2xl font-bold -translate-y-1">:</span>
                                             <TimerBox value={timeLeft.hours} label="Hours" />
@@ -111,7 +111,7 @@ export default function PricingSection() {
                                         </li>
                                     ))}
                                 </ul>
-                                <p className="text-muted-foreground mt-6 text-sm">Generous credits for all your validation needs, renewed annually.</p>
+                                <p className="text-gray-500 mt-6 text-sm">Generous credits for all your validation needs, renewed annually.</p>
                                 <div className="mt-12 space-y-4">
                                     <div className="flex items-center gap-4">
                                         <Image
@@ -123,8 +123,8 @@ export default function PricingSection() {
                                             data-ai-hint="person photo"
                                         />
                                         <div>
-                                            <p className="font-semibold text-foreground">"An absolute game-changer. The Pro plan has incredible value for the price. Cleaned my lists in minutes!"</p>
-                                            <p className="text-sm text-muted-foreground">- Sarah K., Marketing Manager</p>
+                                            <p className="font-semibold text-gray-800">"An absolute game-changer. The Pro plan has incredible value for the price. Cleaned my lists in minutes!"</p>
+                                            <p className="text-sm text-gray-500">- Sarah K., Marketing Manager</p>
                                         </div>
                                     </div>
                                 </div>
