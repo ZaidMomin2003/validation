@@ -51,6 +51,12 @@ export default function FaqSection() {
             question: 'Is it safe to upload my files and data?',
             answer: "Yes, absolutely. Your data is your property. We use secure, encrypted connections for all data transfers. Your files are processed securely and are never shared with any third parties or used for any other purpose.",
         },
+         {
+            id: 'item-7',
+            icon: 'shield-check' as IconName,
+            question: 'Is my payment information secure?',
+            answer: 'Yes. We use Razorpay, a leading global payment gateway, to handle all transactions. Your payment information is encrypted and processed on their secure servers. We never see or store your card details. It is a safe and guaranteed checkout. You can learn more about Razorpay at their website.',
+        },
     ]
 
     return (
