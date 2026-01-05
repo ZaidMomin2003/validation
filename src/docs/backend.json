@@ -34,7 +34,7 @@
           "description": "Timestamp for when the user's free trial ends."
         }
       },
-      "required": ["uid", "email", "plan"]
+      "required": ["uid", "email", "plan", "trialEndsAt"]
     },
     "List": {
       "title": "List",

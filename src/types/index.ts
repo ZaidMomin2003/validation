@@ -5,8 +5,8 @@ export type User = {
   displayName: string | null;
   photoURL: string | null;
   providerId: string;
-  plan?: 'Trial' | 'Lifetime';
-  trialEndsAt?: number; // Timestamp
+  plan: 'Trial' | 'Lifetime';
+  trialEndsAt: number; // Timestamp
 };
 
 export interface List {
