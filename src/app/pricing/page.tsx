@@ -10,8 +10,8 @@ import Link from "next/link";
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
-import { doc, updateDoc, getDoc, DocumentData } from 'firebase/firestore';
-import { db } from '@/firebase/firebaseClient';
+import { doc, updateDoc } from 'firebase/firestore';
+import { useFirestore } from '@/firebase/provider';
 import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError } from '@/firebase/errors';
 
@@ -59,6 +59,7 @@ const plans = [
 
 export default function PricingPage() {
   const { user, loading } = useAuth();
+  const db = useFirestore();
   const { toast } = useToast();
   const router = useRouter();
   const [isPaymentLoading, setIsPaymentLoading] = useState<boolean>(false);
@@ -123,20 +124,6 @@ export default function PricingPage() {
       setIsPaymentLoading(false);
       return;
     }
-    
-    const userDocRef = doc(db, 'users', user.uid);
-    let currentUserData: DocumentData;
-    try {
-        const userDocSnap = await getDoc(userDocRef);
-        if (!userDocSnap.exists()) {
-            throw new Error('User profile not found.');
-        }
-        currentUserData = userDocSnap.data();
-    } catch(e) {
-        toast({ variant: 'destructive', title: 'Error', description: 'Could not retrieve user profile.' });
-        setIsPaymentLoading(false);
-        return;
-    }
 
     try {
       const orderResponse = await fetch('/api/create-order', {
@@ -151,6 +138,7 @@ export default function PricingPage() {
       }
       
       const order = await orderResponse.json();
+      const userDocRef = doc(db, 'users', user.uid);
 
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
@@ -161,7 +149,6 @@ export default function PricingPage() {
         order_id: order.id,
         handler: async function (response: any) {
             const newPlanData = {
-              ...currentUserData,
               plan: "Lifetime",
             };
 
