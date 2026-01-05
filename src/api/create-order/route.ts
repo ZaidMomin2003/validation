@@ -4,10 +4,7 @@ import Razorpay from 'razorpay';
 import { randomBytes } from 'crypto';
 
 // Server-side price mapping to prevent client-side tampering
-const planPrices: Record<string, number> = {
-    'lifetime': 29,
-    'payg': 19,
-};
+const LIFETIME_PRICE = 29; // Price in USD
 
 export async function POST(request: Request) {
   const { plan } = await request.json();
@@ -16,9 +13,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Razorpay API keys are not configured.' }, { status: 500 });
   }
 
-  const amount = planPrices[plan];
-
-  if (!amount) {
+  // Since there is only one plan, we can hardcode the amount.
+  if (plan !== 'lifetime') {
     return NextResponse.json({ error: 'Invalid plan selected.' }, { status: 400 });
   }
 
@@ -28,11 +24,11 @@ export async function POST(request: Request) {
   });
 
   const options = {
-    amount: amount * 100, // amount in the smallest currency unit
+    amount: LIFETIME_PRICE * 100, // amount in the smallest currency unit (cents)
     currency: "USD",
     receipt: `receipt_order_${randomBytes(10).toString('hex')}`,
     notes: {
-        plan: plan,
+        plan: "lifetime",
     }
   };
 

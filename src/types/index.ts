@@ -1,12 +1,12 @@
+
 export type User = {
   uid: string;
   email: string | null;
   displayName: string | null;
   photoURL: string | null;
   providerId: string;
-  plan?: string;
-  creditsUsed?: number;
-  creditsTotal?: number;
+  plan?: 'Trial' | 'Lifetime';
+  trialEndsAt?: number; // Timestamp
 };
 
 export interface List {

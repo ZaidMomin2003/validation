@@ -43,7 +43,7 @@ export default function FaqSection() {
             id: 'item-5',
             icon: 'credit-card' as IconName,
             question: 'How does the pricing work?',
-            answer: 'We offer a straightforward Lifetime Deal. This one-time purchase grants you full, permanent access to all our tools—including the List Cleaner, Lead Generator, Email Extractor, and Spam Checker—along with all future updates. There are no recurring subscriptions or hidden fees.',
+            answer: 'We offer a 1-day free trial for all new users with unlimited access. After the trial, you can upgrade to our Lifetime Deal. This one-time $29 purchase grants you permanent, unlimited access to all our tools—including the List Cleaner, Lead Generator, Email Extractor, and Spam Checker—along with all future updates. There are no recurring subscriptions or hidden fees.',
         },
         {
             id: 'item-6',
@@ -51,11 +51,11 @@ export default function FaqSection() {
             question: 'Is it safe to upload my files and data?',
             answer: "Yes, absolutely. Your data is your property. We use secure, encrypted connections for all data transfers. Your files are processed securely and are never shared with any third parties or used for any other purpose.",
         },
-         {
+        {
             id: 'item-7',
             icon: 'shield-check' as IconName,
             question: 'Is my payment information secure?',
-            answer: 'Yes. We use Razorpay, a leading global payment gateway, to handle all transactions. Your payment information is encrypted and processed on their secure servers. We never see or store your card details. It is a safe and guaranteed checkout. You can learn more about Razorpay at their website.',
+            answer: 'Yes. We use Razorpay, a leading global payment gateway, to handle all transactions. Your payment information is encrypted and processed on their secure servers. We never see or store your card details. It is a safe and guaranteed checkout. You can learn more about Razorpay on their website.',
         },
     ]
 

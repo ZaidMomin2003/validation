@@ -27,18 +27,14 @@
         "plan": {
           "type": "string",
           "description": "The user's subscription plan.",
-          "enum": ["Free", "Pay-as-you-go", "Lifetime"]
+          "enum": ["Trial", "Lifetime"]
         },
-        "creditsUsed": {
+        "trialEndsAt": {
           "type": "number",
-          "description": "The number of credits the user has used."
-        },
-        "creditsTotal": {
-          "type": "number",
-          "description": "The total number of credits available to the user."
+          "description": "Timestamp for when the user's free trial ends."
         }
       },
-      "required": ["uid", "email"]
+      "required": ["uid", "email", "plan"]
     },
     "List": {
       "title": "List",
@@ -94,7 +90,7 @@
       "schema": {
         "$ref": "#/entities/UserProfile"
       },
-      "description": "Stores user profile information, including subscription and credit details."
+      "description": "Stores user profile information, including subscription and trial details."
     },
     "/users/{userId}/lists/{listId}": {
       "schema": {

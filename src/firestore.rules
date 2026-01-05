@@ -9,9 +9,8 @@ service cloud.firestore {
              data.email is string &&
              (!('displayName' in data) || data.displayName is string || data.displayName == null) &&
              (!('photoURL' in data) || data.photoURL is string || data.photoURL == null) &&
-             'plan' in data && (data.plan == 'Free' || data.plan == 'Pay-as-you-go' || data.plan == 'Lifetime Deal' || data.plan == 'Lifetime') &&
-             'creditsUsed' in data && data.creditsUsed is number &&
-             'creditsTotal' in data && data.creditsTotal is number;
+             'plan' in data && (data.plan == 'Trial' || data.plan == 'Lifetime') &&
+             'trialEndsAt' in data && data.trialEndsAt is number;
     }
 
     // Validates the creation of a cleaned list document
@@ -33,23 +32,24 @@ service cloud.firestore {
       // Users can only read their own profile
       allow read: if request.auth.uid == userId;
       
-      // Allow creation only if the data is valid and required fields are present
+      // Allow creation only if the data is valid, it's a new user,
+      // and they are being put on a trial plan.
       allow create: if request.auth.uid == userId &&
                        isUserProfile(request.resource.data) &&
                        request.resource.data.uid == userId &&
-                       request.resource.data.plan == 'Free' &&
-                       request.resource.data.creditsTotal == 1000 &&
-                       request.resource.data.creditsUsed == 0;
+                       request.resource.data.plan == 'Trial' &&
+                       request.resource.data.trialEndsAt > request.time.toMillis();
 
-      // CORRECTED RULE: Allow update if the user is the owner, the new data is valid,
+
+      // Allow update if the user is the owner, the new data is valid,
       // and they are only changing fields they are allowed to change.
-      // This rule is being deployed to fix the payment issue.
       allow update: if request.auth.uid == userId && 
                        isUserProfile(request.resource.data) &&
                        request.resource.data.uid == resource.data.uid &&
                        request.resource.data.email == resource.data.email &&
-                       request.resource.data.creditsUsed == resource.data.creditsUsed;
-                       // Any other fields (plan, creditsTotal, displayName, photoURL) are allowed to be updated.
+                       // Only allow plan to change from Trial to Lifetime.
+                       (request.resource.data.plan == resource.data.plan ||
+                        (resource.data.plan == 'Trial' && request.resource.data.plan == 'Lifetime'));
 
       match /lists/{listId} {
         // Users can only manage their own lists

@@ -58,15 +58,15 @@ const createUserProfileDocument = async (db: Firestore, user: FirebaseUser) => {
     const userDoc = await getDoc(userDocRef);
 
     if (!userDoc.exists()) {
-        const newUserProfile: Partial<AppUser> = {
+        const trialEndsAt = Date.now() + 24 * 60 * 60 * 1000; // 1 day from now
+        const newUserProfile: AppUser = {
             uid: user.uid,
             email: user.email,
             displayName: user.displayName,
             photoURL: user.photoURL,
             providerId: user.providerData[0]?.providerId || 'password',
-            plan: 'Free',
-            creditsUsed: 0,
-            creditsTotal: 1000,
+            plan: 'Trial',
+            trialEndsAt: trialEndsAt
         };
         try {
             await setDoc(userDocRef, newUserProfile);
