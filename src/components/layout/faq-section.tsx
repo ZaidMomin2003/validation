@@ -17,33 +17,33 @@ export default function FaqSection() {
     const faqItems: FAQItem[] = [
         {
             id: 'item-1',
-            icon: 'bar-chart' as IconName,
-            question: 'How accurate is the email validation?',
-            answer: 'Our service uses a multi-layered approach, including syntax checks, domain/MX record verification, and disposable email detection. This ensures a high level of accuracy for identifying valid and deliverable email addresses.',
+            icon: 'wrench' as IconName,
+            question: 'What does the "Clean List" tool do?',
+            answer: 'It\'s designed for messy spreadsheets. If you have a file where multiple email addresses are stuck in a single cell (e.g., "email1@test.com, email2@test.com"), our tool automatically separates them, creating a clean, properly formatted list with one email per row.',
         },
         {
             id: 'item-2',
-            icon: 'x-circle' as IconName,
-            question: 'What types of emails are marked as "Bad"?',
-            answer: '"Bad" emails include those with syntax errors, non-existent domains, typos in common domains (like \'gnail.com\'), and addresses from known disposable email providers.',
+            icon: 'users' as IconName,
+            question: 'How does the Lead Generation tool work?',
+            answer: 'It helps you find professionals on LinkedIn by building advanced Google search queries. You can specify job titles, locations, and other keywords to generate a targeted search URL that uncovers public LinkedIn profiles.',
         },
         {
             id: 'item-3',
             icon: 'shield-check' as IconName,
-            question: 'Is it safe to upload my email lists?',
-            answer: "Yes, absolutely. Your data is your property. We use secure, encrypted connections (HTTPS) for all data transfers. Your lists are processed in a secure environment and are never shared with any third parties.",
+            question: 'Is it safe to upload my files?',
+            answer: "Yes, absolutely. Your data is your property. We use secure, encrypted connections for all data transfers. Your files are processed securely and are never shared with any third parties or used for any other purpose.",
         },
         {
             id: 'item-4',
             icon: 'credit-card' as IconName,
             question: 'How does the pricing work?',
-            answer: 'We offer a free plan to get you started, a pay-as-you-go option for one-time needs, and a Lifetime Deal for power users. All paid plans come with a generous number of email verification credits.',
+            answer: 'We offer a free plan to get you started, a pay-as-you-go option, and a Lifetime Deal for power users. Paid plans give you generous credits for services like list cleaning and future premium features.',
         },
         {
             id: 'item-5',
-            icon: 'code' as IconName,
-            question: 'Do you offer an API for developers?',
-            answer: 'An API for developers is on our roadmap and will be available soon. This will allow you to integrate our validation service directly into your own applications and sign-up forms.',
+            icon: 'scan-text' as IconName,
+            question: 'What are the free tools available?',
+            answer: 'We offer a free Email Extractor to pull email addresses from any block of text and a Spam Checker to analyze your email content for trigger words before you send. These are free forever.',
         },
     ]
 
