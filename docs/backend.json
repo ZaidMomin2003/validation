@@ -1,3 +1,4 @@
+
 {
   "entities": {
     "UserProfile": {
@@ -26,22 +27,18 @@
         "plan": {
           "type": "string",
           "description": "The user's subscription plan.",
-          "enum": ["Free", "Pay-as-you-go", "Lifetime"]
+          "enum": ["Trial", "Lifetime"]
         },
-        "creditsUsed": {
+        "trialEndsAt": {
           "type": "number",
-          "description": "The number of credits the user has used."
-        },
-        "creditsTotal": {
-          "type": "number",
-          "description": "The total number of credits available to the user."
+          "description": "Timestamp for when the user's free trial ends."
         }
       },
-      "required": ["uid", "email"]
+      "required": ["uid", "email", "plan"]
     },
     "List": {
       "title": "List",
-      "description": "Represents a user's email list for validation.",
+      "description": "Represents a user's cleaned email list.",
       "type": "object",
       "properties": {
         "name": {
@@ -52,25 +49,9 @@
           "type": "number",
           "description": "Timestamp of when the list was created."
         },
-        "progress": {
-          "type": "number",
-          "description": "Validation progress percentage."
-        },
         "emailCount": {
           "type": "number",
           "description": "Total number of emails in the list."
-        },
-        "good": {
-          "type": "number",
-          "description": "Number of valid emails."
-        },
-        "risky": {
-          "type": "number",
-          "description": "Number of risky emails."
-        },
-        "bad": {
-          "type": "number",
-          "description": "Number of invalid emails."
         },
         "userId": {
           "type": "string",
@@ -81,7 +62,24 @@
           "description": "The full dataset of the list, with each object being a row."
         }
       },
-      "required": ["name", "createdAt", "emailCount", "userId"]
+      "required": ["name", "createdAt", "emailCount", "userId", "data"]
+    },
+    "NewsletterSubscriber": {
+      "title": "Newsletter Subscriber",
+      "description": "Represents an email address subscribed to the newsletter.",
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "The subscriber's email address."
+        },
+        "subscribedAt": {
+          "type": "number",
+          "description": "Timestamp of when the user subscribed."
+        }
+      },
+      "required": ["email", "subscribedAt"]
     }
   },
   "auth": {
@@ -92,13 +90,19 @@
       "schema": {
         "$ref": "#/entities/UserProfile"
       },
-      "description": "Stores user profile information, including subscription and credit details."
+      "description": "Stores user profile information, including subscription and trial details."
     },
     "/users/{userId}/lists/{listId}": {
       "schema": {
         "$ref": "#/entities/List"
       },
-      "description": "Stores the email lists for each user, including the full data."
+      "description": "Stores the cleaned email lists for each user."
+    },
+    "/subscribers/{subscriberId}": {
+      "schema": {
+        "$ref": "#/entities/NewsletterSubscriber"
+      },
+      "description": "Stores email addresses for the newsletter."
     }
   }
 }

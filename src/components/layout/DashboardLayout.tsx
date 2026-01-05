@@ -118,9 +118,7 @@ export default function DashboardLayout({
       .toUpperCase();
   };
 
-  const totalCredits = user?.creditsTotal ?? 0;
-  const creditPercentage = totalCredits > 0 ? (usedCredits / totalCredits) * 100 : 0;
-  const planName = user?.plan ?? 'Free';
+  const planName = user?.plan ?? 'Trial';
 
   return (
       <SidebarProvider>
