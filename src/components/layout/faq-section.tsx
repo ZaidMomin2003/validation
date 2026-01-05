@@ -37,13 +37,7 @@ export default function FaqSection() {
             id: 'item-4',
             icon: 'credit-card' as IconName,
             question: 'How does the pricing work?',
-            answer: 'We offer a free plan to get you started, a pay-as-you-go option, and a Lifetime Deal for power users. Paid plans give you generous credits for services like list cleaning and future premium features.',
-        },
-        {
-            id: 'item-5',
-            icon: 'scan-text' as IconName,
-            question: 'What are the free tools available?',
-            answer: 'We offer a free Email Extractor to pull email addresses from any block of text and a Spam Checker to analyze your email content for trigger words before you send. These are free forever.',
+            answer: 'We offer a straightforward Lifetime Deal. This one-time purchase grants you full, permanent access to all our tools, including the List Cleaner and Lead Generator, along with all future updates. There are no recurring subscriptions or hidden fees.',
         },
     ]
 
