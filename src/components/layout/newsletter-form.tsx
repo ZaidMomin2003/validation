@@ -58,16 +58,16 @@ export function NewsletterForm() {
         <p className="mt-2 text-muted-foreground">
             Get the latest tips on email deliverability, marketing trends, and product updates.
         </p>
-        <form onSubmit={handleSubmit} className="mt-6 flex w-full max-w-md mx-auto items-center space-x-2">
+        <form onSubmit={handleSubmit} className="mt-6 mx-auto w-full max-w-md flex flex-col sm:flex-row items-center gap-2">
             <Input
                 type="email"
                 placeholder="Enter your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="bg-background/50 border-white/20 text-base h-12"
+                className="bg-background/50 border-white/20 text-base h-12 w-full"
             />
-            <Button type="submit" disabled={isLoading} size="lg" className="h-12">
+            <Button type="submit" disabled={isLoading} size="lg" className="h-12 w-full sm:w-auto">
                 {isLoading ? (
                     <Loader2 className="h-5 w-5 animate-spin" />
                 ) : (
