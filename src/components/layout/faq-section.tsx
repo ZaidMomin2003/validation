@@ -48,7 +48,7 @@ export default function FaqSection() {
 
     return (
         <section className="bg-muted dark:bg-background py-20">
-            <div className="mx-auto max-w-5xl px-4 md:px-6">
+            <div className="mx-auto max-w-5xl px-4 md:px-6 relative z-10">
                 <div className="flex flex-col gap-10 md:flex-row md:gap-16">
                     <div className="md:w-1/3">
                         <div className="sticky top-20">
