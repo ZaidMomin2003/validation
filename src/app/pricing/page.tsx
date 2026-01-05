@@ -10,7 +10,7 @@ import Link from "next/link";
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
-import { doc, updateDoc, getDoc, DocumentData, serverTimestamp } from 'firebase/firestore';
+import { doc, updateDoc, getDoc, DocumentData } from 'firebase/firestore';
 import { db } from '@/firebase/firebaseClient';
 import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError } from '@/firebase/errors';
@@ -21,28 +21,47 @@ declare global {
   }
 }
 
-const lifetimePlan = {
-  name: "Lifetime Deal",
-  price: 29,
-  description: "Unlimited access to all features, forever. One-time payment.",
-  features: [
-    "Unlimited List Cleaning",
-    "Unlimited Email Extraction",
-    "Unlimited Spam Checking",
-    "Unlimited Lead Generation",
-    "All Future Tools Included",
-    "Lifetime Updates & Support",
-  ],
-  cta: "Upgrade for Life",
-  planId: "lifetime"
-};
+const plans = [
+    {
+        name: "Free Trial",
+        price: "Free",
+        priceDetails: "/ 1 Day",
+        description: "Unlimited access to all tools for one day. No credit card required.",
+        features: [
+            "Unlimited List Cleaning",
+            "Unlimited Email Extraction",
+            "Unlimited Spam Checking",
+            "Unlimited Lead Generation",
+            "Access All Tools",
+        ],
+        cta: "Start Your Free Trial",
+        planId: "trial",
+        isPrimary: false,
+    },
+    {
+        name: "Lifetime Deal",
+        price: "$29",
+        priceDetails: "/ one-time",
+        description: "Unlimited access to all features, forever. One-time payment.",
+        features: [
+            "Unlimited List Cleaning",
+            "Unlimited Email Extraction",
+            "Unlimited Spam Checking",
+            "Unlimited Lead Generation",
+            "All Future Tools Included",
+            "Lifetime Updates & Support",
+        ],
+        cta: "Upgrade for Life",
+        planId: "lifetime",
+        isPrimary: true,
+    }
+];
 
 export default function PricingPage() {
   const { user, loading } = useAuth();
   const { toast } = useToast();
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+  const [isPaymentLoading, setIsPaymentLoading] = useState<boolean>(false);
   const [isTrialActive, setIsTrialActive] = useState(false);
   const [trialTimeLeft, setTrialTimeLeft] = useState('');
 
@@ -92,7 +111,7 @@ export default function PricingPage() {
         return;
     }
     
-    setIsLoading(true);
+    setIsPaymentLoading(true);
 
     const res = await loadRazorpay();
     if (!res) {
@@ -101,7 +120,7 @@ export default function PricingPage() {
         title: 'Payment Gateway Error',
         description: 'Failed to load Razorpay. Please check your network and try again.',
       });
-      setIsLoading(false);
+      setIsPaymentLoading(false);
       return;
     }
     
@@ -115,7 +134,7 @@ export default function PricingPage() {
         currentUserData = userDocSnap.data();
     } catch(e) {
         toast({ variant: 'destructive', title: 'Error', description: 'Could not retrieve user profile.' });
-        setIsLoading(null);
+        setIsPaymentLoading(false);
         return;
     }
 
@@ -123,7 +142,7 @@ export default function PricingPage() {
       const orderResponse = await fetch('/api/create-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan: lifetimePlan.planId }),
+        body: JSON.stringify({ plan: 'lifetime' }),
       });
 
       if (!orderResponse.ok) {
@@ -138,7 +157,7 @@ export default function PricingPage() {
         amount: order.amount,
         currency: order.currency,
         name: 'Cleanmails',
-        description: `Payment for ${lifetimePlan.name}`,
+        description: `Payment for Lifetime Deal`,
         order_id: order.id,
         handler: async function (response: any) {
             const newPlanData = {
@@ -194,9 +213,41 @@ export default function PricingPage() {
         description: error.message || 'Could not initiate the payment process.',
       });
     } finally {
-        setIsLoading(false);
+        setIsPaymentLoading(false);
     }
   };
+
+  const getButton = (plan: typeof plans[0]) => {
+    if (plan.planId === 'trial') {
+      if (user) {
+        return (
+          <Button className="w-full" size="lg" disabled>
+            {user.plan === 'Trial' ? 'Trial Active' : 'Not Applicable'}
+          </Button>
+        );
+      }
+      return (
+        <Button asChild className="w-full" size="lg">
+          <Link href="/auth"><Zap className="mr-2 h-4 w-4" />{plan.cta}</Link>
+        </Button>
+      );
+    }
+
+    if (plan.planId === 'lifetime') {
+      return (
+        <Button 
+          className="w-full" 
+          size="lg"
+          disabled={isPaymentLoading || user?.plan === 'Lifetime'}
+          onClick={handlePayment}
+        >
+          {isPaymentLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : (user?.plan === 'Lifetime' ? 'You have Lifetime Access' : plan.cta) }
+        </Button>
+      );
+    }
+
+    return null;
+  }
 
 
   return (
@@ -204,10 +255,10 @@ export default function PricingPage() {
       <div className="grid gap-4 md:gap-8">
         <div className="text-center">
           <h1 className="text-3xl md:text-5xl font-bold tracking-tight font-headline">
-            Simple, One-Time Pricing
+            Simple, Transparent Pricing
           </h1>
           <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
-            Get unlimited access to all current and future tools with a single purchase. No subscriptions, no hidden fees.
+            Try all our tools for free. When you're ready, upgrade to a lifetime plan with a single purchase.
           </p>
         </div>
         
@@ -227,69 +278,52 @@ export default function PricingPage() {
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto items-start pt-8">
-          <Card className="flex flex-col h-full border-primary shadow-2xl relative md:col-span-2">
-            <div className="absolute top-0 -translate-y-1/2 w-full flex justify-center">
-                <div className="bg-primary text-primary-foreground px-4 py-1 rounded-full text-sm font-semibold flex items-center gap-2">
-                    <Star className="h-4 w-4" />
-                    <span>Best Value</span>
-                </div>
-            </div>
-            <CardHeader className="text-center">
-              <CardTitle className="text-2xl font-bold font-headline">{lifetimePlan.name}</CardTitle>
-              <div className="flex items-baseline justify-center gap-2 mt-4">
-                <span className="text-4xl font-bold">${lifetimePlan.price}</span>
-                <span className="text-muted-foreground">/ one-time payment</span>
-              </div>
-              <CardDescription className="pt-2">{lifetimePlan.description}</CardDescription>
-            </CardHeader>
-            <CardContent className="flex-1">
-              <ul className="space-y-4">
-                {lifetimePlan.features.map((feature, index) => (
-                  <li key={index} className="flex items-center gap-3">
-                    <Check className="h-5 w-5 text-primary flex-shrink-0" />
-                    <span className="text-sm">{feature}</span>
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-            <CardFooter className="flex-col items-center pt-6">
-              <Button 
-                className="w-full max-w-xs" 
-                size="lg"
-                disabled={isLoading || user?.plan === 'Lifetime'}
-                onClick={handlePayment}
-              >
-                {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : (user?.plan === 'Lifetime' ? 'You have Lifetime Access' : lifetimePlan.cta) }
-              </Button>
-              <div className="flex items-center text-xs text-muted-foreground mt-4 h-6">
-                  <ShieldCheck className="h-4 w-4 mr-1.5" />
-                  <span>Guaranteed safe and secure checkout. Powered by Razorpay.</span>
-              </div>
-            </CardFooter>
-          </Card>
+            {plans.map(plan => (
+                <Card 
+                    key={plan.planId} 
+                    className={cn(
+                        "flex flex-col h-full", 
+                        plan.isPrimary && "border-primary shadow-2xl shadow-primary/20 relative"
+                    )}
+                >
+                    {plan.isPrimary && (
+                        <div className="absolute top-0 -translate-y-1/2 w-full flex justify-center">
+                            <div className="bg-primary text-primary-foreground px-4 py-1 rounded-full text-sm font-semibold flex items-center gap-2">
+                                <Star className="h-4 w-4" />
+                                <span>Best Value</span>
+                            </div>
+                        </div>
+                    )}
+                    <CardHeader className="text-center">
+                        <CardTitle className="text-2xl font-bold font-headline">{plan.name}</CardTitle>
+                         <div className="flex items-baseline justify-center gap-1 mt-4">
+                            <span className="text-4xl font-bold">{plan.price}</span>
+                            <span className="text-muted-foreground">{plan.priceDetails}</span>
+                        </div>
+                        <CardDescription className="pt-2">{plan.description}</CardDescription>
+                    </CardHeader>
+                    <CardContent className="flex-1">
+                        <ul className="space-y-4">
+                            {plan.features.map((feature, index) => (
+                            <li key={index} className="flex items-center gap-3">
+                                <Check className="h-5 w-5 text-green-500 flex-shrink-0" />
+                                <span className="text-sm">{feature}</span>
+                            </li>
+                            ))}
+                        </ul>
+                    </CardContent>
+                    <CardFooter className="flex-col items-center pt-6">
+                        {getButton(plan)}
+                         {plan.planId === 'lifetime' && (
+                             <div className="flex items-center text-xs text-muted-foreground mt-4 h-6">
+                                <ShieldCheck className="h-4 w-4 mr-1.5" />
+                                <span>Guaranteed safe checkout via Razorpay.</span>
+                            </div>
+                         )}
+                    </CardFooter>
+              </Card>
+            ))}
         </div>
-
-        {user?.plan !== 'Lifetime' && !isTrialActive && (
-          <div className="max-w-4xl mx-auto w-full pt-8">
-            <Card className="bg-muted/30">
-              <div className="p-8 flex flex-col md:flex-row items-center justify-between text-center md:text-left gap-4">
-                <div>
-                  <h3 className="text-lg font-semibold">New to Cleanmails?</h3>
-                  <p className="text-muted-foreground mt-1">
-                    Sign up today and get a 1-day free trial with unlimited access. No credit card required.
-                  </p>
-                </div>
-                <Button asChild className="w-full md:w-auto flex-shrink-0">
-                  <Link href="/auth">
-                    <Zap className="mr-2 h-4 w-4" />
-                    Start Your Free Trial
-                  </Link>
-                </Button>
-              </div>
-            </Card>
-          </div>
-        )}
-
       </div>
     </main>
   );
