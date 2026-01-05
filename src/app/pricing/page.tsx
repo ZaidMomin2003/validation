@@ -221,16 +221,22 @@ export default function PricingPage() {
     }
 
     if (plan.planId === 'lifetime') {
-      return (
-        <Button 
-          className="w-full" 
-          size="lg"
-          disabled={isPaymentLoading || user?.plan === 'Lifetime'}
-          onClick={handlePayment}
-        >
-          {isPaymentLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : (user?.plan === 'Lifetime' ? 'You have Lifetime Access' : plan.cta) }
-        </Button>
-      );
+        if (loading) {
+            return <Button className="w-full" size="lg" disabled><Loader2 className="mr-2 h-4 w-4 animate-spin" />Loading...</Button>
+        }
+        if (user?.plan === 'Lifetime') {
+            return <Button className="w-full" size="lg" disabled>You have Lifetime Access</Button>
+        }
+        return (
+            <Button 
+                className="w-full" 
+                size="lg"
+                disabled={isPaymentLoading}
+                onClick={handlePayment}
+            >
+            {isPaymentLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Upgrade for Life' }
+            </Button>
+        );
     }
 
     return null;
