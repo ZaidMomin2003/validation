@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState } from 'react';
@@ -133,26 +134,7 @@ export default function GenerateLeadsPage() {
           </form>
 
           <div className="space-y-6">
-             <Card>
-                <CardHeader>
-                    <CardTitle>Like this tool?</CardTitle>
-                     <CardDescription>Share with your colleagues</CardDescription>
-                </CardHeader>
-                <CardContent className="flex flex-wrap gap-2">
-                    <Button variant="outline" size="sm" className="bg-blue-600 text-white hover:bg-blue-700">
-                        <Facebook className="mr-2 h-4 w-4" /> Share
-                    </Button>
-                    <Button variant="outline" size="sm" className="bg-black text-white hover:bg-zinc-800">
-                         <Twitter className="mr-2 h-4 w-4" /> Post
-                    </Button>
-                    <Button variant="outline" size="sm" className="bg-sky-500 text-white hover:bg-sky-600">
-                        <Linkedin className="mr-2 h-4 w-4" /> Share
-                    </Button>
-                     <Button variant="outline" size="sm">
-                        <Mail className="mr-2 h-4 w-4" /> Email
-                    </Button>
-                </CardContent>
-            </Card>
+            
           </div>
         </div>
       </div>
