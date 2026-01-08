@@ -102,6 +102,8 @@ export default function DashboardLayout({
       .join('')
       .toUpperCase();
   };
+  
+  const showUpgradeNotice = user?.plan === 'Free' && pathname !== '/pricing';
 
   return (
       <SidebarProvider>
@@ -306,7 +308,7 @@ export default function DashboardLayout({
         <div className="flex flex-1 flex-col overflow-auto">
           <Header />
           <SidebarInset>
-            {children}
+            {showUpgradeNotice ? <UpgradeNotice /> : children}
           </SidebarInset>
         </div>
       </SidebarProvider>
