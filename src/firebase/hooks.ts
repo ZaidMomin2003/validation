@@ -18,6 +18,32 @@ import { useAuthContext, useFirestore } from './provider';
 import type { User as AppUser, List } from '@/types';
 import { useRouter } from 'next/navigation';
 
+const createUserProfileDocument = async (db: Firestore, user: FirebaseUser) => {
+    const userDocRef = doc(db, 'users', user.uid);
+    const userDoc = await getDoc(userDocRef);
+
+    if (!userDoc.exists()) {
+        const trialEndsAt = Date.now() + 24 * 60 * 60 * 1000; // 1 day from now
+        const newUserProfile: AppUser = {
+            uid: user.uid,
+            email: user.email,
+            displayName: user.displayName,
+            photoURL: user.photoURL,
+            providerId: user.providerData[0]?.providerId || 'password',
+            plan: 'Trial',
+            trialEndsAt: trialEndsAt
+        };
+        try {
+            // Using setDoc with merge: false to ensure it only creates, not updates.
+            await setDoc(userDocRef, newUserProfile);
+        } catch (error) {
+            console.error("Error creating user profile:", error);
+            // Optionally re-throw or handle the error in a way that informs the user
+        }
+    }
+};
+
+
 export function useCollection<T>(q: query.Query | null) {
   const [data, setData] = useState<T[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -53,30 +79,6 @@ export function useCollection<T>(q: query.Query | null) {
   return { data, loading, error };
 }
 
-const createUserProfileDocument = async (db: Firestore, user: FirebaseUser) => {
-    const userDocRef = doc(db, 'users', user.uid);
-    const userDoc = await getDoc(userDocRef);
-
-    if (!userDoc.exists()) {
-        const trialEndsAt = Date.now() + 24 * 60 * 60 * 1000; // 1 day from now
-        const newUserProfile: AppUser = {
-            uid: user.uid,
-            email: user.email,
-            displayName: user.displayName,
-            photoURL: user.photoURL,
-            providerId: user.providerData[0]?.providerId || 'password',
-            plan: 'Trial',
-            trialEndsAt: trialEndsAt
-        };
-        try {
-            await setDoc(userDocRef, newUserProfile);
-        } catch (error) {
-            console.error("Error creating user profile:", error);
-        }
-    }
-};
-
-
 export function useUser() {
   const auth = useAuthContext();
   const db = useFirestore();
@@ -87,6 +89,7 @@ export function useUser() {
 
   useEffect(() => {
     if (!auth || !db) {
+        setLoading(false);
         return;
     }
     
@@ -94,25 +97,21 @@ export function useUser() {
       if (firebaseUser) {
         if (firebaseUser.emailVerified) {
           
+          const userDocRef = doc(db, 'users', firebaseUser.uid);
+          
+          // Ensure profile document is created before setting up the listener
           await createUserProfileDocument(db, firebaseUser);
 
-          const userDocRef = doc(db, 'users', firebaseUser.uid);
           const unsubscribeProfile = onSnapshot(userDocRef, 
             (docSnapshot) => {
               if (docSnapshot.exists()) {
-                const profileData = docSnapshot.data() as Omit<AppUser, 'uid' | 'email' | 'providerId' >;
-                const formattedUser: AppUser = {
-                  uid: firebaseUser.uid,
-                  email: firebaseUser.email,
-                  displayName: firebaseUser.displayName,
-                  photoURL: firebaseUser.photoURL,
-                  providerId: firebaseUser.providerData[0]?.providerId || 'password',
-                  ...profileData,
-                };
-                setUser(formattedUser);
+                const profileData = docSnapshot.data() as AppUser;
+                 setUser(profileData);
               } else {
-                 // If the profile doesn't exist for some reason, create it and then listen again
-                 createUserProfileDocument(db, firebaseUser);
+                 // This case should be rare now, but as a fallback, we can try creating it again
+                 // Or we can assume the auth state is inconsistent and sign out.
+                 console.error("User profile does not exist even after creation attempt.");
+                 setUser(null);
               }
               setLoading(false);
             },
