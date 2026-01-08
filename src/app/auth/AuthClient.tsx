@@ -218,7 +218,7 @@ export default function AuthClient() {
                         </AnimatePresence>
                     </div>
 
-                    <div className="mt-8 flex flex-col gap-4">
+                    <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
                         {features.map((feature) => (
                             <div
                                 key={feature.id}
@@ -237,9 +237,9 @@ export default function AuthClient() {
                                     </div>
                                     <div>
                                         <h3 className="font-semibold text-gray-100">{feature.text}</h3>
-                                        <p className="mt-1 text-xs text-muted-foreground">{feature.description}</p>
                                     </div>
                                 </div>
+                                <p className="mt-2 text-xs text-muted-foreground">{feature.description}</p>
                             </div>
                         ))}
                     </div>
