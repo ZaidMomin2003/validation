@@ -21,7 +21,7 @@ export default function ExtractFromTextPage() {
   const { toast } = useToast();
   const router = useRouter();
 
-  const isFreeUser = !user || user.plan === 'Free';
+  const isFreeUser = !user || user.plan === 'Trial';
   const charLimit = isFreeUser ? 100000 : Infinity;
   const charsLeft = charLimit - text.length;
 
@@ -63,12 +63,13 @@ export default function ExtractFromTextPage() {
 
     // Store the data in sessionStorage to pass it to the next page
     sessionStorage.setItem('validationData', JSON.stringify({
-        emails,
-        fileName: `extracted-emails-${new Date().toISOString()}.csv`
+        rows: emails.map(email => ({'Email': email})),
+        fileName: `Extracted-Emails-${new Date().toISOString().split('T')[0]}.csv`,
+        emailColumn: 'Email'
     }));
 
     // Redirect to the bulk validation page
-    router.push('/bulk-validate');
+    router.push('/email-validation');
   }
 
 

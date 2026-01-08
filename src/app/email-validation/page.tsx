@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FileUp, Download, Loader2, ShieldCheck, PieChart, ShieldAlert, ShieldX, CheckCircle, FileWarning, FileX, Check, HelpCircle } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { FileUpload } from "@/components/ui/file-upload";
@@ -48,6 +48,29 @@ export default function EmailValidationPage() {
     const [validatedData, setValidatedData] = useState<ValidatedData | null>(null);
     const [selectedCategories, setSelectedCategories] = useState<Set<ValidationCategory>>(new Set(['good']));
     const { toast } = useToast();
+    
+    useEffect(() => {
+        // Check for data from another page
+        const validationDataString = sessionStorage.getItem('validationData');
+        if (validationDataString) {
+            try {
+                const data = JSON.parse(validationDataString);
+                sessionStorage.removeItem('validationData'); // Clean up after use
+
+                if (data.rows && data.fileName && data.emailColumn) {
+                    setTableData({ 
+                        headers: Object.keys(data.rows[0]), 
+                        rows: data.rows.map((r: any) => Object.values(r)),
+                        fileName: data.fileName 
+                    });
+                    setEmailColumn(data.emailColumn);
+                    handleValidate(data.rows, data.emailColumn);
+                }
+            } catch (error) {
+                console.error("Failed to parse validation data from sessionStorage", error);
+            }
+        }
+    }, []);
 
     const processFile = (file: File) => {
         setIsProcessing(true);
@@ -60,7 +83,7 @@ export default function EmailValidationPage() {
                 const workbook = XLSX.read(data, { type: 'binary' });
                 const sheetName = workbook.SheetNames[0];
                 const worksheet = workbook.Sheets[sheetName];
-                const json: any[] = XLSX.utils.sheet_to_json(worksheet, { header: 'A' });
+                const json: any[] = XLSX.utils.sheet_to_json(worksheet);
 
                 if (json.length === 0) throw new Error("The file is empty.");
                 
@@ -72,7 +95,7 @@ export default function EmailValidationPage() {
                 let bestCandidate: string | null = null;
                 let maxEmailCount = 0;
                 
-                headers.forEach((h, colIndex) => {
+                headers.forEach((h) => {
                     let emailCount = 0;
                     for(let i = 0; i < json.length; i++) {
                         if (json[i] && String(json[i][h]).includes('@')) {
@@ -85,10 +108,14 @@ export default function EmailValidationPage() {
                     }
                 });
 
-                setEmailColumn(bestCandidate || (headers.length > 0 ? headers[0] : null));
+                const detectedEmailColumn = bestCandidate || (headers.length > 0 ? headers[0] : null);
+                setEmailColumn(detectedEmailColumn);
                 
-                // Automatically start validation
-                handleValidate(json, bestCandidate || headers[0]);
+                if (detectedEmailColumn) {
+                    handleValidate(json, detectedEmailColumn);
+                } else {
+                    throw new Error("Could not detect a column with email addresses.");
+                }
 
             } catch (error) {
                 toast({
@@ -366,7 +393,3 @@ export default function EmailValidationPage() {
   </main>
   );
 }
-
-    
-
-    

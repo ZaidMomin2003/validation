@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { FileUp, Download, Columns, Loader2, Settings } from 'lucide-react';
+import { FileUp, Download, Columns, Loader2, Settings, CheckCircle } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { FileUpload } from "@/components/ui/file-upload";
 import { Button } from '@/components/ui/button';
@@ -169,6 +169,18 @@ export default function BulkValidatePage() {
             return obj;
         });
     };
+    
+    const handleValidate = () => {
+        if (!cleanedData) return;
+
+        sessionStorage.setItem('validationData', JSON.stringify({
+            rows: convertDataToObjects(cleanedData),
+            fileName: `Cleaned-${tableData?.fileName || 'data'}.csv`,
+            emailColumn: 'Email'
+        }));
+
+        router.push('/email-validation');
+    }
 
     const handleDownloadCleaned = () => {
         if (!cleanedData) return;
@@ -294,6 +306,10 @@ export default function BulkValidatePage() {
                                 <Download className="mr-2 h-4 w-4" />
                                 Download CSV
                              </Button>
+                            <Button onClick={handleValidate}>
+                                <CheckCircle className="mr-2 h-4 w-4" />
+                                Validate Cleaned List
+                            </Button>
                              <Button onClick={handleSaveCleanedList} disabled={isProcessing}>
                                 {isProcessing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                                 Save Cleaned List
