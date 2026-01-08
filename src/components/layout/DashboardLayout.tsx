@@ -1,3 +1,4 @@
+
 'use client';
 
 import {
@@ -236,7 +237,7 @@ export default function DashboardLayout({
                                 {user?.plan === 'Lifetime' ? (
                                     <Badge variant="outline" className="border-green-500/50 text-green-400">LTD</Badge>
                                 ) : (
-                                    <Badge variant="secondary">Free</Badge>
+                                    <Badge variant="secondary">1 Day Free Trial</Badge>
                                 )}
                             </Link>
                           </DropdownMenuItem>
