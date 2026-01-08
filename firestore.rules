@@ -41,12 +41,16 @@ service cloud.firestore {
                        request.resource.data.trialEndsAt > request.time.toMillis();
 
 
-      // Allow update if the user is the owner, the new data is valid,
-      // and they are only changing fields they are allowed to change.
-      allow update: if request.auth.uid == userId && 
-                       // Check if the update is only to change the plan to Lifetime
-                       (request.resource.data.size() == 1 && 'plan' in request.resource.data && request.resource.data.plan == 'Lifetime' && resource.data.plan == 'Trial') ||
-                       // Or if it's a general profile update that respects immutability rules
+      // Allow update if the user is the owner, and the update is valid.
+      allow update: if request.auth.uid == userId &&
+                       // Case 1: Upgrading plan from Trial to Lifetime.
+                       // This allows sending just the { plan: 'Lifetime' } object.
+                       (request.resource.data.keys().hasOnly(['plan']) &&
+                        request.resource.data.plan == 'Lifetime' &&
+                        resource.data.plan == 'Trial') ||
+
+                       // Case 2: General profile update (e.g., changing displayName).
+                       // This ensures immutable fields are not changed.
                        (isUserProfile(request.resource.data) &&
                         request.resource.data.uid == resource.data.uid &&
                         request.resource.data.email == resource.data.email &&
