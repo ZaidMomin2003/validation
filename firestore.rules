@@ -1,8 +1,6 @@
 
 rules_version = '2';
 
-// Retry deployment - 1
-
 service cloud.firestore {
   match /databases/{database}/documents {
     
@@ -39,9 +37,12 @@ service cloud.firestore {
                        request.resource.data.trialEndsAt > request.time.toMillis();
 
       allow update: if request.auth.uid == userId && (
-          // Plan upgrade from Free to Lifetime (only 'plan' field can be updated)
+          // Case 1: Allow plan upgrade from Free to Lifetime.
+          // This rule checks that ONLY the 'plan' field is being changed.
           (resource.data.plan == 'Free' && request.resource.data.plan == 'Lifetime' && request.resource.data.keys().hasOnly(['plan'])) ||
-          // General profile updates (displayName, photoURL) - plan and other fields must be unchanged
+          
+          // Case 2: Allow general profile updates (e.g., displayName, photoURL).
+          // This rule ensures core fields like uid, email, plan, and trialEndsAt are NOT changed during a general update.
           (isUserProfile(request.resource.data) &&
            request.resource.data.uid == resource.data.uid &&
            request.resource.data.email == resource.data.email &&
