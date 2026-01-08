@@ -23,7 +23,7 @@ const createUserProfileDocument = async (db: Firestore, user: FirebaseUser) => {
     const userDoc = await getDoc(userDocRef);
 
     if (!userDoc.exists()) {
-        const newUserProfile: AppUser = {
+        const newUserProfile: Omit<AppUser, 'plan'> & { plan: 'Free' } = {
             uid: user.uid,
             email: user.email,
             displayName: user.displayName,
@@ -85,7 +85,8 @@ export function useUser() {
 
   useEffect(() => {
     if (!auth || !db) {
-        setLoading(false);
+        // Firebase is not initialized yet, wait for it.
+        // The loading state is already true, so we just return.
         return;
     }
     
@@ -136,7 +137,7 @@ export function useUser() {
     });
 
     return () => unsubscribeAuth();
-  }, [auth, db]);
+  }, [auth, db, router]);
 
   const signOut = async () => {
     if(auth) {
