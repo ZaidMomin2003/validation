@@ -224,7 +224,7 @@ export default function AuthClient() {
         const provider = new GoogleAuthProvider();
         try {
             await signInWithPopup(auth, provider);
-            router.push('/email-validation');
+            router.push('/pricing');
         } catch (error: any) {
             toast({
                 variant: 'destructive',

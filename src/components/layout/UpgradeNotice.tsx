@@ -24,9 +24,9 @@ export default function UpgradeNotice() {
                     <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10">
                         <Zap className="h-8 w-8 text-primary" />
                     </div>
-                    <CardTitle className="text-2xl font-bold">Your Free Trial Has Ended</CardTitle>
+                    <CardTitle className="text-2xl font-bold">Upgrade to Unlock All Features</CardTitle>
                     <CardDescription>
-                        Upgrade to our Lifetime Deal to continue using all our powerful tools without any limits.
+                        Purchase our Lifetime Deal to get unlimited access to all our powerful tools.
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">

@@ -23,22 +23,18 @@ const createUserProfileDocument = async (db: Firestore, user: FirebaseUser) => {
     const userDoc = await getDoc(userDocRef);
 
     if (!userDoc.exists()) {
-        const trialEndsAt = Date.now() + 24 * 60 * 60 * 1000; // 1 day from now
         const newUserProfile: AppUser = {
             uid: user.uid,
             email: user.email,
             displayName: user.displayName,
             photoURL: user.photoURL,
             providerId: user.providerData[0]?.providerId || 'password',
-            plan: 'Trial',
-            trialEndsAt: trialEndsAt
+            plan: 'Free',
         };
         try {
-            // Using setDoc with merge: false to ensure it only creates, not updates.
             await setDoc(userDocRef, newUserProfile);
         } catch (error) {
             console.error("Error creating user profile:", error);
-            // Optionally re-throw or handle the error in a way that informs the user
         }
     }
 };
@@ -99,7 +95,6 @@ export function useUser() {
           
           const userDocRef = doc(db, 'users', firebaseUser.uid);
           
-          // Ensure profile document is created before setting up the listener
           await createUserProfileDocument(db, firebaseUser);
 
           const unsubscribeProfile = onSnapshot(userDocRef, 
@@ -108,8 +103,6 @@ export function useUser() {
                 const profileData = docSnapshot.data() as AppUser;
                  setUser(profileData);
               } else {
-                 // This case should be rare now, but as a fallback, we can try creating it again
-                 // Or we can assume the auth state is inconsistent and sign out.
                  console.error("User profile does not exist even after creation attempt.");
                  setUser(null);
               }
@@ -126,7 +119,6 @@ export function useUser() {
           return () => unsubscribeProfile();
 
         } else {
-          // If email is not verified, sign out the user
            if (auth.currentUser) {
             firebaseSignOut(auth);
            }

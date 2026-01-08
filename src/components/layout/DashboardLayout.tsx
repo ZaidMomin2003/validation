@@ -77,22 +77,6 @@ export default function DashboardLayout({
   const { setTheme } = useTheme();
   const router = useRouter();
 
-  const listsQuery = React.useMemo(() => {
-    if (!user) return null;
-    return query(collection(db, `users/${user.uid}/lists`));
-  }, [user]);
-
-  const { data: lists, loading: listsLoading } = useCollection<List>(listsQuery);
-
-  const usedCredits = React.useMemo(() => {
-    if (!lists) return 0;
-    return lists.reduce((acc, list) => {
-        // This logic might need adjustment depending on how you track credit usage for cleaning.
-        // For now, let's assume cleaning doesn't consume credits from the total.
-        return acc;
-    }, 0);
-  }, [lists]);
-
   React.useEffect(() => {
     if (!authLoading && !user) {
       router.push('/auth');
@@ -109,9 +93,8 @@ export default function DashboardLayout({
         </div>
     );
   }
-
-  const isTrialExpired = user.plan === 'Trial' && Date.now() > user.trialEndsAt;
-
+  
+  const isFeatureLocked = user.plan === 'Free' && pathname !== '/pricing';
 
   const getInitials = (name?: string | null) => {
     if (!name) return 'U';
@@ -122,7 +105,7 @@ export default function DashboardLayout({
       .toUpperCase();
   };
 
-  const planName = user?.plan ?? 'Trial';
+  const planName = user?.plan ?? 'Free';
 
   return (
       <SidebarProvider>
@@ -252,7 +235,7 @@ export default function DashboardLayout({
                                 {user?.plan === 'Lifetime' ? (
                                     <Badge variant="outline" className="border-green-500/50 text-green-400">LTD</Badge>
                                 ) : (
-                                    <Badge variant="secondary">Trial</Badge>
+                                    <Badge variant="secondary">Free</Badge>
                                 )}
                             </Link>
                           </DropdownMenuItem>
@@ -326,7 +309,7 @@ export default function DashboardLayout({
         </Sidebar>
         <SidebarInset>
           <Header />
-          {isTrialExpired ? <UpgradeNotice /> : children}
+          {isFeatureLocked ? <UpgradeNotice /> : children}
         </SidebarInset>
       </SidebarProvider>
   );

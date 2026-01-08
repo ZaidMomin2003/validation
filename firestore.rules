@@ -3,17 +3,14 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     
-    // Helper functions for data validation
     function isUserProfile(data) {
       return data.uid is string &&
              data.email is string &&
              (!('displayName' in data) || data.displayName is string || data.displayName == null) &&
              (!('photoURL' in data) || data.photoURL is string || data.photoURL == null) &&
-             'plan' in data && (data.plan == 'Trial' || data.plan == 'Lifetime') &&
-             'trialEndsAt' in data && data.trialEndsAt is number;
+             'plan' in data && (data.plan == 'Free' || data.plan == 'Lifetime');
     }
 
-    // Validates the creation of a cleaned list document
     function isListCreate(data) {
       return data.name is string &&
              data.createdAt is number &&
@@ -29,42 +26,30 @@ service cloud.firestore {
     }
 
     match /users/{userId} {
-      // Users can only read their own profile
       allow read: if request.auth.uid == userId;
       
-      // Allow creation only if the data is valid, it's a new user,
-      // and they are being put on a trial plan.
       allow create: if request.auth.uid == userId &&
                        isUserProfile(request.resource.data) &&
                        request.resource.data.uid == userId &&
-                       request.resource.data.plan == 'Trial' &&
-                       request.resource.data.trialEndsAt > request.time.toMillis();
+                       request.resource.data.plan == 'Free';
 
-
-      // Allow update if the user is the owner, the new data is valid,
-      // and they are only changing fields they are allowed to change.
-      allow update: if request.auth.uid == userId && 
-                       isUserProfile(request.resource.data) &&
-                       request.resource.data.uid == resource.data.uid &&
-                       request.resource.data.email == resource.data.email &&
-                       // CRITICAL: trialEndsAt must not be changed by the client after creation.
-                       request.resource.data.trialEndsAt == resource.data.trialEndsAt;
+      allow update: if request.auth.uid == userId &&
+                       // Case 1: Upgrading from Free to Lifetime
+                       (resource.data.plan == 'Free' && request.resource.data.plan == 'Lifetime' && request.resource.data.keys().hasOnly(['plan'])) ||
+                       // Case 2: General profile updates (e.g., displayName)
+                       (isUserProfile(request.resource.data) &&
+                        request.resource.data.uid == resource.data.uid &&
+                        request.resource.data.email == resource.data.email &&
+                        request.resource.data.plan == resource.data.plan);
 
       match /lists/{listId} {
-        // Users can only manage their own lists
         allow read, delete: if request.auth.uid == userId;
-
-        // Use isListCreate for creation
         allow create: if request.auth.uid == userId && isListCreate(request.resource.data);
-
-        // Updates are not allowed from the client for now to keep data integral
         allow update: if false;
       }
     }
      match /subscribers/{subscriberId} {
-      // Anyone can create a subscription
       allow create: if isNewsletterSubscriber(request.resource.data);
-      // No one can read, update, or delete subscriber emails from the client
       allow read, update, delete: if false;
     }
   }

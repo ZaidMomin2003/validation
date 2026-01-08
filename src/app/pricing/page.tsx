@@ -13,23 +13,6 @@ import { useRouter } from 'next/navigation';
 
 const plans = [
     {
-        name: "Free Trial",
-        price: "Free",
-        priceDetails: "/ 1 Day",
-        description: "Unlimited access to all tools for one day. No credit card required.",
-        features: [
-            "Unlimited Email Validation",
-            "Unlimited List Cleaning",
-            "Unlimited Email Extraction",
-            "Unlimited Spam Checking",
-            "Unlimited Lead Generation",
-            "Access All Tools",
-        ],
-        cta: "Start Your Free Trial",
-        planId: "trial",
-        isPrimary: false,
-    },
-    {
         name: "Lifetime Deal",
         price: "$29",
         priceDetails: "/ one-time",
@@ -53,57 +36,21 @@ export default function PricingPage() {
   const { user, loading } = useAuth();
   const { toast } = useToast();
   const router = useRouter();
-  const [isTrialActive, setIsTrialActive] = useState(false);
-  const [trialTimeLeft, setTrialTimeLeft] = useState('');
-
-  useEffect(() => {
-    if (user && user.plan === 'Trial' && user.trialEndsAt) {
-      const trialEndDate = new Date(user.trialEndsAt);
-      if (trialEndDate > new Date()) {
-        setIsTrialActive(true);
-        const updateTimer = () => {
-          const now = new Date();
-          const difference = trialEndDate.getTime() - now.getTime();
-          if (difference > 0) {
-            const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
-            const minutes = Math.floor((difference / 1000 / 60) % 60);
-            const seconds = Math.floor((difference / 1000) % 60);
-            setTrialTimeLeft(`${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`);
-          } else {
-            setIsTrialActive(false);
-            setTrialTimeLeft('00:00:00');
-          }
-        };
-        updateTimer();
-        const interval = setInterval(updateTimer, 1000);
-        return () => clearInterval(interval);
-      }
-    }
-  }, [user]);
-
 
   const getButton = (plan: typeof plans[0]) => {
-    if (plan.planId === 'trial') {
-      if (user) {
-        return (
-          <Button className="w-full" size="lg" disabled>
-            {user.plan === 'Trial' ? 'Trial Active' : 'Not Applicable'}
-          </Button>
-        );
-      }
-      return (
-        <Button asChild className="w-full" size="lg">
-          <Link href="/auth"><Zap className="mr-2 h-4 w-4" />{plan.cta}</Link>
-        </Button>
-      );
-    }
-
     if (plan.planId === 'lifetime') {
         if (loading) {
             return <Button className="w-full" size="lg" disabled><Loader2 className="mr-2 h-4 w-4 animate-spin" />Loading...</Button>
         }
         if (user?.plan === 'Lifetime') {
             return <Button className="w-full" size="lg" disabled>You have Lifetime Access</Button>
+        }
+        if (!user) {
+             return (
+                <Button asChild className="w-full" size="lg">
+                    <Link href="/auth"><Zap className="mr-2 h-4 w-4" />Sign In to Upgrade</Link>
+                </Button>
+             )
         }
         return (
             <Button 
@@ -128,26 +75,11 @@ export default function PricingPage() {
             Simple, Transparent Pricing
           </h1>
           <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
-            Try all our tools for free. When you're ready, upgrade to a lifetime plan with a single purchase.
+            Upgrade to a lifetime plan with a single purchase to unlock all features.
           </p>
         </div>
         
-        {isTrialActive && (
-          <div className="mx-auto max-w-md w-full">
-            <Card className="bg-primary/10 border-primary/20">
-              <CardHeader className="text-center">
-                <CardTitle>Your Free Trial is Active!</CardTitle>
-                <CardDescription>You have unlimited access to all features.</CardDescription>
-              </CardHeader>
-              <CardContent className="text-center">
-                  <p className="text-sm text-muted-foreground">Time Remaining:</p>
-                  <p className="text-4xl font-bold font-mono text-primary">{trialTimeLeft}</p>
-              </CardContent>
-            </Card>
-          </div>
-        )}
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto items-start pt-8">
+        <div className="grid grid-cols-1 md:grid-cols-1 gap-8 max-w-md mx-auto items-start pt-8 w-full">
             {plans.map(plan => (
                 <Card 
                     key={plan.planId} 
@@ -186,8 +118,12 @@ export default function PricingPage() {
                         {getButton(plan)}
                          {plan.planId === 'lifetime' && (
                              <div className="flex items-center text-xs text-muted-foreground mt-4 h-6">
-                                <ShieldCheck className="h-4 w-4 mr-1.5" />
-                                <span>Secure payments.</span>
+                                {user && user.plan !== 'Lifetime' && (
+                                     <>
+                                        <ShieldCheck className="h-4 w-4 mr-1.5" />
+                                        <span>Secure one-time payment.</span>
+                                     </>
+                                )}
                             </div>
                          )}
                     </CardFooter>

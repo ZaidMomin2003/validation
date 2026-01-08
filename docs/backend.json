@@ -27,14 +27,10 @@
         "plan": {
           "type": "string",
           "description": "The user's subscription plan.",
-          "enum": ["Trial", "Lifetime"]
-        },
-        "trialEndsAt": {
-          "type": "number",
-          "description": "Timestamp for when the user's free trial ends."
+          "enum": ["Free", "Lifetime"]
         }
       },
-      "required": ["uid", "email", "plan", "trialEndsAt"]
+      "required": ["uid", "email", "plan"]
     },
     "List": {
       "title": "List",
