@@ -289,6 +289,19 @@ export default function DashboardLayout({
                 </DropdownMenuContent>
               </DropdownMenu>
               </ClientOnly>
+            {user?.plan !== 'Lifetime' && (
+              <div className="p-2">
+                <Button asChild variant="outline" className="w-full justify-between bg-background">
+                  <Link href="/pricing">
+                    <div className="flex items-center gap-2">
+                      <Zap />
+                      <span>Upgrade to Pro</span>
+                    </div>
+                    <ChevronRight className="h-4 w-4" />
+                  </Link>
+                </Button>
+              </div>
+            )}
           </SidebarFooter>
         </Sidebar>
         <SidebarInset>
