@@ -174,15 +174,14 @@ export default function DashboardLayout({
               </SidebarMenu>
             </SidebarGroup>
              <div className="p-2">
-                <Link href="/generate-leads">
+                <Link href="/email-system">
                     <div className="group rounded-lg bg-gradient-to-br from-primary/80 to-primary/60 p-4 text-primary-foreground transition-all hover:from-primary/90 hover:to-primary/70">
                         <div className="flex items-center gap-3">
                              <Rocket className="h-5 w-5 transition-transform group-hover:rotate-12" />
                             <p className="text-sm font-semibold">
-                                Generate Leads
+                                Get Complete Email System
                             </p>
                         </div>
-                        <p className="text-xs text-primary-foreground/80 mt-1">New! Find leads for your business.</p>
                     </div>
                 </Link>
             </div>
