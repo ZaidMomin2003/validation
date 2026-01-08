@@ -80,7 +80,7 @@ export default function EmailSystemPage() {
                 </div>
                 <CardContent className="max-w-xl mx-auto text-muted-foreground">
                     <p>
-                        This is a complete handover. You get full ownership of a powerful, scalable email infrastructure built by experts, ready to fuel your growth.
+                        This is a complete handover. You get full ownership of a powerful, scalable email infrastructure built by experts. Your system will be delivered within one week, but please allow for a 3-week warm-up period before starting high-volume campaigns.
                     </p>
                 </CardContent>
                 <Button size="lg" className="mt-4 text-lg h-14 px-10">
