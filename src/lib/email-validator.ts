@@ -70,73 +70,73 @@ export const DISPOSABLE_DOMAINS = new Set([
   'mailtemp.info', 'mailtothis.com', 'mailtrash.net', 'mailtv.net', 'mailzilla.com',
   'makemetheking.com', 'manybrain.com', 'mbx.cc', 'mega.zik.dj', 'meinspamschutz.de',
   'meltmail.com', 'messagebeamer.de', 'mezimages.net', 'ministryofspam.com',
- 'mintemail.com', 'mjukglass.nu', 'mohmal.com', 'moncourrier.fr.nf', 'monemail.fr.nf',
- 'monmail.fr.nf', 'msa.minsmail.com', 'mt2009.com', 'mt2014.com', 'mycard.net.ua',
- 'mycleaninbox.net', 'mymail-in.net', 'mypacks.net', 'mypartyclip.de',
- 'myphantomemail.com', 'myspaceinc.com', 'myspaceinc.net', 'myspaceinc.org',
- 'myspamgourmet.com', 'mytempemail.com', 'mytrashmail.com', 'nabuma.com',
- 'neomailbox.com', 'nepwk.com', 'nervmich.net', 'nervtmich.net', 'netmails.com',
- 'netmails.net', 'netzidiot.de', 'neverbox.com', 'nice-4u.com', 'no-spam.ws',
- 'nobulk.com', 'noclickemail.com', 'nogmailspam.info', 'nomail.pw', 'nomail.xl.cx',
- 'nomail2me.com', 'nomorespamemails.com', 'nospam.ze.tc', 'nospam4.us',
- 'nospamfor.us', 'nospamthanks.info', 'notmailinator.com', 'nowmymail.com',
- 'nurfuerspam.de', 'nus.edu.sg', 'objectmail.com', 'obobbo.com', 'odnorazovoe.ru',
- 'oneoffemail.com', 'onewaymail.com', 'onlatedotcom.info', 'online.ms',
- 'opayq.com', 'ordinaryamerican.net', 'otherinbox.com', 'ovpn.to', 'owlpic.com',
- 'pancakemail.com', 'pcusers.otherinbox.com', 'pjjkp.com', 'plexolan.de',
- 'poczta.onet.pl', 'politikerclub.de', 'poofy.org', 'pookmail.com', 'privacy.net',
- 'privatdemail.net', 'proxymail.eu', 'prtnx.com', 'putthisinyourspamdatabase.com',
- 'qq.com', 'quickinbox.com', 'rcpt.at', 'reallymymail.com', 'recode.me',
- 'recursor.net', 'recyclemail.dk', 'redchan.it', 'regbypass.com', 'regbypass.comsafe-mail.net',
- 'rejectmail.com', 'reliable-mail.com', 'rhyta.com', 'rmqkr.net', 'royal.net',
- 'rtrtr.com', 's0ny.net', 'safe-mail.net', 'safersignup.de', 'safetymail.info',
- 'safetypost.de', 'sandelf.de', 'saynotospam.com', 'schafmail.de', 'schrott-email.de',
- 'secretemail.de', 'secure-mail.biz', 'selfdestructingmail.com', 'selfdestructingmail.org',
- 'sendspamhere.com', 'senseless-entertainment.com', 'shared-mail.de', 'shieldemail.com',
- 'shiftmail.com', 'shitmail.me', 'shitware.nl', 'shmeriously.com', 'shortmail.net',
- 'sibmail.com', 'sinnlos-mail.de', 'slapsfromlastnight.com', 'slaskpost.se',
- 'smashmail.de', 'smellfear.com', 'snakemail.com', 'sneakemail.com', 'sofimail.com',
- 'sofort-mail.de', 'sogetthis.com', 'soodonims.com', 'spam.la', 'spam.su',
- 'spam4.me', 'spamail.de', 'spamarrest.com', 'spambob.com', 'spambob.net',
- 'spambob.org', 'spambog.com', 'spambog.de', 'spambog.ru', 'spambox.info',
- 'spambox.irishspringrealty.com', 'spambox.us', 'spamcannon.com', 'spamcannon.net',
- 'spamcero.com', 'spamcon.org', 'spamcorptastic.com', 'spamcowboy.com',
- 'spamcowboy.net', 'spamcowboy.org', 'spamday.com', 'spamex.com', 'spamfree.eu',
- 'spamfree24.com', 'spamfree24.de', 'spamfree24.eu', 'spamfree24.info',
- 'spamfree24.net', 'spamfree24.org', 'spamgourmet.com', 'spamgourmet.net',
- 'spamgourmet.org', 'spamherelots.com', 'spamhereplease.com', 'spamhole.com',
- 'spamify.com', 'spaminator.de', 'spamkill.info', 'spaml.de', 'spammotel.com',
- 'spamobox.com', 'spamoff.de', 'spamslicer.com', 'spamspot.com', 'spamstack.net',
- 'spamthis.co.uk', 'spamthisplease.com', 'spamtrail.com', 'spamtrap.co',
- 'spamtrap.it', 'spamtroll.net', 'speed.1s.fr', 'spoofmail.de', 'squizzy.de',
- 'ssoia.com', 'startkeys.com', 'stinkefinger.net', 'stop-my-spam.com',
- 'stuffmail.de', 'sudolife.me', 'sudolife.net', 'sudomail.com', 'sudomail.net',
- 'sudouser.com', 'sudouser.net', 'super-auswahl.de', 'supergreatmail.com',
- 'supermailer.jp', 'superrito.com', 'superstachel.de', 'suremail.info', 'talkinator.com',
- 'teewars.org', 'teleworm.com', 'teleworm.us', 'temp-mail.org', 'temp-mail.ru',
- 'tempe-mail.com', 'tempemail.co.za', 'tempemail.com', 'tempemail.net',
- 'tempinbox.co.uk', 'tempinbox.com', 'tempmail.eu', 'tempmail.it', 'tempmail.us',
- 'tempmail2.com', 'tempmaildemo.com', 'tempmailer.com', 'tempmailer.de',
- 'tempomail.fr', 'temporaryemail.net', 'temporaryforwarding.com',
- 'temporaryinbox.com', 'temporarymailaddress.com', 'tempr.email', 'thankyou2010.com',
- 'thisisnotmyrealemail.com', 'throwawayemailaddress.com', 'throam.com',
- 'tilien.com', 'tmail.ws', 'tmailinator.com', 'toomail.biz', 'tradermail.info',
- 'trash-mail.at', 'trash-mail.com', 'trash-mail.de', 'trash2009.com',
- 'trashbox.eu', 'trashdevil.com', 'trashemail.de', 'trashmail.at', 'trashmail.com',
- 'trashmail.de', 'trashmail.me', 'trashmail.net', 'trashmail.org', 'trashmail.ws',
- 'trashmailer.com', 'trashymail.com', 'trashymail.net', 'trialmail.de',
- 'trillianpro.com', 'turual.com', 'twinmail.de', 'tyldd.com', 'uggsrock.com',
- 'umail.net', 'upliftnow.com', 'uplipht.com', 'uroid.com', 'us.af',
- 'venompen.com', 'veryrealemail.com', 'vidchart.com', 'viralplays.com',
- 'vpn.st', 'vsimcard.com', 'vubby.com', 'wasteland.rfc822.org', 'webemail.me',
- 'weg-werf-email.de', 'wegwerf-emails.de', 'wegwerfadresse.de', 'wegwerfemail.com',
- 'wegwerfemail.de', 'wegwerfmail.de', 'wegwerfmail.net', 'wegwerfmail.org',
- 'wetob.com', 'wh4f.org', 'whyspam.me', 'willhackforfood.biz', 'willselfdestruct.com',
- 'winemaven.info', 'wronghead.com', 'wuzupmail.net', 'x.ip6.li', 'xagloo.com',
- 'xemaps.com', 'xents.com', 'xmaily.com', 'xoxy.net', 'yep.it', 'yopmail.com',
- 'yopmail.fr', 'yopmail.net', 'yourdomain.com', 'ypmail.webarnak.fr.eu.org',
- 'yuurok.com', 'z1p.biz', 'za.com', 'zehnminuten.de', 'zehnminutenmail.de',
- 'zippymail.info', 'zoaxe.com', 'zoemail.net', 'zomg.info'
+  'mintemail.com', 'mjukglass.nu', 'mohmal.com', 'moncourrier.fr.nf', 'monemail.fr.nf',
+  'monmail.fr.nf', 'msa.minsmail.com', 'mt2009.com', 'mt2014.com', 'mycard.net.ua',
+  'mycleaninbox.net', 'mymail-in.net', 'mypacks.net', 'mypartyclip.de',
+  'myphantomemail.com', 'myspaceinc.com', 'myspaceinc.net', 'myspaceinc.org',
+  'myspamgourmet.com', 'mytempemail.com', 'mytrashmail.com', 'nabuma.com',
+  'neomailbox.com', 'nepwk.com', 'nervmich.net', 'nervtmich.net', 'netmails.com',
+  'netmails.net', 'netzidiot.de', 'neverbox.com', 'nice-4u.com', 'no-spam.ws',
+  'nobulk.com', 'noclickemail.com', 'nogmailspam.info', 'nomail.pw', 'nomail.xl.cx',
+  'nomail2me.com', 'nomorespamemails.com', 'nospam.ze.tc', 'nospam4.us',
+  'nospamfor.us', 'nospamthanks.info', 'notmailinator.com', 'nowmymail.com',
+  'nurfuerspam.de', 'nus.edu.sg', 'objectmail.com', 'obobbo.com', 'odnorazovoe.ru',
+  'oneoffemail.com', 'onewaymail.com', 'onlatedotcom.info', 'online.ms',
+  'opayq.com', 'ordinaryamerican.net', 'otherinbox.com', 'ovpn.to', 'owlpic.com',
+  'pancakemail.com', 'pcusers.otherinbox.com', 'pjjkp.com', 'plexolan.de',
+  'poczta.onet.pl', 'politikerclub.de', 'poofy.org', 'pookmail.com', 'privacy.net',
+  'privatdemail.net', 'proxymail.eu', 'prtnx.com', 'putthisinyourspamdatabase.com',
+  'qq.com', 'quickinbox.com', 'rcpt.at', 'reallymymail.com', 'recode.me',
+  'recursor.net', 'recyclemail.dk', 'redchan.it', 'regbypass.com', 'regbypass.comsafe-mail.net',
+  'rejectmail.com', 'reliable-mail.com', 'rhyta.com', 'rmqkr.net', 'royal.net',
+  'rtrtr.com', 's0ny.net', 'safe-mail.net', 'safersignup.de', 'safetymail.info',
+  'safetypost.de', 'sandelf.de', 'saynotospam.com', 'schafmail.de', 'schrott-email.de',
+  'secretemail.de', 'secure-mail.biz', 'selfdestructingmail.com', 'selfdestructingmail.org',
+  'sendspamhere.com', 'senseless-entertainment.com', 'shared-mail.de', 'shieldemail.com',
+  'shiftmail.com', 'shitmail.me', 'shitware.nl', 'shmeriously.com', 'shortmail.net',
+  'sibmail.com', 'sinnlos-mail.de', 'slapsfromlastnight.com', 'slaskpost.se',
+  'smashmail.de', 'smellfear.com', 'snakemail.com', 'sneakemail.com', 'sofimail.com',
+  'sofort-mail.de', 'sogetthis.com', 'soodonims.com', 'spam.la', 'spam.su',
+  'spam4.me', 'spamail.de', 'spamarrest.com', 'spambob.com', 'spambob.net',
+  'spambob.org', 'spambog.com', 'spambog.de', 'spambog.ru', 'spambox.info',
+  'spambox.irishspringrealty.com', 'spambox.us', 'spamcannon.com', 'spamcannon.net',
+  'spamcero.com', 'spamcon.org', 'spamcorptastic.com', 'spamcowboy.com',
+  'spamcowboy.net', 'spamcowboy.org', 'spamday.com', 'spamex.com', 'spamfree.eu',
+  'spamfree24.com', 'spamfree24.de', 'spamfree24.eu', 'spamfree24.info',
+  'spamfree24.net', 'spamfree24.org', 'spamgourmet.com', 'spamgourmet.net',
+  'spamgourmet.org', 'spamherelots.com', 'spamhereplease.com', 'spamhole.com',
+  'spamify.com', 'spaminator.de', 'spamkill.info', 'spaml.de', 'spammotel.com',
+  'spamobox.com', 'spamoff.de', 'spamslicer.com', 'spamspot.com', 'spamstack.net',
+  'spamthis.co.uk', 'spamthisplease.com', 'spamtrail.com', 'spamtrap.co',
+  'spamtrap.it', 'spamtroll.net', 'speed.1s.fr', 'spoofmail.de', 'squizzy.de',
+  'ssoia.com', 'startkeys.com', 'stinkefinger.net', 'stop-my-spam.com',
+  'stuffmail.de', 'sudolife.me', 'sudolife.net', 'sudomail.com', 'sudomail.net',
+  'sudouser.com', 'sudouser.net', 'super-auswahl.de', 'supergreatmail.com',
+  'supermailer.jp', 'superrito.com', 'superstachel.de', 'suremail.info', 'talkinator.com',
+  'teewars.org', 'teleworm.com', 'teleworm.us', 'temp-mail.org', 'temp-mail.ru',
+  'tempe-mail.com', 'tempemail.co.za', 'tempemail.com', 'tempemail.net',
+  'tempinbox.co.uk', 'tempinbox.com', 'tempmail.eu', 'tempmail.it', 'tempmail.us',
+  'tempmail2.com', 'tempmaildemo.com', 'tempmailer.com', 'tempmailer.de',
+  'tempomail.fr', 'temporaryemail.net', 'temporaryforwarding.com',
+  'temporaryinbox.com', 'temporarymailaddress.com', 'tempr.email', 'thankyou2010.com',
+  'thisisnotmyrealemail.com', 'throwawayemailaddress.com', 'throam.com',
+  'tilien.com', 'tmail.ws', 'tmailinator.com', 'toomail.biz', 'tradermail.info',
+  'trash-mail.at', 'trash-mail.com', 'trash-mail.de', 'trash2009.com',
+  'trashbox.eu', 'trashdevil.com', 'trashemail.de', 'trashmail.at', 'trashmail.com',
+  'trashmail.de', 'trashmail.me', 'trashmail.net', 'trashmail.org', 'trashmail.ws',
+  'trashmailer.com', 'trashymail.com', 'trashymail.net', 'trialmail.de',
+  'trillianpro.com', 'turual.com', 'twinmail.de', 'tyldd.com', 'uggsrock.com',
+  'umail.net', 'upliftnow.com', 'uplipht.com', 'uroid.com', 'us.af',
+  'venompen.com', 'veryrealemail.com', 'vidchart.com', 'viralplays.com',
+  'vpn.st', 'vsimcard.com', 'vubby.com', 'wasteland.rfc822.org', 'webemail.me',
+  'weg-werf-email.de', 'wegwerf-emails.de', 'wegwerfadresse.de', 'wegwerfemail.com',
+  'wegwerfemail.de', 'wegwerfmail.de', 'wegwerfmail.net', 'wegwerfmail.org',
+  'wetob.com', 'wh4f.org', 'whyspam.me', 'willhackforfood.biz', 'willselfdestruct.com',
+  'winemaven.info', 'wronghead.com', 'wuzupmail.net', 'x.ip6.li', 'xagloo.com',
+  'xemaps.com', 'xents.com', 'xmaily.com', 'xoxy.net', 'yep.it', 'yopmail.com',
+  'yopmail.fr', 'yopmail.net', 'yourdomain.com', 'ypmail.webarnak.fr.eu.org',
+  'yuurok.com', 'z1p.biz', 'za.com', 'zehnminuten.de', 'zehnminutenmail.de',
+  'zippymail.info', 'zoaxe.com', 'zoemail.net', 'zomg.info'
 ]);
 
 // A comprehensive list of role-based prefixes
@@ -147,7 +147,7 @@ export const ROLE_BASED_PREFIXES = new Set([
   'analyst', 'answers', 'anti-spam', 'antispam', 'api', 'app', 'application', 'applications',
   'apply', 'apps', 'archives', 'art', 'artist', 'ask', 'assistance', 'associates', 'athletics',
   'auto', 'auto-reply', 'autoresponder', 'available', 'backup', 'bank', 'billing', 'billings',
- 'board', 'book', 'booking', 'bookings', 'books', 'business', 'buy', 'ca', 'career', 'careers',
+  'board', 'book', 'booking', 'bookings', 'books', 'business', 'buy', 'ca', 'career', 'careers',
   'ceo', 'cfo', 'chairman', 'channel', 'CIO', 'clients', 'clinic', 'cloud', 'co-op', 'coach',
   'com', 'comments', 'commercial', 'communications', 'community', 'comp', 'company',
   'compliance', 'computer', 'comunicacao', 'comunicaciones', 'connect', 'consorzio', 'consult',
@@ -159,18 +159,18 @@ export const ROLE_BASED_PREFIXES = new Set([
   'director', 'directors', 'directory', 'discuss', 'dispatch', 'dns', 'docs', 'doctor',
   'domain', 'domains', 'download', 'downloads', 'dreamteam', 'ecommerce', 'editor',
   'editorial', 'editors', 'education', 'email', 'emergency', 'employee', 'employees', 'employment',
- 'engineering', 'enquiries', 'enquiry', 'enterprise', 'env', 'errors', 'estate', 'event',
+  'engineering', 'enquiries', 'enquiry', 'enterprise', 'env', 'errors', 'estate', 'event',
   'events', 'everyone', 'exec', 'executive', 'expert', 'experts', 'export', 'facebook',
   'facilities', 'facility', 'faculty', 'family', 'faq', 'faqs', 'farm', 'feedback', 'finance',
   'financial', 'food', 'football', 'form', 'forms', 'forum', 'forums', 'founder', 'founders',
   'free', 'ftp', 'fun', 'funds', 'gallery', 'games', 'general', 'get', 'gettingstarted', 'gifts',
   'global', 'gmail', 'gov', 'grants', 'group', 'groups', 'guest', 'guidance', 'guides', 'head',
   'head.office', 'headoffice', 'health', 'hello', 'help', 'help-desk', 'helpdesk', 'home',
- 'hosting', 'hostmaster', 'hotel', 'house', 'hr', 'human-resources', 'humanresources', 'iana',
+  'hosting', 'hostmaster', 'hotel', 'house', 'hr', 'human-resources', 'humanresources', 'iana',
   'idea', 'ideas', 'if', 'info', 'inform', 'information', 'informativo', 'infra', 'infrastructure',
- 'institute', 'instructor', 'integration', 'integrations', 'interno', 'internet', 'interns',
+  'institute', 'instructor', 'integration', 'integrations', 'interno', 'internet', 'interns',
   'internship', 'invest', 'investor', 'investorrelations', 'investors', 'invoice', 'invoices',
- 'invoicing', 'ir', 'irc', 'is', 'isp', 'issues', 'it', 'it-support', 'itsupport', 'job', 'jobs',
+  'invoicing', 'ir', 'irc', 'is', 'isp', 'issues', 'it', 'it-support', 'itsupport', 'job', 'jobs',
   'join', 'joke', 'journal', 'junk', 'kontakt', 'kontor', 'lab', 'labor', 'labs', 'law',
   'lawyer', 'lead', 'leads', 'legal', 'library', 'licensing', 'list', 'list-request',
   'listproc', 'lists', 'listserv', 'login', 'logistics', 'love', 'lunch', 'maildaemon',
@@ -181,21 +181,21 @@ export const ROLE_BASED_PREFIXES = new Set([
   'noc', 'no-reply', 'noreply', 'no-spam', 'nospam', 'notes', 'notifications', 'null',
   'office', 'official', 'online', 'operations', 'ops', 'order', 'orders', 'org', 'organization',
   'outreach', 'owner', 'owners', 'paris', 'partner', 'partners', 'partnerships', 'pastor',
- 'people', 'personnel', 'phish', 'phishing', 'photo', 'photos', 'physician', 'pilot', 'plan',
+  'people', 'personnel', 'phish', 'phishing', 'photo', 'photos', 'physician', 'pilot', 'plan',
   'planning', 'pm', 'police', 'policy', 'post', 'postbox', 'postmaster', 'pre-order', 'premium',
   'president', 'press', 'prime', 'principal', 'privacy', 'private', 'prod', 'product',
   'production', 'products', 'program', 'programs', 'project', 'projects', 'promo', 'promotions',
   'public', 'purchase', 'purchases', 'purchasing', 'python', 'qa', 'questions', 'random',
   'realestate', 'reception', 'recruit', 'recruiter', 'recruiters', 'recruiting', 'recruitment',
- 'reference', 'register', 'registrar', 'registration', 'registrations', 'relations', 'release',
+  'reference', 'register', 'registrar', 'registration', 'registrations', 'relations', 'release',
   'releases', 'remove', 'rental', 'rentals', 'report', 'reports', 'request', 'requests',
   'research', 'reservations', 'residents', 'returns', 'review', 'reviews', 'rfc', 'rnd',
   'roadmin', 'root', 'rr', 'rsvp', 'sale', 'sales', 'sample', 'samples', 'school', 'schools',
   'science', 'sde', 'secretary', 'security', 'sell', 'seller', 'seminar', 'send', 'senior',
- 'server', 'service', 'services', 'shop', 'shopping', 'social', 'software', 'solution',
+  'server', 'service', 'services', 'shop', 'shopping', 'social', 'software', 'solution',
   'solutions', 'somebody', 'someone', 'spam', 'staff', 'start', 'state', 'static', 'stats',
   'student', 'students', 'studio', 'subscribe', 'subscriptions', 'suggestions', 'supervisor',
- 'support', 'support-team', 'supportteam', 'survey', 'surveys', 'sys', 'sysadmin', 'system',
+  'support', 'support-team', 'supportteam', 'survey', 'surveys', 'sys', 'sysadmin', 'system',
   'systems', 'talent', 'task', 'tasks', 'teacher', 'teachers', 'team', 'team-leaders',
   'teamleaders', 'teams', 'tech', 'technical', 'technology', 'test', 'testing', 'tests',
   'tickets', 'todo', 'tool', 'tools', 'trade', 'train', 'trainer', 'training', 'travel',
@@ -269,42 +269,66 @@ export const validate = async (
     let bad = 0;
     const total = rows.length;
     let validatedData: Record<string, any>[] = [];
+    const processedIndices = new Set<number>();
 
-    const validRowsToProcess: { row: Record<string, any>; email: string; domain: string }[] = [];
+    // Initial pass for emails that can be failed without an API call
+    for (let i = 0; i < rows.length; i++) {
+        const row = rows[i];
+        const email = String(row[emailColumn] || '').trim();
+        let isBad = false;
+        let notes = '';
+
+        if (!email) {
+            isBad = true;
+            notes = 'Missing email';
+        } else if (!EMAIL_REGEX.test(email)) {
+            isBad = true;
+            notes = 'Invalid syntax';
+        } else {
+            const domain = getDomainFromEmail(email);
+            if (!domain) {
+                isBad = true;
+                notes = 'Invalid domain';
+            } else {
+                const typoSuggestion = checkTypo(domain);
+                if (typoSuggestion) {
+                    isBad = true;
+                    notes = `Typo, did you mean ${typoSuggestion}?`;
+                } else if (DISPOSABLE_DOMAINS.has(domain)) {
+                    isBad = true;
+                    notes = 'Disposable domain';
+                }
+            }
+        }
+
+        if (isBad) {
+            bad++;
+            validatedData.push({ ...row, Status: 'Bad', Notes: notes, Category: 'Invalid' });
+            processedIndices.add(i);
+        }
+    }
+
+    onProgress({ good, risky, bad, total, data: validatedData });
+
+    // Prepare for API call with remaining emails
+    const validRowsToProcess: { index: number; row: Record<string, any>; email: string; domain: string }[] = [];
     const domainsToValidate = new Set<string>();
 
-    for (const row of rows) {
-        const email = String(row[emailColumn] || '').trim();
-        if (!email) {
-            bad++;
-            validatedData.push({ ...row, Status: 'Bad', Notes: 'Missing email', Category: 'Invalid' });
-            continue;
+    for (let i = 0; i < rows.length; i++) {
+        if (!processedIndices.has(i)) {
+            const row = rows[i];
+            const email = String(row[emailColumn] || '').trim();
+            const domain = getDomainFromEmail(email)!; // We know it's valid from the first pass
+            validRowsToProcess.push({ index: i, row, email, domain });
+            domainsToValidate.add(domain);
         }
+    }
 
-        if (!EMAIL_REGEX.test(email)) {
-            bad++;
-            validatedData.push({ ...row, Status: 'Bad', Notes: 'Invalid syntax', Category: 'Invalid' });
-            continue;
-        }
-
-        const domain = getDomainFromEmail(email);
-        if (!domain) {
-            bad++;
-            validatedData.push({ ...row, Status: 'Bad', Notes: 'Invalid domain', Category: 'Invalid' });
-            continue;
-        }
-
-        const typoSuggestion = checkTypo(domain);
-        if (typoSuggestion) {
-            bad++;
-            validatedData.push({ ...row, Status: 'Bad', Notes: `Typo, did you mean ${typoSuggestion}?`, Category: 'Invalid' });
-            continue;
-        }
-        
-        validRowsToProcess.push({ row, email, domain });
-        domainsToValidate.add(domain);
+    if (validRowsToProcess.length === 0) {
+        return { good, risky, bad, total, data: validatedData };
     }
     
+    // API call for MX records
     let apiValidationMap: Record<string, boolean> = {};
     if (domainsToValidate.size > 0) {
         try {
@@ -317,50 +341,36 @@ export const validate = async (
                 const result = await response.json();
                 apiValidationMap = result.validationMap;
             } else {
-                 throw new Error('Domain validation API failed with status ' + response.status);
+                throw new Error('Domain validation API failed with status ' + response.status);
             }
         } catch (error) {
-             console.error("API call to /api/validate-domains failed:", error);
-             // If API fails, mark all remaining as bad
-             validRowsToProcess.forEach(item => {
+            console.error("API call to /api/validate-domains failed:", error);
+            // If API fails, mark all remaining as bad
+            validRowsToProcess.forEach(item => {
                 bad++;
                 validatedData.push({ ...item.row, Status: 'Bad', Notes: 'Domain check failed', Category: 'Invalid' });
-             });
-             // Add already processed items
-             const finalData = [...validatedData];
-             onProgress({ good, risky, bad, total, data: finalData });
-             return { good, risky, bad, total, data: finalData };
+            });
+            onProgress({ good, risky, bad, total, data: validatedData });
+            return { good, risky, bad, total, data: validatedData };
         }
     }
 
+    // Final pass for remaining emails using API results
     for (const { row, email, domain } of validRowsToProcess) {
         let status: 'Good' | 'Risky' | 'Bad' = 'Good';
         let notes = '';
         let category = FREE_DOMAINS.has(domain) ? 'Free' : 'Business';
 
         const hasMx = apiValidationMap[domain];
-        if (hasMx === false) { // Domain is confirmed to be invalid
+        if (hasMx === false) {
             status = 'Bad';
             notes = 'No MX Record';
             category = 'Invalid';
-        } else if (hasMx === undefined) { // API failed for this domain or in general
-            status = 'Bad';
-            notes = 'Domain check failed';
-            category = 'Invalid';
-        } else { // Domain is valid, proceed with other checks
-            if (DISPOSABLE_DOMAINS.has(domain)) {
-                status = 'Bad';
-                notes = 'Disposable domain';
-                category = 'Invalid';
-            } else {
-                const prefix = getPrefixFromEmail(email);
-                if (prefix && ROLE_BASED_PREFIXES.has(prefix)) {
-                    status = 'Risky';
-                    notes = 'Role-based email';
-                } else if (prefix && commonCatchAllPrefixes.includes(prefix)) {
-                    status = 'Risky';
-                    notes = 'Potential catch-all (role-based)';
-                }
+        } else {
+            const prefix = getPrefixFromEmail(email);
+            if (prefix && ROLE_BASED_PREFIXES.has(prefix)) {
+                status = 'Risky';
+                notes = 'Role-based email';
             }
         }
         
@@ -369,30 +379,13 @@ export const validate = async (
         else bad++;
 
         validatedData.push({ ...row, Status: status, Notes: notes, Category: category });
-        
-        if ((good + risky + bad) % 10 === 0 || (good + risky + bad) === total) {
+
+        if (validatedData.length % 50 === 0 || validatedData.length === total) {
             onProgress({ good, risky, bad, total, data: validatedData });
         }
     }
 
-    // This ensures a final progress update is always sent
-    if (validatedData.length < total) {
-        // This handles rows that were filtered out at the very beginning
-        const processedEmails = new Set(validatedData.map(v => v[emailColumn]));
-        rows.forEach(r => {
-            if (!processedEmails.has(r[emailColumn])) {
-                 // These were already accounted for in the 'bad' count at the start
-                 // but we need them in the final dataset.
-                 // Let's find them in the initial validatedData if they exist
-                 if(!validatedData.find(vd => vd[emailColumn] === r[emailColumn])) {
-                    validatedData.push({ ...r, Status: 'Bad', Notes: 'Pre-validation failed', Category: 'Invalid' });
-                 }
-            }
-        });
-    }
-
+    // Final progress update
     onProgress({ good, risky, bad, total, data: validatedData });
     return { good, risky, bad, total, data: validatedData };
 };
-
-const commonCatchAllPrefixes = ['info', 'contact', 'support', 'sales', 'admin'];

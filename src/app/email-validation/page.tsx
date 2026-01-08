@@ -2,7 +2,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { FileUp, Download, Loader2, ShieldCheck, PieChart, ShieldAlert, ShieldX, CheckCircle, FileWarning, FileX, Check } from 'lucide-react';
+import { FileUp, Download, Loader2, ShieldCheck, PieChart, ShieldAlert, ShieldX, CheckCircle, FileWarning, FileX, Check, HelpCircle } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { FileUpload } from "@/components/ui/file-upload";
 import { Button } from '@/components/ui/button';
@@ -14,6 +14,12 @@ import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card"
+
 
 const PREVIEW_ROW_COUNT = 8;
 
@@ -181,6 +187,21 @@ export default function EmailValidationPage() {
         const fileName = `${Array.from(selectedCategories).join('-')}-${tableData?.fileName || 'data'}.csv`;
         XLSX.writeFile(wb, fileName, { bookType: 'csv' });
     }
+    
+    const Legend = () => (
+        <Alert className="bg-muted/50 border-border/50">
+            <HelpCircle className="h-4 w-4" />
+            <AlertTitle>Understanding the Results</AlertTitle>
+            <AlertDescription>
+                <ul className="list-disc list-inside space-y-2 mt-2 text-xs">
+                    <li><strong className="text-green-400">Good:</strong> The email has valid syntax and the domain has a mail server (MX Record). Safe to send.</li>
+                    <li><strong className="text-yellow-400">Risky:</strong> These are role-based emails (e.g., support@, info@). They are valid but may have low engagement.</li>
+                    <li><strong className="text-red-400">Bad:</strong> These emails are undeliverable. They may have invalid syntax, belong to a disposable domain, have a typo, or the domain does not accept emails (no MX Record).</li>
+                </ul>
+            </AlertDescription>
+        </Alert>
+    );
+
 
     const renderFileUpload = () => (
         <>
@@ -211,7 +232,7 @@ export default function EmailValidationPage() {
                             <CardTitle>2. Validate & Clean</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <p className="text-muted-foreground">We check for syntax, disposable domains, and role-based emails.</p>
+                            <p className="text-muted-foreground">We check syntax, MX records, disposable domains, and more.</p>
                         </CardContent>
                     </Card>
                      <Card>
@@ -277,7 +298,7 @@ export default function EmailValidationPage() {
                             </CardContent>
                         </Card>
                     </div>
-
+                     <Legend />
                     <Alert>
                         <PieChart className="h-4 w-4" />
                         <AlertTitle>Download Validated Segments</AlertTitle>
@@ -337,5 +358,3 @@ export default function EmailValidationPage() {
   </main>
   );
 }
-
-    
