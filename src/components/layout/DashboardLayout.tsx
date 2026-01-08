@@ -291,7 +291,7 @@ export default function DashboardLayout({
               </ClientOnly>
             {user?.plan !== 'Lifetime' && (
               <div className="p-2">
-                <Button asChild variant="outline" className="w-full justify-between bg-background">
+                <Button asChild className="w-full justify-between dark:bg-white dark:text-black dark:hover:bg-white/90 bg-primary text-primary-foreground hover:bg-primary/90">
                   <Link href="/pricing">
                     <div className="flex items-center gap-2">
                       <Zap />
