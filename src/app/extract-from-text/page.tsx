@@ -21,10 +21,6 @@ export default function ExtractFromTextPage() {
   const { toast } = useToast();
   const router = useRouter();
 
-  const isFreeUser = !user || user.plan === 'Trial';
-  const charLimit = isFreeUser ? 100000 : Infinity;
-  const charsLeft = charLimit - text.length;
-
   const handleExtract = () => {
     setIsLoading(true);
     // Simple regex to find email-like strings
@@ -83,11 +79,6 @@ export default function ExtractFromTextPage() {
           <p className="text-muted-foreground">
             Paste any block of text below to find and extract all email addresses.
           </p>
-           {isFreeUser && (
-            <p className="text-sm text-amber-500 dark:text-amber-400 mt-2">
-                100k character limit for free users. <Link href="/pricing" className="underline font-semibold">Upgrade for unlimited</Link>.
-            </p>
-          )}
         </div>
 
         <Card>
@@ -103,7 +94,6 @@ export default function ExtractFromTextPage() {
               className="min-h-[200px] text-base"
               value={text}
               onChange={(e) => setText(e.target.value)}
-              maxLength={isFreeUser ? 100000 : undefined}
             />
             <div className="flex justify-between items-center">
                 <Button onClick={handleExtract} disabled={isLoading || !text}>
@@ -114,11 +104,6 @@ export default function ExtractFromTextPage() {
                     )}
                     Extract Emails
                 </Button>
-                {isFreeUser && (
-                    <div className="text-sm text-muted-foreground">
-                        {charsLeft.toLocaleString()} characters remaining
-                    </div>
-                )}
             </div>
           </CardContent>
         </Card>
