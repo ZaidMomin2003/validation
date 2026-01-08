@@ -2,7 +2,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { FileUp, Download, Loader2, ShieldCheck, PieChart, ShieldAlert, ShieldX, CheckCircle, FileWarning, FileX } from 'lucide-react';
+import { FileUp, Download, Loader2, ShieldCheck, PieChart, ShieldAlert, ShieldX, CheckCircle, FileWarning, FileX, Check } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { FileUpload } from "@/components/ui/file-upload";
 import { Button } from '@/components/ui/button';
@@ -12,6 +12,8 @@ import { cn } from '@/lib/utils';
 import { validate } from '@/lib/email-validator';
 import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
 
 const PREVIEW_ROW_COUNT = 8;
 
@@ -20,6 +22,8 @@ interface TableData {
     rows: any[][];
     fileName: string;
 }
+
+type ValidationCategory = 'good' | 'risky' | 'bad';
 
 interface ValidatedData {
     good: number;
@@ -36,6 +40,7 @@ export default function EmailValidationPage() {
     const [isProcessing, setIsProcessing] = useState(false);
     const [progress, setProgress] = useState(0);
     const [validatedData, setValidatedData] = useState<ValidatedData | null>(null);
+    const [selectedCategories, setSelectedCategories] = useState<Set<ValidationCategory>>(new Set(['good']));
     const { toast } = useToast();
 
     const processFile = (file: File) => {
@@ -106,6 +111,7 @@ export default function EmailValidationPage() {
         setEmailColumn(null);
         setIsProcessing(false);
         setProgress(0);
+        setSelectedCategories(new Set(['good']));
     };
 
     const handleValidate = async (rows: Record<string, any>[], emailCol: string) => {
@@ -134,18 +140,46 @@ export default function EmailValidationPage() {
         }
     };
 
-    const handleDownload = (filter: 'good' | 'risky' | 'bad' | 'all') => {
-        if (!validatedData) return;
+    const handleCategoryToggle = (category: ValidationCategory) => {
+        setSelectedCategories(prev => {
+            const newSet = new Set(prev);
+            if (newSet.has(category)) {
+                newSet.delete(category);
+            } else {
+                newSet.add(category);
+            }
+            return newSet;
+        });
+    };
 
-        let dataToExport = validatedData.data;
-        if (filter !== 'all') {
-            dataToExport = validatedData.data.filter(row => row.Status && row.Status.toLowerCase() === filter);
+    const handleDownload = () => {
+        if (!validatedData || selectedCategories.size === 0) {
+            toast({
+                variant: 'destructive',
+                title: 'No categories selected',
+                description: 'Please select at least one category to download.',
+            });
+            return;
+        }
+
+        const dataToExport = validatedData.data.filter(row => 
+            row.Status && selectedCategories.has(row.Status.toLowerCase())
+        );
+
+        if (dataToExport.length === 0) {
+            toast({
+                title: 'No emails to download',
+                description: 'There are no emails in the selected categories.',
+            });
+            return;
         }
 
         const ws = XLSX.utils.json_to_sheet(dataToExport);
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, "Validated Data");
-        XLSX.writeFile(wb, `${filter}-${tableData?.fileName || 'data'}.csv`, { bookType: 'csv' });
+
+        const fileName = `${Array.from(selectedCategories).join('-')}-${tableData?.fileName || 'data'}.csv`;
+        XLSX.writeFile(wb, fileName, { bookType: 'csv' });
     }
 
     const renderFileUpload = () => (
@@ -199,7 +233,7 @@ export default function EmailValidationPage() {
     const renderResults = () => {
         if (!validatedData) return null;
         
-        const { good, risky, bad, total, data } = validatedData;
+        const { good, risky, bad, total } = validatedData;
         const goodPercent = total > 0 ? (good / total * 100).toFixed(1) : 0;
         const riskyPercent = total > 0 ? (risky / total * 100).toFixed(1) : 0;
         const badPercent = total > 0 ? (bad / total * 100).toFixed(1) : 0;
@@ -208,7 +242,7 @@ export default function EmailValidationPage() {
             <Card>
                 <CardHeader>
                     <CardTitle className="text-2xl">Validation Results</CardTitle>
-                    <CardDescription>Your list has been analyzed. Download the segments you need below.</CardDescription>
+                    <CardDescription>Your list has been analyzed. Select categories and download the segments you need.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
                     <div className="grid gap-4 md:grid-cols-3">
@@ -246,13 +280,27 @@ export default function EmailValidationPage() {
 
                     <Alert>
                         <PieChart className="h-4 w-4" />
-                        <AlertTitle>Download Your Validated Lists</AlertTitle>
-                        <AlertDescription>Choose which segment of your list you would like to download.</AlertDescription>
-                        <div className="mt-4 flex flex-wrap gap-2">
-                           <Button variant="outline" onClick={() => handleDownload('all')} size="sm"><Download className="mr-2 h-4 w-4" />All ({total})</Button>
-                           <Button variant="outline" onClick={() => handleDownload('good')} size="sm" className="border-green-500/50 hover:bg-green-500/10 text-green-300"><FileUp className="mr-2 h-4 w-4" />Good ({good})</Button>
-                           <Button variant="outline" onClick={() => handleDownload('risky')} size="sm" className="border-yellow-500/50 hover:bg-yellow-500/10 text-yellow-300"><FileWarning className="mr-2 h-4 w-4" />Risky ({risky})</Button>
-                           <Button variant="outline" onClick={() => handleDownload('bad')} size="sm" className="border-red-500/50 hover:bg-red-500/10 text-red-300"><FileX className="mr-2 h-4 w-4" />Bad ({bad})</Button>
+                        <AlertTitle>Download Validated Segments</AlertTitle>
+                        <AlertDescription>Select one or more categories to include in your download.</AlertDescription>
+                        <div className="mt-4 flex flex-col sm:flex-row sm:items-center gap-4">
+                            <div className="flex items-center space-x-4">
+                                <div className="flex items-center space-x-2">
+                                    <Checkbox id="good-check" checked={selectedCategories.has('good')} onCheckedChange={() => handleCategoryToggle('good')} />
+                                    <Label htmlFor="good-check" className="font-normal text-green-300">Good ({good})</Label>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                    <Checkbox id="risky-check" checked={selectedCategories.has('risky')} onCheckedChange={() => handleCategoryToggle('risky')} />
+                                    <Label htmlFor="risky-check" className="font-normal text-yellow-300">Risky ({risky})</Label>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                    <Checkbox id="bad-check" checked={selectedCategories.has('bad')} onCheckedChange={() => handleCategoryToggle('bad')} />
+                                    <Label htmlFor="bad-check" className="font-normal text-red-300">Bad ({bad})</Label>
+                                </div>
+                            </div>
+                            <Button onClick={handleDownload} size="sm" className="sm:ml-auto" disabled={selectedCategories.size === 0}>
+                                <Download className="mr-2 h-4 w-4" />
+                                Download Selected
+                            </Button>
                         </div>
                     </Alert>
                 </CardContent>
@@ -289,3 +337,5 @@ export default function EmailValidationPage() {
   </main>
   );
 }
+
+    
