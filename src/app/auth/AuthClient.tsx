@@ -101,6 +101,9 @@ export default function AuthClient() {
 
 
                 <div className="w-full max-w-sm z-10 text-center">
+                    <div className="lg:hidden mb-10">
+                        <Logo />
+                    </div>
                     <h2 className="text-3xl font-semibold tracking-tight">
                         Get started with Cleanmails
                     </h2>
