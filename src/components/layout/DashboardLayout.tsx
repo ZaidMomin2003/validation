@@ -19,6 +19,7 @@ import {
   FileText,
   ShieldAlert,
   Rocket,
+  ShieldCheck,
 } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -132,6 +133,12 @@ export default function DashboardLayout({
             <SidebarGroup>
                 <SidebarGroupLabel>Tools</SidebarGroupLabel>
                 <SidebarMenu>
+                    <SidebarMenuItem>
+                        <SidebarMenuButton href="/email-validation" isActive={pathname === '/email-validation'}>
+                        <ShieldCheck />
+                        Email Validation
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
                     <SidebarMenuItem>
                         <SidebarMenuButton href="/bulk-validate" isActive={pathname === '/bulk-validate'}>
                         <FileUp />
