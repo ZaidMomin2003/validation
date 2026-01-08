@@ -307,7 +307,7 @@ export default function AuthClient() {
                         Get started with Cleanmails
                     </h2>
                     <p className="mt-2 text-muted-foreground">
-                        Sign in with your Google account to begin.
+                        Sign in to start your 24-hour free trial. No credit card required.
                     </p>
                     
                     <div className="mt-10">
