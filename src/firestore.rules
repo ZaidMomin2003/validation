@@ -35,15 +35,16 @@ service cloud.firestore {
                        request.resource.data.plan == 'Free' &&
                        request.resource.data.trialEndsAt > request.time.toMillis();
 
-      allow update: if request.auth.uid == userId &&
-                       // Case 1: Upgrading from Free to Lifetime
-                       (resource.data.plan == 'Free' && request.resource.data.plan == 'Lifetime' && request.resource.data.size() == 1 && 'plan' in request.resource.data) ||
-                       // Case 2: General profile updates (displayName, photoURL)
-                       (isUserProfile(request.resource.data) &&
-                        request.resource.data.uid == resource.data.uid &&
-                        request.resource.data.email == resource.data.email &&
-                        request.resource.data.plan == resource.data.plan &&
-                        request.resource.data.trialEndsAt == resource.data.trialEndsAt); // trialEndsAt is immutable
+      allow update: if request.auth.uid == userId && (
+          // Plan upgrade from Free to Lifetime (only 'plan' field can be updated)
+          (resource.data.plan == 'Free' && request.resource.data.plan == 'Lifetime' && request.resource.data.keys().hasOnly(['plan'])) ||
+          // General profile updates (displayName, photoURL) - plan and other fields must be unchanged
+          (isUserProfile(request.resource.data) &&
+           request.resource.data.uid == resource.data.uid &&
+           request.resource.data.email == resource.data.email &&
+           request.resource.data.plan == resource.data.plan &&
+           request.resource.data.trialEndsAt == resource.data.trialEndsAt)
+        );
 
       match /lists/{listId} {
         allow read, delete: if request.auth.uid == userId;
