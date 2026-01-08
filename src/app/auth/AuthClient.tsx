@@ -9,7 +9,7 @@ import {
     signInWithPopup
 } from 'firebase/auth';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, MailCheck, ShieldCheck, Zap, Bot } from 'lucide-react';
+import { Loader2, MailCheck, ShieldCheck, Zap, FileUp } from 'lucide-react';
 import { useAuthContext } from '@/firebase/provider';
 import Logo from '@/components/logo';
 
@@ -52,8 +52,8 @@ export default function AuthClient() {
             text: "Blazing Fast Results"
         },
         {
-            icon: <Bot className="h-5 w-5 text-primary" />,
-            text: "AI-Powered Cleaning"
+            icon: <FileUp className="h-5 w-5 text-primary" />,
+            text: "Bulk List Cleaning"
         }
     ];
 
