@@ -4,27 +4,34 @@
 
 import { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { CheckCircle, FileInput, Mail, ScanText } from 'lucide-react';
+import { CheckCircle, FileInput, Mail, ScanText, ShieldCheck } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 
 const tools = [
   {
+    id: 'validator',
+    title: 'Email Validation',
+    description: 'Upload your list and we\'ll check for invalid syntax, disposable domains, and non-existent mail servers to dramatically reduce your bounce rate.',
+    icon: <ShieldCheck />,
+    link: '/email-validation',
+  },
+  {
     id: 'extractor',
     title: 'Email Extractor',
     description: 'Paste any unstructured text—from articles, logs, or documents—and our tool will instantly find and list every email address for you.',
     icon: <ScanText />,
-    link: '/Email-extract'
+    link: '/extract-from-text'
   },
   {
     id: 'spam-checker',
     title: 'Spam Word Analysis',
     description: 'Check your email content against a comprehensive list of common spam trigger words. Improve your deliverability by cleaning up your copy before you send.',
     icon: <CheckCircle />,
-    link: '/check-spam'
+    link: '/spam-checker'
   },
-    {
+  {
     id: 'cleaner',
     title: 'List Cleaner',
     description: 'Upload a sheet with multiple emails crammed into one cell. We automatically unpivot your data, creating a clean, structured list with one email per row.',
@@ -32,6 +39,60 @@ const tools = [
     link: '/bulk-validate',
   },
 ];
+
+const ValidatorUI = () => (
+    <motion.div 
+        key="validator"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -20 }}
+        transition={{ duration: 0.3 }}
+        className="w-full h-full p-4 bg-zinc-900/50 rounded-lg border border-zinc-700/50 flex flex-col justify-center text-xs font-mono"
+    >
+        <div className="bg-zinc-800/60 rounded-lg p-2 text-zinc-400 shadow-inner">
+            <p className="text-zinc-500 text-center mb-1"># upload.csv</p>
+            <div className="grid grid-cols-[2fr_1fr] gap-x-2 text-zinc-300 border-b border-zinc-700/80 pb-1">
+                <p>email</p><p>name</p>
+            </div>
+             <div className="grid grid-cols-[2fr_1fr] gap-x-2 mt-1">
+                <p>good@email.com</p><p>Valid User</p>
+            </div>
+             <div className="grid grid-cols-[2fr_1fr] gap-x-2 mt-1">
+                <p className="text-red-400">bad@domain.xyz</p><p>Invalid User</p>
+            </div>
+             <div className="grid grid-cols-[2fr_1fr] gap-x-2 mt-1">
+                <p className="text-yellow-400">info@company.com</p><p>Risky User</p>
+            </div>
+        </div>
+         <div className="flex justify-center my-3">
+             <motion.div 
+                initial={{ rotate: 90, scale: 0.8 }}
+                animate={{ rotate: 0, scale: 1 }}
+                transition={{ delay: 0.3, type: 'spring', stiffness: 300, damping: 20 }}
+                className="w-px h-6 bg-gradient-to-b from-primary/80 to-transparent"
+             >
+                <div className="text-primary -translate-x-1/2 -translate-y-1/2 absolute left-1/2 top-1/2 rotate-90">➔</div>
+             </motion.div>
+        </div>
+        <div className="bg-zinc-800/60 rounded-lg p-2 text-zinc-400 shadow-inner">
+            <div className="grid grid-cols-3 gap-2 text-center">
+                <div>
+                    <p className="text-lg font-bold text-green-400">1</p>
+                    <p className="text-zinc-500">Good</p>
+                </div>
+                 <div>
+                    <p className="text-lg font-bold text-yellow-400">1</p>
+                    <p className="text-zinc-500">Risky</p>
+                </div>
+                 <div>
+                    <p className="text-lg font-bold text-red-400">1</p>
+                    <p className="text-zinc-500">Bad</p>
+                </div>
+            </div>
+        </div>
+    </motion.div>
+);
+
 
 const ExtractorUI = () => (
     <motion.div 
@@ -167,6 +228,7 @@ export function ToolsShowcase() {
             <div className="relative h-[32rem] rounded-2xl bg-zinc-900 p-2 border border-zinc-800">
                 <div className="w-full h-full rounded-lg bg-dot-white/[0.1]">
                     <AnimatePresence mode="wait">
+                       {activeTool.id === 'validator' && <ValidatorUI />}
                        {activeTool.id === 'extractor' && <ExtractorUI />}
                        {activeTool.id === 'spam-checker' && <SpamCheckUI />}
                        {activeTool.id === 'cleaner' && <CleanerUI />}
