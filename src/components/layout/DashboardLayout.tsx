@@ -103,7 +103,8 @@ export default function DashboardLayout({
       .toUpperCase();
   };
   
-  const showUpgradeNotice = user?.plan === 'Free' && pathname !== '/pricing';
+  const isTrialExpired = user?.plan === 'Free' && user.trialEndsAt && Date.now() > user.trialEndsAt;
+  const showUpgradeNotice = isTrialExpired && pathname !== '/pricing';
 
   return (
       <SidebarProvider>

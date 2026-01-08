@@ -6,6 +6,7 @@ export type User = {
   photoURL: string | null;
   providerId: string;
   plan: 'Free' | 'Lifetime';
+  trialEndsAt?: number;
 };
 
 export interface List {

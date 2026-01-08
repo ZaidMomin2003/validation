@@ -27,7 +27,7 @@
         "plan": {
           "type": "string",
           "description": "The user's subscription plan.",
-          "enum": ["Trial", "Lifetime"]
+          "enum": ["Free", "Lifetime"]
         },
         "trialEndsAt": {
           "type": "number",
