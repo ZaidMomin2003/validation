@@ -192,7 +192,7 @@ export default function EmailValidationPage() {
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, "Validated Data");
 
-        const fileName = `${Array.from(selectedCategories).join('-')}-${tableData?.fileName || 'data'}.csv`;
+        const fileName = `Cleanmail-${tableData?.fileName || 'data'}.csv`;
         XLSX.writeFile(wb, fileName, { bookType: 'csv' });
     }
     
@@ -366,5 +366,7 @@ export default function EmailValidationPage() {
   </main>
   );
 }
+
+    
 
     
