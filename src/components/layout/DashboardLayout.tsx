@@ -185,7 +185,7 @@ export default function DashboardLayout({
             </SidebarGroup>
              <div className="p-2">
                 <Link href="/email-system" className="block group">
-                    <div className="relative rounded-lg p-4 overflow-hidden bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 text-primary-foreground transition-all hover:shadow-lg hover:shadow-primary/20">
+                    <div className="relative rounded-lg p-4 overflow-hidden bg-primary text-primary-foreground transition-all hover:shadow-lg hover:shadow-primary/20">
                         <div className="absolute -top-1/2 -right-1/2 w-full h-full bg-white/10 rounded-full animate-pulse blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
                         <div className="relative flex items-center gap-3">
                              <Rocket className="h-5 w-5 transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110" />
