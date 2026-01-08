@@ -174,10 +174,11 @@ export default function DashboardLayout({
               </SidebarMenu>
             </SidebarGroup>
              <div className="p-2">
-                <Link href="/email-system">
-                    <div className="group rounded-lg bg-gradient-to-br from-primary/80 to-primary/60 p-4 text-primary-foreground transition-all hover:from-primary/90 hover:to-primary/70">
-                        <div className="flex items-center gap-3">
-                             <Rocket className="h-5 w-5 transition-transform group-hover:rotate-12" />
+                <Link href="/email-system" className="block group">
+                    <div className="relative rounded-lg p-4 overflow-hidden bg-gradient-to-br from-primary/80 to-primary/60 text-primary-foreground transition-all hover:shadow-lg hover:shadow-primary/20">
+                        <div className="absolute -top-1/2 -right-1/2 w-full h-full bg-primary/20 rounded-full animate-pulse blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
+                        <div className="relative flex items-center gap-3">
+                             <Rocket className="h-5 w-5 transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110" />
                             <p className="text-sm font-semibold">
                                 Get Complete Email System
                             </p>
@@ -195,7 +196,6 @@ export default function DashboardLayout({
                               <Skeleton className="h-9 w-9 rounded-full" />
                               <div className="flex flex-col gap-1">
                                   <Skeleton className="h-4 w-20" />
-                                  <Skeleton className="h-3 w-12" />
                               </div>
                           </div>
                       ) : user ? (
@@ -206,7 +206,6 @@ export default function DashboardLayout({
                               </Avatar>
                               <div className="flex flex-col text-left">
                                   <span className="text-sm font-medium">{user?.displayName}</span>
-                                  <span className="text-xs text-muted-foreground">{user?.email}</span>
                               </div>
                               <ChevronsUpDown className="ml-auto h-4 w-4 text-muted-foreground" />
                           </div>
@@ -283,15 +282,6 @@ export default function DashboardLayout({
                 </DropdownMenuContent>
               </DropdownMenu>
               </ClientOnly>
-            <div className="p-2">
-              <Button asChild className="w-full justify-between bg-black text-white dark:bg-white dark:text-black">
-                <Link href="/pricing">
-                  <Zap />
-                  <span>Upgrade to Pro</span>
-                  <ChevronRight />
-                </Link>
-              </Button>
-            </div>
           </SidebarFooter>
         </Sidebar>
         <SidebarInset>
