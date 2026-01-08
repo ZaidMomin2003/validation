@@ -1,4 +1,3 @@
-
 'use client';
 
 import {
@@ -63,9 +62,10 @@ import { Skeleton } from '../ui/skeleton';
 import { Progress } from '../ui/progress';
 import { useCollection } from '@/firebase/hooks';
 import { collection, query } from 'firebase/firestore';
-import { db } from '@/firebase/firebaseClient';
+import { useFirestore } from '@/firebase/provider';
 import type { List } from '@/types';
 import UpgradeNotice from './UpgradeNotice';
+import { TrialStatus } from './TrialStatus';
 
 export default function DashboardLayout({
   children,
@@ -74,6 +74,7 @@ export default function DashboardLayout({
 }) {
   const pathname = usePathname();
   const { user, signOut, loading: authLoading } = useAuth();
+  const db = useFirestore();
   const { setTheme } = useTheme();
   const router = useRouter();
 
@@ -115,6 +116,7 @@ export default function DashboardLayout({
             </div>
           </SidebarHeader>
           <SidebarContent>
+            <TrialStatus />
             <SidebarGroup>
                 <SidebarGroupLabel>Tools</SidebarGroupLabel>
                 <SidebarMenu>
