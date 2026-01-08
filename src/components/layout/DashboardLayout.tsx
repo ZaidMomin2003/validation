@@ -125,7 +125,7 @@ export default function DashboardLayout({
       <SidebarProvider>
         <Sidebar>
           <SidebarHeader>
-            <div className="flex h-14 items-center px-4">
+            <div className="flex h-14 items-center justify-center px-4">
               <Logo />
             </div>
           </SidebarHeader>
@@ -182,8 +182,8 @@ export default function DashboardLayout({
             </SidebarGroup>
              <div className="p-2">
                 <Link href="/email-system" className="block group">
-                    <div className="relative rounded-lg p-4 overflow-hidden bg-gradient-to-br from-primary/80 to-primary/60 text-primary-foreground transition-all hover:shadow-lg hover:shadow-primary/20">
-                        <div className="absolute -top-1/2 -right-1/2 w-full h-full bg-primary/20 rounded-full animate-pulse blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
+                    <div className="relative rounded-lg p-4 overflow-hidden bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 text-primary-foreground transition-all hover:shadow-lg hover:shadow-primary/20">
+                        <div className="absolute -top-1/2 -right-1/2 w-full h-full bg-white/10 rounded-full animate-pulse blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
                         <div className="relative flex items-center gap-3">
                              <Rocket className="h-5 w-5 transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110" />
                             <p className="text-sm font-semibold">
@@ -241,9 +241,16 @@ export default function DashboardLayout({
                             </Link>
                           </DropdownMenuItem>
                           <DropdownMenuItem asChild>
-                            <Link href="/pricing">
-                              <CreditCard className="mr-2 h-4 w-4" />
-                              <span>Subscription</span>
+                            <Link href="/pricing" className="flex justify-between items-center">
+                                <div className='flex items-center'>
+                                    <CreditCard className="mr-2 h-4 w-4" />
+                                    <span>Subscription</span>
+                                </div>
+                                {user?.plan === 'Lifetime' ? (
+                                    <Badge variant="outline" className="border-green-500/50 text-green-400">LTD</Badge>
+                                ) : (
+                                    <Badge variant="secondary">Trial</Badge>
+                                )}
                             </Link>
                           </DropdownMenuItem>
                            <DropdownMenuItem asChild>
