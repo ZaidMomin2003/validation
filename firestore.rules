@@ -8,7 +8,8 @@ service cloud.firestore {
              data.email is string &&
              (!('displayName' in data) || data.displayName is string || data.displayName == null) &&
              (!('photoURL' in data) || data.photoURL is string || data.photoURL == null) &&
-             'plan' in data && (data.plan == 'Free' || data.plan == 'Lifetime');
+             'plan' in data && (data.plan == 'Free' || data.plan == 'Lifetime') &&
+             'trialEndsAt' in data && data.trialEndsAt is number;
     }
 
     function isListCreate(data) {
@@ -31,16 +32,19 @@ service cloud.firestore {
       allow create: if request.auth.uid == userId &&
                        isUserProfile(request.resource.data) &&
                        request.resource.data.uid == userId &&
-                       request.resource.data.plan == 'Free';
+                       request.resource.data.plan == 'Free' &&
+                       request.resource.data.trialEndsAt > request.time.toMillis();
 
-      allow update: if request.auth.uid == userId &&
-                       // Case 1: Upgrading from Free to Lifetime
-                       (resource.data.plan == 'Free' && request.resource.data.plan == 'Lifetime' && request.resource.data.keys().hasOnly(['plan'])) ||
-                       // Case 2: General profile updates (e.g., displayName)
-                       (isUserProfile(request.resource.data) &&
-                        request.resource.data.uid == resource.data.uid &&
-                        request.resource.data.email == resource.data.email &&
-                        request.resource.data.plan == resource.data.plan);
+      allow update: if request.auth.uid == userId && (
+          // Plan upgrade from Free to Lifetime (only 'plan' field can be updated)
+          (resource.data.plan == 'Free' && request.resource.data.plan == 'Lifetime' && request.resource.data.keys().hasOnly(['plan'])) ||
+          // General profile updates (displayName, photoURL) - plan and other fields must be unchanged
+          (isUserProfile(request.resource.data) &&
+           request.resource.data.uid == resource.data.uid &&
+           request.resource.data.email == resource.data.email &&
+           request.resource.data.plan == resource.data.plan &&
+           request.resource.data.trialEndsAt == resource.data.trialEndsAt)
+        );
 
       match /lists/{listId} {
         allow read, delete: if request.auth.uid == userId;
