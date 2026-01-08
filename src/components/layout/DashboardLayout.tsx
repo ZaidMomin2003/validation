@@ -105,8 +105,6 @@ export default function DashboardLayout({
       .toUpperCase();
   };
 
-  const planName = user?.plan ?? 'Free';
-
   return (
       <SidebarProvider>
         <Sidebar>
