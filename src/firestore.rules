@@ -9,7 +9,7 @@ service cloud.firestore {
              (!('displayName' in data) || data.displayName is string || data.displayName == null) &&
              (!('photoURL' in data) || data.photoURL is string || data.photoURL == null) &&
              'plan' in data && (data.plan == 'Free' || data.plan == 'Lifetime') &&
-             'trialEndsAt' in data && data.trialEndsAt is number;
+             (!('trialEndsAt' in data) || data.trialEndsAt is number || data.trialEndsAt == null);
     }
 
     function isListCreate(data) {
@@ -43,12 +43,11 @@ service cloud.firestore {
            request.resource.data.diff(resource.data).changedKeys().hasOnly(['plan'])) ||
           
           // Case 2: Allow general profile updates (e.g., displayName, photoURL).
-          // This rule ensures core fields like uid, email, plan, and trialEndsAt are NOT changed during a general update.
+          // This rule ensures core fields like uid, email, and plan are NOT changed during a general update.
           (isUserProfile(request.resource.data) &&
            request.resource.data.uid == resource.data.uid &&
            request.resource.data.email == resource.data.email &&
-           request.resource.data.plan == resource.data.plan &&
-           request.resource.data.trialEndsAt == resource.data.trialEndsAt)
+           request.resource.data.plan == resource.data.plan)
         );
 
       match /lists/{listId} {

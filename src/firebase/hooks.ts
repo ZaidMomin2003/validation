@@ -24,7 +24,7 @@ const createUserProfileDocument = async (db: Firestore, user: FirebaseUser) => {
 
     if (!userDoc.exists()) {
         const trialEndsAt = Date.now() + 24 * 60 * 60 * 1000; // 24 hours from now
-        const newUserProfile: AppUser = {
+        const newUserProfile: Omit<AppUser, 'plan'> & { plan: 'Free', trialEndsAt: number } = {
             uid: user.uid,
             email: user.email,
             displayName: user.displayName,
