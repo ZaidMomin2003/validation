@@ -17,30 +17,6 @@ import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 
-const features = [
-    {
-        id: 'validator',
-        icon: <ShieldCheck className="h-5 w-5 text-primary" />,
-        text: "Email Validation",
-        description: "Verify emails in real-time to reduce bounce rates and protect your sender reputation.",
-        ui: <ValidatorUI />
-    },
-    {
-        id: 'cleaner',
-        icon: <FileUp className="h-5 w-5 text-primary" />,
-        text: "List Cleaning",
-        description: "Clean messy data by un-pivoting files with multiple emails in a single cell.",
-        ui: <CleanerUI />
-    },
-    {
-        id: 'spam-checker',
-        icon: <ListChecks className="h-5 w-5 text-primary" />,
-        text: "Spam Analysis",
-        description: "Check your email content for spam trigger words to improve your deliverability.",
-        ui: <SpamCheckUI />
-    },
-];
-
 const ValidatorUI = () => (
     <motion.div 
         key="validator"
@@ -158,6 +134,30 @@ const SpamCheckUI = () => (
         </div>
     </motion.div>
 )
+
+const features = [
+    {
+        id: 'validator',
+        icon: <ShieldCheck className="h-5 w-5 text-primary" />,
+        text: "Email Validation",
+        description: "Verify emails in real-time to reduce bounce rates and protect your sender reputation.",
+        ui: <ValidatorUI />
+    },
+    {
+        id: 'cleaner',
+        icon: <FileUp className="h-5 w-5 text-primary" />,
+        text: "List Cleaning",
+        description: "Clean messy data by un-pivoting files with multiple emails in a single cell.",
+        ui: <CleanerUI />
+    },
+    {
+        id: 'spam-checker',
+        icon: <ListChecks className="h-5 w-5 text-primary" />,
+        text: "Spam Analysis",
+        description: "Check your email content for spam trigger words to improve your deliverability.",
+        ui: <SpamCheckUI />
+    },
+];
 
 export default function AuthClient() {
     const router = useRouter();
