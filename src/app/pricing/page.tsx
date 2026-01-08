@@ -10,16 +10,6 @@ import Link from "next/link";
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
-import { doc, updateDoc } from 'firebase/firestore';
-import { useFirestore } from '@/firebase/provider';
-import { errorEmitter } from '@/firebase/error-emitter';
-import { FirestorePermissionError } from '@/firebase/errors';
-
-declare global {
-  interface Window {
-    Razorpay: any;
-  }
-}
 
 const plans = [
     {
@@ -61,10 +51,8 @@ const plans = [
 
 export default function PricingPage() {
   const { user, loading } = useAuth();
-  const db = useFirestore();
   const { toast } = useToast();
   const router = useRouter();
-  const [isPaymentLoading, setIsPaymentLoading] = useState<boolean>(false);
   const [isTrialActive, setIsTrialActive] = useState(false);
   const [trialTimeLeft, setTrialTimeLeft] = useState('');
 
@@ -94,118 +82,6 @@ export default function PricingPage() {
   }, [user]);
 
 
-  const loadRazorpay = () => {
-    return new Promise((resolve) => {
-      const script = document.createElement('script');
-      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-      script.onload = () => {
-        resolve(true);
-      };
-      script.onerror = () => {
-        resolve(false);
-      };
-      document.body.appendChild(script);
-    });
-  };
-
-  const handlePayment = async () => {
-    if (!user || !db) {
-        router.push('/auth');
-        return;
-    }
-    
-    setIsPaymentLoading(true);
-
-    const res = await loadRazorpay();
-    if (!res) {
-      toast({
-        variant: 'destructive',
-        title: 'Payment Gateway Error',
-        description: 'Failed to load Razorpay. Please check your network and try again.',
-      });
-      setIsPaymentLoading(false);
-      return;
-    }
-
-    try {
-      const orderResponse = await fetch('/api/create-order', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan: 'lifetime' }),
-      });
-
-      if (!orderResponse.ok) {
-        const errorData = await orderResponse.json();
-        throw new Error(errorData.error || 'Failed to create order.');
-      }
-      
-      const order = await orderResponse.json();
-      const userDocRef = doc(db, 'users', user.uid);
-
-      const options = {
-        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-        amount: order.amount,
-        currency: order.currency,
-        name: 'Cleanmails',
-        description: `Payment for Lifetime Deal`,
-        order_id: order.id,
-        handler: async function (response: any) {
-            const newPlanData = {
-              plan: "Lifetime",
-            };
-
-            updateDoc(userDocRef, newPlanData)
-                .then(() => {
-                    toast({
-                        title: 'Payment Successful!',
-                        description: `Thank you for your purchase. You now have lifetime access.`,
-                    });
-                    router.push('/bulk-validate');
-                })
-                .catch((serverError: any) => {
-                    const permissionError = new FirestorePermissionError({
-                        path: userDocRef.path,
-                        operation: 'update',
-                        requestResourceData: newPlanData,
-                    });
-                    errorEmitter.emit('permission-error', permissionError);
-                     toast({
-                        variant: "destructive",
-                        title: "Update Failed",
-                        description: "Your payment was successful, but we failed to update your plan. Please contact support.",
-                    });
-                });
-        },
-        prefill: {
-          name: user.displayName || 'Cleanmails User',
-          email: user.email,
-        },
-        theme: {
-          color: '#3b82f6',
-        },
-      };
-
-      const paymentObject = new window.Razorpay(options);
-      paymentObject.on('payment.failed', function (response: any) {
-          toast({
-            variant: 'destructive',
-            title: 'Payment Failed',
-            description: response.error.description || 'Something went wrong during payment.',
-          });
-      });
-      paymentObject.open();
-
-    } catch (error: any) {
-       toast({
-        variant: 'destructive',
-        title: 'Something went wrong',
-        description: error.message || 'Could not initiate the payment process.',
-      });
-    } finally {
-        setIsPaymentLoading(false);
-    }
-  };
-
   const getButton = (plan: typeof plans[0]) => {
     if (plan.planId === 'trial') {
       if (user) {
@@ -233,10 +109,9 @@ export default function PricingPage() {
             <Button 
                 className="w-full" 
                 size="lg"
-                disabled={isPaymentLoading}
-                onClick={handlePayment}
+                disabled
             >
-            {isPaymentLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Upgrade for Life' }
+             Coming Soon
             </Button>
         );
     }
@@ -312,7 +187,7 @@ export default function PricingPage() {
                          {plan.planId === 'lifetime' && (
                              <div className="flex items-center text-xs text-muted-foreground mt-4 h-6">
                                 <ShieldCheck className="h-4 w-4 mr-1.5" />
-                                <span>Guaranteed safe checkout via Razorpay.</span>
+                                <span>Secure payments.</span>
                             </div>
                          )}
                     </CardFooter>
