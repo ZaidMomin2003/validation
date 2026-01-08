@@ -127,10 +127,18 @@ export default function EmailValidationPage() {
         setValidatedData(null);
 
         try {
-            const results = await validate(rows, emailCol, (progressData) => {
-                setProgress(Math.round((progressData.good + progressData.risky + progressData.bad) / progressData.total * 100));
+            const validationPromise = validate(rows, emailCol, (progressData) => {
+                const currentProgress = Math.round((progressData.good + progressData.risky + progressData.bad) / progressData.total * 90);
+                setProgress(currentProgress); // Cap progress at 90% until delay is over
                 setValidatedData(progressData);
             });
+
+            const delayPromise = new Promise(resolve => setTimeout(resolve, 5000));
+            
+            const [results] = await Promise.all([validationPromise, delayPromise]);
+            
+            setProgress(100);
+
             toast({
                 title: "Validation Complete!",
                 description: `Successfully processed ${results.total} records.`,
@@ -358,3 +366,5 @@ export default function EmailValidationPage() {
   </main>
   );
 }
+
+    
