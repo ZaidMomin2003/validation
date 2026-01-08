@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import { Loader2, Zap, Copy, Download, CheckCircle, UploadCloud } from "lucide-react";
+import { Loader2, Zap, Copy, Download, CheckCircle, UploadCloud, FileType, StickyNote } from "lucide-react";
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import * as XLSX from 'xlsx';
@@ -155,6 +155,58 @@ export default function ExtractFromTextPage() {
                 </CardFooter>
             </Card>
         )}
+        
+        <div className="grid gap-4 mt-8">
+            <h2 className="text-2xl font-bold">How It Works</h2>
+            <div className="grid gap-4 md:grid-cols-3">
+                <Card>
+                    <CardHeader>
+                        <div className="flex items-center gap-4">
+                            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+                                <Copy className="h-6 w-6 text-primary" />
+                            </div>
+                            <CardTitle>1. Copy Content</CardTitle>
+                        </div>
+                    </CardHeader>
+                    <CardContent>
+                    <p className="text-muted-foreground">
+                        Copy any text from a website, document, or any other source that contains email addresses.
+                    </p>
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardHeader>
+                        <div className="flex items-center gap-4">
+                            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+                                <StickyNote className="h-6 w-6 text-primary" />
+                            </div>
+                            <CardTitle>2. Paste Content</CardTitle>
+                        </div>
+                    </CardHeader>
+                    <CardContent>
+                    <p className="text-muted-foreground">
+                        Paste the copied text into the text area above. The tool can handle large blocks of content.
+                    </p>
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardHeader>
+                        <div className="flex items-center gap-4">
+                            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+                                <Zap className="h-6 w-6 text-primary" />
+                            </div>
+                            <CardTitle>3. Extract Emails</CardTitle>
+                        </div>
+                    </CardHeader>
+                    <CardContent>
+                    <p className="text-muted-foreground">
+                        Click the "Extract Emails" button. The tool will instantly find and display all unique email addresses.
+                    </p>
+                    </CardContent>
+                </Card>
+            </div>
+        </div>
+
       </div>
     </main>
   );
