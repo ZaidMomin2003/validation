@@ -47,6 +47,8 @@ service cloud.firestore {
                        isUserProfile(request.resource.data) &&
                        request.resource.data.uid == resource.data.uid &&
                        request.resource.data.email == resource.data.email &&
+                       // CRITICAL: trialEndsAt must not be changed by the client after creation.
+                       request.resource.data.trialEndsAt == resource.data.trialEndsAt &&
                        // Only allow plan to change from Trial to Lifetime.
                        (request.resource.data.plan == resource.data.plan ||
                         (resource.data.plan == 'Trial' && request.resource.data.plan == 'Lifetime'));
