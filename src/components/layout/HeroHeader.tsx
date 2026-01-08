@@ -53,7 +53,7 @@ export const HeroHeader = () => {
                             <div className="flex w-full justify-end md:w-fit">
                                 {loading ? null : user ? (
                                     <Button asChild size="sm">
-                                        <Link href="/bulk-validate">
+                                        <Link href="/email-validation">
                                             <span>Go To App</span>
                                         </Link>
                                     </Button>

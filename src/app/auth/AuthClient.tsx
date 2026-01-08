@@ -43,7 +43,7 @@ export default function AuthClient() {
         setIsSigningIn(true);
         try {
             await signInWithEmailAndPassword(auth, email, password);
-            router.push('/bulk-validate');
+            router.push('/email-validation');
         } catch (error: any) {
             toast({
                 variant: 'destructive',
@@ -95,7 +95,7 @@ export default function AuthClient() {
         const provider = new GoogleAuthProvider();
         try {
             await signInWithPopup(auth, provider);
-            router.push('/bulk-validate');
+            router.push('/email-validation');
         } catch (error: any) {
             toast({
                 variant: 'destructive',

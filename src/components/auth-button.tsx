@@ -70,7 +70,7 @@ export default function AuthButton() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <Link href="/bulk-validate">
+          <Link href="/email-validation">
             <UserIcon className="mr-2 h-4 w-4" />
             <span>Dashboard</span>
           </Link>
