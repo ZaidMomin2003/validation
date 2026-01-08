@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import { 
@@ -9,9 +9,155 @@ import {
     signInWithPopup
 } from 'firebase/auth';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, MailCheck, ShieldCheck, Zap, FileUp } from 'lucide-react';
+import { Loader2, MailCheck, ShieldCheck, Zap, FileUp, ListChecks } from 'lucide-react';
 import { useAuthContext } from '@/firebase/provider';
 import Logo from '@/components/logo';
+import { AnimatePresence, motion } from 'framer-motion';
+import { cn } from '@/lib/utils';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
+
+const features = [
+    {
+        id: 'validator',
+        icon: <ShieldCheck className="h-5 w-5 text-primary" />,
+        text: "Email Validation",
+        description: "Verify emails in real-time to reduce bounce rates and protect your sender reputation.",
+        ui: <ValidatorUI />
+    },
+    {
+        id: 'cleaner',
+        icon: <FileUp className="h-5 w-5 text-primary" />,
+        text: "List Cleaning",
+        description: "Clean messy data by un-pivoting files with multiple emails in a single cell.",
+        ui: <CleanerUI />
+    },
+    {
+        id: 'spam-checker',
+        icon: <ListChecks className="h-5 w-5 text-primary" />,
+        text: "Spam Analysis",
+        description: "Check your email content for spam trigger words to improve your deliverability.",
+        ui: <SpamCheckUI />
+    },
+];
+
+const ValidatorUI = () => (
+    <motion.div 
+        key="validator"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -20 }}
+        transition={{ duration: 0.3 }}
+        className="w-full h-full p-4 bg-zinc-900/50 rounded-lg border border-zinc-700/50 flex flex-col justify-center text-xs font-mono"
+    >
+        <div className="bg-zinc-800/60 rounded-lg p-2 text-zinc-400 shadow-inner">
+            <p className="text-zinc-500 text-center mb-1"># upload.csv</p>
+            <div className="grid grid-cols-[2fr_1fr] gap-x-2 text-zinc-300 border-b border-zinc-700/80 pb-1">
+                <p>email</p><p>name</p>
+            </div>
+             <div className="grid grid-cols-[2fr_1fr] gap-x-2 mt-1">
+                <p>good@email.com</p><p>Valid User</p>
+            </div>
+             <div className="grid grid-cols-[2fr_1fr] gap-x-2 mt-1">
+                <p className="text-red-400">bad@domain.xyz</p><p>Invalid User</p>
+            </div>
+             <div className="grid grid-cols-[2fr_1fr] gap-x-2 mt-1">
+                <p className="text-yellow-400">info@company.com</p><p>Risky User</p>
+            </div>
+        </div>
+         <div className="flex justify-center my-3">
+             <motion.div 
+                initial={{ rotate: 90, scale: 0.8 }}
+                animate={{ rotate: 0, scale: 1 }}
+                transition={{ delay: 0.3, type: 'spring', stiffness: 300, damping: 20 }}
+                className="w-px h-6 bg-gradient-to-b from-primary/80 to-transparent"
+             >
+                <div className="text-primary -translate-x-1/2 -translate-y-1/2 absolute left-1/2 top-1/2 rotate-90">➔</div>
+             </motion.div>
+        </div>
+        <div className="bg-zinc-800/60 rounded-lg p-2 text-zinc-400 shadow-inner">
+            <div className="grid grid-cols-3 gap-2 text-center">
+                <div>
+                    <p className="text-lg font-bold text-green-400">1</p>
+                    <p className="text-zinc-500">Good</p>
+                </div>
+                 <div>
+                    <p className="text-lg font-bold text-yellow-400">1</p>
+                    <p className="text-zinc-500">Risky</p>
+                </div>
+                 <div>
+                    <p className="text-lg font-bold text-red-400">1</p>
+                    <p className="text-zinc-500">Bad</p>
+                </div>
+            </div>
+        </div>
+    </motion.div>
+);
+
+const CleanerUI = () => (
+    <motion.div
+        key="cleaner"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -20 }}
+        transition={{ duration: 0.3 }}
+        className="w-full h-full p-4 bg-zinc-900/50 rounded-lg border border-zinc-700/50 flex flex-col justify-center text-xs font-mono"
+    >
+        <div className="bg-zinc-800/60 rounded-lg p-2 text-zinc-400 shadow-inner">
+            <p className="text-zinc-500 text-center mb-1"># messy-data.csv</p>
+            <div className="grid grid-cols-[1fr_2fr] gap-x-2 text-zinc-300 border-b border-zinc-700/80 pb-1">
+                <p>Name</p><p>Emails</p>
+            </div>
+             <div className="grid grid-cols-[1fr_2fr] gap-x-2 mt-1">
+                <p>Company A</p><p>"<mark className="bg-primary/20 text-primary-foreground rounded-sm">sales@a.com</mark>, <mark className="bg-primary/20 text-primary-foreground rounded-sm">support@a.com</mark>"</p>
+            </div>
+        </div>
+         <div className="flex justify-center my-3">
+             <motion.div 
+                initial={{ rotate: 90, scale: 0.8 }}
+                animate={{ rotate: 0, scale: 1 }}
+                transition={{ delay: 0.3, type: 'spring', stiffness: 300, damping: 20 }}
+                className="w-px h-6 bg-gradient-to-b from-primary/80 to-transparent"
+             >
+                <div className="text-primary -translate-x-1/2 -translate-y-1/2 absolute left-1/2 top-1/2 rotate-90">➔</div>
+             </motion.div>
+        </div>
+        <div className="bg-zinc-800/60 rounded-lg p-2 text-zinc-400 shadow-inner">
+            <p className="text-zinc-500 text-center mb-1"># cleaned-data.csv</p>
+            <div className="grid grid-cols-[1fr_2fr] gap-x-2 text-zinc-300 border-b border-zinc-700/80 pb-1">
+                <p>Name</p><p>Email</p>
+            </div>
+            <div className="grid grid-cols-[1fr_2fr] gap-x-2 mt-1">
+                <p>Company A</p><p>sales@a.com</p>
+            </div>
+            <div className="grid grid-cols-[1fr_2fr] gap-x-2 mt-1">
+                <p>Company A</p><p>support@a.com</p>
+            </div>
+        </div>
+    </motion.div>
+);
+
+const SpamCheckUI = () => (
+    <motion.div
+        key="spam-checker"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -20 }}
+        transition={{ duration: 0.3 }}
+        className="w-full h-full p-4 bg-zinc-900/50 rounded-lg border border-zinc-700/50 flex flex-col"
+    >
+        <p className="text-sm text-zinc-300">Subject: <mark className="bg-destructive/20 text-red-300 rounded-sm px-0.5">Act now</mark>! <mark className="bg-destructive/20 text-red-300 rounded-sm px-0.5">Limited time</mark> offer!</p>
+        <div className="w-full h-full mt-2 bg-zinc-800/60 rounded p-2 text-xs text-zinc-400 overflow-auto">
+            <p>Dear Friend,</p>
+            <br />
+            <p>Don't miss this <mark className="bg-destructive/20 text-red-300 rounded-sm px-0.5">amazing</mark> deal. This is a <mark className="bg-destructive/20 text-red-300 rounded-sm px-0.5">once in a lifetime</mark> opportunity to get a <mark className="bg-destructive/20 text-red-300 rounded-sm px-0.5">free gift</mark> with your purchase.</p>
+        </div>
+        <div className="mt-3">
+            <p className="text-xs text-red-400 text-center">Spam Score: 4.5/10</p>
+            <Progress value={45} className="h-2 mt-1" />
+        </div>
+    </motion.div>
+)
 
 export default function AuthClient() {
     const router = useRouter();
@@ -19,6 +165,21 @@ export default function AuthClient() {
     const { toast } = useToast();
     
     const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+    const [activeFeature, setActiveFeature] = useState(features[0]);
+    const [isHovered, setIsHovered] = useState(false);
+
+    useEffect(() => {
+        if (isHovered) return;
+        const interval = setInterval(() => {
+            setActiveFeature(prev => {
+                const currentIndex = features.findIndex(f => f.id === prev.id);
+                const nextIndex = (currentIndex + 1) % features.length;
+                return features[nextIndex];
+            });
+        }, 5000);
+        return () => clearInterval(interval);
+    }, [isHovered]);
+
 
     const handleGoogleSignIn = async () => {
         if (!auth) return;
@@ -38,52 +199,53 @@ export default function AuthClient() {
         }
     };
 
-    const features = [
-        {
-            icon: <MailCheck className="h-5 w-5 text-primary" />,
-            text: "Instant Email Validation"
-        },
-        {
-            icon: <ShieldCheck className="h-5 w-5 text-primary" />,
-            text: "Spam Trap Detection"
-        },
-        {
-            icon: <Zap className="h-5 w-5 text-primary" />,
-            text: "Blazing Fast Results"
-        },
-        {
-            icon: <FileUp className="h-5 w-5 text-primary" />,
-            text: "Bulk List Cleaning"
-        }
-    ];
 
     return (
         <div className="dark min-h-screen w-full bg-background text-foreground grid lg:grid-cols-2">
-            <div className="hidden lg:flex flex-col items-center justify-between p-12 bg-neutral-950/50 relative overflow-hidden">
+            <div className="hidden lg:flex flex-col items-center justify-center p-12 bg-neutral-950/50 relative overflow-hidden">
                  <div className="absolute top-8 left-8">
                     <Logo />
                 </div>
                 
-                <div className="m-auto max-w-md space-y-8">
-                     <h1 className="text-4xl font-bold tracking-tight text-white">
-                        Stop bad emails.
-                        <br />
-                        Boost your deliverability.
-                    </h1>
-                    <p className="text-neutral-400">
-                        Join thousands of marketers who trust Cleanmails to maintain a healthy and effective email list.
-                    </p>
-                    <div className="space-y-4">
-                        {features.map((feature, index) => (
-                            <div key={index} className="flex items-center gap-3">
-                                {feature.icon}
-                                <span className="text-neutral-300">{feature.text}</span>
+                <div 
+                    className="m-auto w-full max-w-md"
+                    onMouseEnter={() => setIsHovered(true)}
+                    onMouseLeave={() => setIsHovered(false)}
+                >
+                    <div className="relative h-72 rounded-xl bg-zinc-900 p-2 border border-zinc-800">
+                         <AnimatePresence mode="wait">
+                            {activeFeature.ui}
+                        </AnimatePresence>
+                    </div>
+
+                    <div className="mt-8 flex flex-col gap-4">
+                        {features.map((feature) => (
+                            <div
+                                key={feature.id}
+                                onMouseEnter={() => setActiveFeature(feature)}
+                                className={cn(
+                                    "p-4 rounded-lg cursor-pointer border-2 transition-all duration-300",
+                                    activeFeature.id === feature.id ? 'bg-primary/10 border-primary/50' : 'border-transparent hover:bg-white/5'
+                                )}
+                            >
+                                <div className="flex items-center gap-4">
+                                     <div className={cn(
+                                        "flex h-8 w-8 items-center justify-center rounded-lg border transition-colors",
+                                        activeFeature.id === feature.id ? 'bg-primary/10 border-primary/30 text-primary' : 'bg-white/10 border-white/20 text-white'
+                                    )}>
+                                        {feature.icon}
+                                    </div>
+                                    <div>
+                                        <h3 className="font-semibold text-gray-100">{feature.text}</h3>
+                                        <p className="mt-1 text-xs text-muted-foreground">{feature.description}</p>
+                                    </div>
+                                </div>
                             </div>
                         ))}
                     </div>
                 </div>
 
-                <div className="text-xs text-neutral-500">
+                <div className="text-xs text-neutral-500 absolute bottom-8 left-1/2 -translate-x-1/2">
                     © {new Date().getFullYear()} Cleanmails. All rights reserved.
                 </div>
             </div>
@@ -101,7 +263,7 @@ export default function AuthClient() {
 
 
                 <div className="w-full max-w-sm z-10 text-center">
-                    <div className="lg:hidden mb-10">
+                    <div className="lg:hidden mb-10 flex justify-center">
                         <Logo />
                     </div>
                     <h2 className="text-3xl font-semibold tracking-tight">
