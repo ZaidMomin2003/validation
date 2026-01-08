@@ -211,8 +211,9 @@ export default function DashboardLayout({
                                   <AvatarImage src={user.photoURL ?? ""} alt={user.displayName ?? "User"} />
                                   <AvatarFallback>{getInitials(user.displayName)}</AvatarFallback>
                               </Avatar>
-                              <div className="flex flex-col text-left">
-                                  <span className="text-sm font-medium">{user?.displayName}</span>
+                              <div className="flex flex-col text-left overflow-hidden">
+                                  <span className="text-sm font-medium truncate">{user?.displayName}</span>
+                                  <span className="text-xs text-muted-foreground truncate">{user?.email}</span>
                               </div>
                               <ChevronsUpDown className="ml-auto h-4 w-4 text-muted-foreground" />
                           </div>
