@@ -9,7 +9,7 @@ import {
     signInWithPopup
 } from 'firebase/auth';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, MailCheck, ShieldCheck, Zap, FileUp, ListChecks } from 'lucide-react';
+import { Loader2, ShieldCheck, Zap, FileUp, ListChecks, ScanText } from 'lucide-react';
 import { useAuthContext } from '@/firebase/provider';
 import Logo from '@/components/logo';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -133,7 +133,37 @@ const SpamCheckUI = () => (
             <Progress value={45} className="h-2 mt-1" />
         </div>
     </motion.div>
-)
+);
+
+const ExtractorUI = () => (
+    <motion.div 
+        key="extractor"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -20 }}
+        transition={{ duration: 0.3 }}
+        className="w-full h-full p-4 bg-zinc-900/50 rounded-lg border border-zinc-700/50 flex flex-col justify-center"
+    >
+        <div className="w-full h-40 bg-zinc-800/60 rounded p-2 text-xs text-zinc-400 overflow-hidden">
+            <p>Paste your unstructured or scraped text here. For example, you can reach our team at <mark className="bg-primary/20 text-primary-foreground rounded-sm px-0.5">contact@example.com</mark>. For support inquiries, please use <mark className="bg-primary/20 text-primary-foreground rounded-sm px-0.5">support@example.com</mark>.</p>
+        </div>
+        <div className="flex justify-center my-3">
+             <motion.div 
+                initial={{ rotate: 90, scale: 0.8 }}
+                animate={{ rotate: 0, scale: 1 }}
+                transition={{ delay: 0.3, type: 'spring', stiffness: 300, damping: 20 }}
+                className="w-px h-6 bg-gradient-to-b from-primary/80 to-transparent"
+             >
+                <div className="text-primary -translate-x-1/2 -translate-y-1/2 absolute left-1/2 top-1/2 rotate-90">➔</div>
+             </motion.div>
+        </div>
+        <div className="w-full bg-zinc-800/60 rounded p-2 text-xs flex flex-wrap gap-1">
+            <Badge variant="secondary">contact@example.com</Badge>
+            <Badge variant="secondary">support@example.com</Badge>
+        </div>
+    </motion.div>
+);
+
 
 const features = [
     {
@@ -157,6 +187,13 @@ const features = [
         description: "Check your email content for spam trigger words to improve your deliverability.",
         ui: <SpamCheckUI />
     },
+    {
+        id: 'extractor',
+        icon: <ScanText className="h-5 w-5 text-primary" />,
+        text: "Email Extractor",
+        description: "Paste any block of text to instantly find and extract all email addresses.",
+        ui: <ExtractorUI />
+    }
 ];
 
 export default function AuthClient() {
