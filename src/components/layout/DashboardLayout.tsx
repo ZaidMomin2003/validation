@@ -94,8 +94,6 @@ export default function DashboardLayout({
     );
   }
   
-  const isFeatureLocked = user.plan === 'Free' && pathname !== '/pricing';
-
   const getInitials = (name?: string | null) => {
     if (!name) return 'U';
     return name
@@ -305,10 +303,12 @@ export default function DashboardLayout({
             )}
           </SidebarFooter>
         </Sidebar>
-        <SidebarInset>
+        <div className="flex flex-1 flex-col overflow-auto">
           <Header />
-          {isFeatureLocked ? <UpgradeNotice /> : children}
-        </SidebarInset>
+          <SidebarInset>
+            {children}
+          </SidebarInset>
+        </div>
       </SidebarProvider>
   );
 }

@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -19,6 +18,8 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card"
+import { useAuth } from '@/hooks/useAuth';
+import UpgradeNotice from '@/components/layout/UpgradeNotice';
 
 
 const PREVIEW_ROW_COUNT = 8;
@@ -40,6 +41,7 @@ interface ValidatedData {
 }
 
 export default function EmailValidationPage() {
+    const { user } = useAuth();
     const [files, setFiles] = useState<File[]>([]);
     const [tableData, setTableData] = useState<TableData | null>(null);
     const [emailColumn, setEmailColumn] = useState<string | null>(null);
@@ -375,6 +377,10 @@ export default function EmailValidationPage() {
             <p className="text-sm font-semibold">{progress}% complete</p>
         </Card>
     );
+
+    if (user?.plan === 'Free') {
+        return <UpgradeNotice />;
+    }
 
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
