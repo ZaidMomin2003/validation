@@ -44,14 +44,14 @@ service cloud.firestore {
       // Allow update if the user is the owner, the new data is valid,
       // and they are only changing fields they are allowed to change.
       allow update: if request.auth.uid == userId && 
-                       isUserProfile(request.resource.data) &&
-                       request.resource.data.uid == resource.data.uid &&
-                       request.resource.data.email == resource.data.email &&
-                       // trialEndsAt must not be changed by the client
-                       request.resource.data.trialEndsAt == resource.data.trialEndsAt &&
-                       // Only allow plan to change from Trial to Lifetime.
-                       (request.resource.data.plan == resource.data.plan ||
-                        (resource.data.plan == 'Trial' && request.resource.data.plan == 'Lifetime'));
+                       // Check if the update is only to change the plan to Lifetime
+                       (request.resource.data.size() == 1 && 'plan' in request.resource.data && request.resource.data.plan == 'Lifetime' && resource.data.plan == 'Trial') ||
+                       // Or if it's a general profile update that respects immutability rules
+                       (isUserProfile(request.resource.data) &&
+                        request.resource.data.uid == resource.data.uid &&
+                        request.resource.data.email == resource.data.email &&
+                        request.resource.data.trialEndsAt == resource.data.trialEndsAt &&
+                        request.resource.data.plan == resource.data.plan);
 
       match /lists/{listId} {
         // Users can only manage their own lists
