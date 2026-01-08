@@ -290,7 +290,16 @@ export default function DashboardLayout({
                 </DropdownMenuContent>
               </DropdownMenu>
               </ClientOnly>
-            {user?.plan !== 'Lifetime' && (
+            {user?.plan === 'Lifetime' ? (
+                <div className="p-2">
+                    <div className="w-full justify-center rounded-lg bg-emerald-500/10 p-3 text-center text-sm font-semibold text-emerald-400 border border-emerald-500/20">
+                        <div className="flex items-center justify-center gap-2">
+                            <ShieldCheck className="h-4 w-4"/>
+                            <span>Lifetime Deal Active</span>
+                        </div>
+                    </div>
+                </div>
+            ) : (
               <div className="p-2">
                 <Button asChild className="w-full justify-between dark:bg-white dark:text-black dark:hover:bg-white/90 bg-primary text-primary-foreground hover:bg-primary/90">
                   <Link href="/pricing">
