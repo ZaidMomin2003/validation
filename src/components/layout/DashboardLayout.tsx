@@ -148,7 +148,6 @@ export default function DashboardLayout({
                         <SidebarMenuButton href="/spam-checker" isActive={pathname === '/spam-checker'}>
                         <ShieldAlert />
                         Spam Checker
-                        <Badge variant="secondary" className="ml-auto">Free</Badge>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>
@@ -208,7 +207,7 @@ export default function DashboardLayout({
                               </Avatar>
                               <div className="flex flex-col text-left">
                                   <span className="text-sm font-medium">{user?.displayName}</span>
-                                  <span className="text-xs text-muted-foreground">{planName} Plan</span>
+                                  <span className="text-xs text-muted-foreground">{user?.email}</span>
                               </div>
                               <ChevronsUpDown className="ml-auto h-4 w-4 text-muted-foreground" />
                           </div>
@@ -236,12 +235,9 @@ export default function DashboardLayout({
                             </Link>
                           </DropdownMenuItem>
                           <DropdownMenuItem asChild>
-                            <Link href="/pricing" className='flex items-center justify-between w-full'>
-                              <div className='flex items-center'>
-                                <CreditCard className="mr-2 h-4 w-4" />
-                                <span>Subscription</span>
-                              </div>
-                              <Badge variant="secondary">{planName}</Badge>
+                            <Link href="/pricing">
+                              <CreditCard className="mr-2 h-4 w-4" />
+                              <span>Subscription</span>
                             </Link>
                           </DropdownMenuItem>
                            <DropdownMenuItem asChild>
