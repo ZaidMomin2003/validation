@@ -28,6 +28,7 @@ const plans = [
         priceDetails: "/ 1 Day",
         description: "Unlimited access to all tools for one day. No credit card required.",
         features: [
+            "Unlimited Email Validation",
             "Unlimited List Cleaning",
             "Unlimited Email Extraction",
             "Unlimited Spam Checking",
@@ -44,6 +45,7 @@ const plans = [
         priceDetails: "/ one-time",
         description: "Unlimited access to all features, forever. One-time payment.",
         features: [
+            "Unlimited Email Validation",
             "Unlimited List Cleaning",
             "Unlimited Email Extraction",
             "Unlimited Spam Checking",

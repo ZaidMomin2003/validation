@@ -9,6 +9,7 @@ import React from 'react';
 
 const features = {
     pro: [
+        'Unlimited Email Validation',
         'Unlimited List Cleaning',
         'Unlimited Lead Generation',
         'Unlimited Email Extraction',
