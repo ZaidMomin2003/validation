@@ -65,6 +65,7 @@ import { useCollection } from '@/firebase/hooks';
 import { collection, query } from 'firebase/firestore';
 import { db } from '@/firebase/firebaseClient';
 import type { List } from '@/types';
+import UpgradeNotice from './UpgradeNotice';
 
 export default function DashboardLayout({
   children,
@@ -108,6 +109,8 @@ export default function DashboardLayout({
         </div>
     );
   }
+
+  const isTrialExpired = user.plan === 'Trial' && Date.now() > user.trialEndsAt;
 
 
   const getInitials = (name?: string | null) => {
@@ -323,7 +326,7 @@ export default function DashboardLayout({
         </Sidebar>
         <SidebarInset>
           <Header />
-          {children}
+          {isTrialExpired ? <UpgradeNotice /> : children}
         </SidebarInset>
       </SidebarProvider>
   );
