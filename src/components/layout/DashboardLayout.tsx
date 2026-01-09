@@ -279,7 +279,7 @@ export default function DashboardLayout({
               </ClientOnly>
             {user?.plan === 'Lifetime' ? (
                 <div className="p-2">
-                    <div className="w-full justify-center rounded-lg bg-emerald-900/50 p-3 text-center text-sm font-semibold text-emerald-400 border border-emerald-500/30">
+                    <div className="w-full justify-center rounded-lg bg-destructive/10 dark:bg-emerald-900/50 p-3 text-center text-sm font-semibold text-destructive dark:text-emerald-400 border border-destructive/20 dark:border-emerald-500/30">
                         <div className="flex items-center justify-center gap-2">
                             <ShieldCheck className="h-4 w-4"/>
                             <span>Lifetime Deal Active</span>
