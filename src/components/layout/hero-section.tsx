@@ -1,7 +1,78 @@
 
 'use client'
 import React from 'react';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight, CheckCircle, ShieldAlert, ShieldX } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
+
+const DashboardPreview = () => {
+    const data = [
+        { email: 'hello@example.com', status: 'Good', notes: 'Valid MX Record', category: 'Business' },
+        { email: 'info@company.co', status: 'Risky', notes: 'Role-based email', category: 'Business' },
+        { email: 'test@gmail.com', status: 'Good', notes: 'Valid MX Record', category: 'Free' },
+        { email: 'fake@disposable.net', status: 'Bad', notes: 'Disposable domain', category: 'Invalid' },
+        { email: 'user@domain.xyz', status: 'Bad', notes: 'No MX Record', category: 'Invalid' },
+        { email: 'contact@website.org', status: 'Risky', notes: 'Role-based email', category: 'Business' },
+    ];
+    return (
+        <div className="aspect-video w-full overflow-hidden rounded-lg border-2 border-white/10 bg-black shadow-2xl shadow-purple-500/10">
+            <div className="h-full w-full bg-grid-white/[0.05] p-4 md:p-6 flex flex-col">
+                <div className="flex-shrink-0 grid grid-cols-1 md:grid-cols-3 gap-4">
+                     <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-3">
+                        <div className="flex items-center justify-between">
+                            <p className="text-xs font-medium text-green-200">Good</p>
+                            <CheckCircle className="h-4 w-4 text-green-300" />
+                        </div>
+                        <p className="text-xl font-bold text-white mt-1">1,234</p>
+                    </div>
+                     <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-3">
+                        <div className="flex items-center justify-between">
+                            <p className="text-xs font-medium text-yellow-200">Risky</p>
+                            <ShieldAlert className="h-4 w-4 text-yellow-300" />
+                        </div>
+                        <p className="text-xl font-bold text-white mt-1">210</p>
+                    </div>
+                     <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-3">
+                        <div className="flex items-center justify-between">
+                            <p className="text-xs font-medium text-red-200">Bad</p>
+                            <ShieldX className="h-4 w-4 text-red-300" />
+                        </div>
+                        <p className="text-xl font-bold text-white mt-1">56</p>
+                    </div>
+                </div>
+                 <div className="flex-grow mt-4 overflow-hidden rounded-lg border border-white/10 bg-white/5">
+                    <div className="h-full overflow-auto">
+                        <table className="w-full text-xs">
+                            <thead>
+                                <tr className="text-left text-white/50">
+                                    <th className="p-2 font-normal">Email Address</th>
+                                    <th className="p-2 font-normal">Status</th>
+                                    <th className="p-2 font-normal">Notes</th>
+                                    <th className="p-2 font-normal">Category</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {data.map((row, i) => (
+                                    <tr key={i} className="border-t border-white/10">
+                                        <td className="p-2 text-white">{row.email}</td>
+                                        <td className="p-2">
+                                            {row.status === 'Good' && <Badge variant="default" className="bg-green-500/20 text-green-300 border-green-500/30">Good</Badge>}
+                                            {row.status === 'Risky' && <Badge variant="default" className="bg-yellow-500/20 text-yellow-300 border-yellow-500/30">Risky</Badge>}
+                                            {row.status === 'Bad' && <Badge variant="destructive" className="bg-red-500/20 text-red-300 border-red-500/30">Bad</Badge>}
+                                        </td>
+                                        <td className="p-2 text-white/70">{row.notes}</td>
+                                        <td className="p-2 text-white/70">{row.category}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
 
 export default function HeroSection() {
   return (
@@ -51,14 +122,7 @@ export default function HeroSection() {
             </div>
           </div>
           <div className="mx-10 mt-32">
-             <div className="aspect-video w-full overflow-hidden rounded-lg border shadow-lg">
-                <iframe
-                    src="https://player.vimeo.com/video/76979871?badge=0&autopause=0&player_id=0&app_id=58479"
-                    allow="autoplay; fullscreen; picture-in-picture; clipboard-write"
-                    className="h-full w-full"
-                    title="Placeholder Video"
-                ></iframe>
-            </div>
+            <DashboardPreview />
           </div>
         </div>
       </section>
