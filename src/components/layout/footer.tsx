@@ -1,3 +1,4 @@
+
 'use client';
 
 import Logo from '@/components/logo'
@@ -38,7 +39,7 @@ const links = [
 export default function Footer() {
     return (
         <footer className="py-16 md:py-32">
-            <div className="mx-auto max-w-5xl px-6">
+            <div className="mx-auto max-w-5xl px-6 relative z-10">
                 
                 <NewsletterForm />
 
