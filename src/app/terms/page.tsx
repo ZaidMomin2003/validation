@@ -121,8 +121,8 @@ export default function TermsOfServicePage() {
               <h2 className="text-xl font-semibold text-foreground">9. Contact Us</h2>
               <p>
                 If you have any questions about these Terms, please contact us at:{" "}
-                <a href="mailto:hii@talxify.space" className="text-primary hover:underline">
-                  hii@talxify.space
+                <a href="mailto:hello@cleanmails.online" className="text-primary hover:underline">
+                  hello@cleanmails.online
                 </a>
               </p>
             </div>

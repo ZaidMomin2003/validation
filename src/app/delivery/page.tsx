@@ -73,8 +73,8 @@ export default function DeliveryPolicyPage() {
               <h2 className="text-xl font-semibold text-foreground">5. Contact Us</h2>
               <p>
                 If you have any questions about our Delivery Policy or are experiencing issues accessing your results, please contact us at:{" "}
-                <a href="mailto:hii@talxify.space" className="text-primary hover:underline">
-                  hii@talxify.space
+                <a href="mailto:hello@cleanmails.online" className="text-primary hover:underline">
+                  hello@cleanmails.online
                 </a>
               </p>
             </div>
