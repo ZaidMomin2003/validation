@@ -1,9 +1,10 @@
 
 'use client'
 import React from 'react';
-import { ArrowRight, CheckCircle, ShieldAlert, ShieldX } from 'lucide-react';
+import { ArrowRight, CheckCircle, ShieldAlert, ShieldX, Download, Check } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 
 const DashboardPreview = () => {
     const data = [
@@ -12,12 +13,11 @@ const DashboardPreview = () => {
         { email: 'test@gmail.com', status: 'Good', notes: 'Valid MX Record', category: 'Free' },
         { email: 'fake@disposable.net', status: 'Bad', notes: 'Disposable domain', category: 'Invalid' },
         { email: 'user@domain.xyz', status: 'Bad', notes: 'No MX Record', category: 'Invalid' },
-        { email: 'contact@website.org', status: 'Risky', notes: 'Role-based email', category: 'Business' },
     ];
     return (
-        <div className="aspect-video w-full overflow-hidden rounded-lg border-2 border-white/10 bg-black shadow-2xl shadow-purple-500/10">
-            <div className="h-full w-full bg-grid-white/[0.05] p-4 md:p-6 flex flex-col">
-                <div className="flex-shrink-0 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="w-full rounded-2xl border-2 border-white/10 bg-black shadow-2xl shadow-primary/10">
+            <div className="h-full w-full bg-grid-white/[0.05] p-4 md:p-6 flex flex-col gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                      <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-3">
                         <div className="flex items-center justify-between">
                             <p className="text-xs font-medium text-green-200">Good</p>
@@ -40,33 +40,56 @@ const DashboardPreview = () => {
                         <p className="text-xl font-bold text-white mt-1">56</p>
                     </div>
                 </div>
-                 <div className="flex-grow mt-4 overflow-hidden rounded-lg border border-white/10 bg-white/5">
-                    <div className="h-full overflow-auto">
+
+                <div className="overflow-hidden rounded-lg border border-white/10 bg-white/5">
+                    <div className="overflow-x-auto">
                         <table className="w-full text-xs">
                             <thead>
                                 <tr className="text-left text-white/50">
-                                    <th className="p-2 font-normal">Email Address</th>
+                                    <th className="p-2 font-normal whitespace-nowrap">Email Address</th>
                                     <th className="p-2 font-normal">Status</th>
-                                    <th className="p-2 font-normal">Notes</th>
-                                    <th className="p-2 font-normal">Category</th>
+                                    <th className="p-2 font-normal hidden sm:table-cell">Notes</th>
+                                    <th className="p-2 font-normal hidden md:table-cell">Category</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {data.map((row, i) => (
                                     <tr key={i} className="border-t border-white/10">
-                                        <td className="p-2 text-white">{row.email}</td>
+                                        <td className="p-2 text-white whitespace-nowrap">{row.email}</td>
                                         <td className="p-2">
                                             {row.status === 'Good' && <Badge variant="default" className="bg-green-500/20 text-green-300 border-green-500/30">Good</Badge>}
                                             {row.status === 'Risky' && <Badge variant="default" className="bg-yellow-500/20 text-yellow-300 border-yellow-500/30">Risky</Badge>}
                                             {row.status === 'Bad' && <Badge variant="destructive" className="bg-red-500/20 text-red-300 border-red-500/30">Bad</Badge>}
                                         </td>
-                                        <td className="p-2 text-white/70">{row.notes}</td>
-                                        <td className="p-2 text-white/70">{row.category}</td>
+                                        <td className="p-2 text-white/70 hidden sm:table-cell">{row.notes}</td>
+                                        <td className="p-2 text-white/70 hidden md:table-cell">{row.category}</td>
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
                     </div>
+                </div>
+                 <div className="rounded-lg border border-white/10 bg-white/5 p-4">
+                    <p className="text-sm font-medium text-white">Download Results</p>
+                    <p className="text-xs text-white/70 mt-1">Select the categories you want to include in your download.</p>
+                     <div className="mt-3 flex flex-col sm:flex-row sm:items-center gap-4">
+                        <div className="flex items-center space-x-2">
+                            <Checkbox id="prev_good" defaultChecked className="border-green-400 data-[state=checked]:bg-green-500" />
+                            <label htmlFor="prev_good" className="text-xs text-green-300">Good (1,234)</label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                            <Checkbox id="prev_risky" className="border-yellow-400 data-[state=checked]:bg-yellow-500" />
+                            <label htmlFor="prev_risky" className="text-xs text-yellow-300">Risky (210)</label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                            <Checkbox id="prev_bad" className="border-red-400 data-[state=checked]:bg-red-500"/>
+                            <label htmlFor="prev_bad" className="text-xs text-red-300">Bad (56)</label>
+                        </div>
+                    </div>
+                     <Button size="sm" className="mt-4 w-full sm:w-auto">
+                        <Download className="mr-2 h-4 w-4" />
+                        Download Selected
+                    </Button>
                 </div>
             </div>
         </div>
@@ -121,7 +144,7 @@ export default function HeroSection() {
               </span>
             </div>
           </div>
-          <div className="mx-10 mt-32">
+          <div className="mx-auto mt-32 max-w-4xl px-4 md:px-0">
             <DashboardPreview />
           </div>
         </div>
