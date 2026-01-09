@@ -15,13 +15,26 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL('https://cleanmails.com'),
   title: {
-    default: 'Cleanmails | Instant Email Validation & Cleaning Service',
+    default: 'Cleanmails | Instant Email Validation, Parser & Spam Checker',
     template: '%s | Cleanmails',
   },
-  description: 'Clean, verify, and protect your email lists with Cleanmails. Reduce bounce rates, remove invalid addresses, and improve sender reputation. Try for free.',
+  description: 'Clean Mails Online: Instant email validation, list cleaning, email parser, and spam checker service. Verify and clean your email lists to improve deliverability. Try for free.',
+  keywords: [
+    'clean mails',
+    'clean mails online',
+    'email validation',
+    'email verification',
+    'email list cleaning',
+    'spam checker',
+    'email parser',
+    'email extractor',
+    'bulk email validation',
+    'email deliverability',
+    'reduce bounce rate',
+  ],
   openGraph: {
-    title: 'Cleanmails | Instant Email Validation & Cleaning Service',
-    description: 'Stop bounces and improve your email deliverability. Fast, affordable, and accurate email verification.',
+    title: 'Cleanmails | Instant Email Validation, Parser & Spam Checker',
+    description: 'Clean Mails Online: Stop bounces and improve your email deliverability with our fast, affordable, and accurate email verification, parsing, and spam checking tools.',
     url: 'https://cleanmails.com',
     siteName: 'Cleanmails',
     images: [
@@ -37,8 +50,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Cleanmails | Instant Email Validation & Cleaning Service',
-    description: 'Stop bounces and improve your email deliverability. Fast, affordable, and accurate email verification.',
+    title: 'Cleanmails | Instant Email Validation, Parser & Spam Checker',
+    description: 'Clean Mails Online: Stop bounces and improve your email deliverability with our fast, affordable, and accurate email verification, parsing, and spam checking tools.',
     images: ['/og-image.png'],
     creator: '@cleanmails', // Add your Twitter handle
   },
