@@ -1,4 +1,3 @@
-
 'use client';
 
 import {
@@ -49,7 +48,6 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuPortal,
-  DropdownMenuSeparator,
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
@@ -106,13 +104,14 @@ export default function DashboardLayout({
   };
   
   const isTrialExpired = user?.plan === 'Free' && user.trialEndsAt && Date.now() > user.trialEndsAt;
-  const showUpgradeNotice = isTrialExpired && pathname !== '/pricing';
+  const showUpgradeNotice = isTrialExpired && pathname !== '/pricing' && pathname !== '/subscription';
+
 
   return (
       <SidebarProvider>
         <Sidebar>
           <SidebarHeader>
-            <div className="flex h-14 items-center justify-center px-4">
+            <div className="flex h-16 items-center justify-center px-4">
               <Logo />
             </div>
           </SidebarHeader>
@@ -156,21 +155,19 @@ export default function DashboardLayout({
                   <SidebarMenuButton href="/support" isActive={pathname === '/support'}>
                     <LifeBuoy />
                     Support
-                    {pathname === '/support' && <ChevronRight className="ml-auto h-4 w-4" />}
                   </SidebarMenuButton>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
                   <SidebarMenuButton href="/feedback" isActive={pathname === '/feedback'}>
                     <MessageSquare />
                     Feedback
-                    {pathname === '/feedback' && <ChevronRight className="ml-auto h-4 w-4" />}
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               </SidebarMenu>
             </SidebarGroup>
              <div className="p-2">
                 <Link href="/email-system" className="block group">
-                    <div className="relative rounded-lg p-4 overflow-hidden bg-primary text-primary-foreground transition-all hover:shadow-lg hover:shadow-primary/20">
+                    <div className="relative rounded-lg p-3 overflow-hidden bg-primary text-primary-foreground transition-all hover:shadow-lg hover:shadow-primary/20">
                         <div className="absolute -top-1/2 -right-1/2 w-full h-full bg-white/10 rounded-full animate-pulse blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
                         <div className="relative flex items-center gap-3">
                              <Rocket className="h-5 w-5 transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110" />
@@ -229,16 +226,9 @@ export default function DashboardLayout({
                             </Link>
                           </DropdownMenuItem>
                           <DropdownMenuItem asChild>
-                            <Link href="/pricing" className="flex justify-between items-center">
-                                <div className='flex items-center'>
-                                    <CreditCard className="mr-2 h-4 w-4" />
-                                    <span>Subscription</span>
-                                </div>
-                                {user?.plan === 'Lifetime' ? (
-                                    <Badge variant="outline" className="border-green-500/50 text-green-400">LTD</Badge>
-                                ) : (
-                                    <Badge variant="secondary">1 Day Free Trial</Badge>
-                                )}
+                            <Link href="/subscription">
+                                <CreditCard className="mr-2 h-4 w-4" />
+                                <span>Subscription</span>
                             </Link>
                           </DropdownMenuItem>
                            <DropdownMenuItem asChild>
@@ -287,7 +277,7 @@ export default function DashboardLayout({
               </ClientOnly>
             {user?.plan === 'Lifetime' ? (
                 <div className="p-2">
-                    <div className="w-full justify-center rounded-lg bg-emerald-500/10 p-3 text-center text-sm font-semibold text-emerald-400 border border-emerald-500/20">
+                    <div className="w-full justify-center rounded-lg bg-emerald-900/50 p-3 text-center text-sm font-semibold text-emerald-400 border border-emerald-500/30">
                         <div className="flex items-center justify-center gap-2">
                             <ShieldCheck className="h-4 w-4"/>
                             <span>Lifetime Deal Active</span>

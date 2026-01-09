@@ -13,11 +13,6 @@ import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card"
 import { useAuth } from '@/hooks/useAuth';
 import UpgradeNotice from '@/components/layout/UpgradeNotice';
 
@@ -162,7 +157,7 @@ export default function EmailValidationPage() {
                 setValidatedData(progressData);
             });
 
-            const delayPromise = new Promise(resolve => setTimeout(resolve, 5000));
+            const delayPromise = new Promise(resolve => setTimeout(resolve, 2000));
             
             const [results] = await Promise.all([validationPromise, delayPromise]);
             
@@ -226,17 +221,19 @@ export default function EmailValidationPage() {
     }
     
     const Legend = () => (
-        <Alert className="bg-muted/50 border-border/50">
-            <HelpCircle className="h-4 w-4" />
-            <AlertTitle>Understanding the Results</AlertTitle>
-            <AlertDescription>
-                <ul className="list-disc list-inside space-y-2 mt-2 text-xs">
+        <Card className="bg-muted/50 border-border/50">
+            <CardHeader className="flex-row items-center gap-4 space-y-0">
+                <HelpCircle className="h-5 w-5" />
+                <CardTitle className="text-base">Understanding the Results</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <ul className="space-y-2 mt-2 text-sm text-muted-foreground">
                     <li><strong className="text-green-400">Good:</strong> The email has valid syntax and the domain has a mail server (MX Record). Safe to send.</li>
                     <li><strong className="text-yellow-400">Risky:</strong> These are role-based emails (e.g., support@, info@). They are valid but may have low engagement.</li>
                     <li><strong className="text-red-400">Bad:</strong> These emails are undeliverable. They may have invalid syntax, belong to a disposable domain, have a typo, or the domain does not accept emails (no MX Record).</li>
                 </ul>
-            </AlertDescription>
-        </Alert>
+            </CardContent>
+        </Card>
     );
 
 
@@ -297,6 +294,7 @@ export default function EmailValidationPage() {
         const badPercent = total > 0 ? (bad / total * 100).toFixed(1) : 0;
 
         return (
+            <>
             <Card>
                 <CardHeader>
                     <CardTitle className="text-2xl">Validation Results</CardTitle>
@@ -304,7 +302,7 @@ export default function EmailValidationPage() {
                 </CardHeader>
                 <CardContent className="space-y-6">
                     <div className="grid gap-4 md:grid-cols-3">
-                        <Card className="bg-green-500/10 border-green-500/20">
+                        <Card className="bg-green-900/20 border-green-500/30">
                             <CardHeader className="flex flex-row items-center justify-between pb-2">
                                 <CardTitle className="text-sm font-medium text-green-200">Good</CardTitle>
                                 <CheckCircle className="h-4 w-4 text-green-300" />
@@ -314,7 +312,7 @@ export default function EmailValidationPage() {
                                 <p className="text-xs text-green-200">{goodPercent}% of total</p>
                             </CardContent>
                         </Card>
-                        <Card className="bg-yellow-500/10 border-yellow-500/20">
+                        <Card className="bg-yellow-900/20 border-yellow-500/30">
                             <CardHeader className="flex flex-row items-center justify-between pb-2">
                                 <CardTitle className="text-sm font-medium text-yellow-200">Risky</CardTitle>
                                 <ShieldAlert className="h-4 w-4 text-yellow-300" />
@@ -324,7 +322,7 @@ export default function EmailValidationPage() {
                                 <p className="text-xs text-yellow-200">{riskyPercent}% of total</p>
                             </CardContent>
                         </Card>
-                        <Card className="bg-red-500/10 border-red-500/20">
+                        <Card className="bg-red-900/20 border-red-500/30">
                             <CardHeader className="flex flex-row items-center justify-between pb-2">
                                 <CardTitle className="text-sm font-medium text-red-200">Bad</CardTitle>
                                 <ShieldX className="h-4 w-4 text-red-300" />
@@ -335,37 +333,44 @@ export default function EmailValidationPage() {
                             </CardContent>
                         </Card>
                     </div>
-                     <Legend />
-                    <Alert>
-                        <PieChart className="h-4 w-4" />
-                        <AlertTitle>Download Validated Segments</AlertTitle>
-                        <AlertDescription>Select one or more categories to include in your download.</AlertDescription>
-                        <div className="mt-4 flex flex-col sm:flex-row sm:items-center gap-4">
-                            <div className="flex items-center space-x-4">
-                                <div className="flex items-center space-x-2">
-                                    <Checkbox id="good-check" checked={selectedCategories.has('good')} onCheckedChange={() => handleCategoryToggle('good')} />
-                                    <Label htmlFor="good-check" className="font-normal text-green-300">Good ({good})</Label>
-                                </div>
-                                <div className="flex items-center space-x-2">
-                                    <Checkbox id="risky-check" checked={selectedCategories.has('risky')} onCheckedChange={() => handleCategoryToggle('risky')} />
-                                    <Label htmlFor="risky-check" className="font-normal text-yellow-300">Risky ({risky})</Label>
-                                </div>
-                                <div className="flex items-center space-x-2">
-                                    <Checkbox id="bad-check" checked={selectedCategories.has('bad')} onCheckedChange={() => handleCategoryToggle('bad')} />
-                                    <Label htmlFor="bad-check" className="font-normal text-red-300">Bad ({bad})</Label>
-                                </div>
-                            </div>
-                            <Button onClick={handleDownload} size="sm" className="sm:ml-auto" disabled={selectedCategories.size === 0}>
-                                <Download className="mr-2 h-4 w-4" />
-                                Download Selected
-                            </Button>
-                        </div>
-                    </Alert>
                 </CardContent>
-                <CardFooter>
+            </Card>
+
+            <Legend />
+            
+            <Card>
+                <CardHeader className="flex-row items-center gap-4 space-y-0">
+                    <CheckCircle className="h-5 w-5" />
+                    <CardTitle className="text-base">Download Validated Segments</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <p className="text-sm text-muted-foreground">Select one or more categories to include in your download.</p>
+                     <div className="mt-4 flex flex-col sm:flex-row sm:items-center gap-4">
+                        <div className="flex items-center space-x-4">
+                            <div className="flex items-center space-x-2">
+                                <Checkbox id="good-check" checked={selectedCategories.has('good')} onCheckedChange={() => handleCategoryToggle('good')} />
+                                <Label htmlFor="good-check" className="font-normal text-green-300">Good ({good})</Label>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                <Checkbox id="risky-check" checked={selectedCategories.has('risky')} onCheckedChange={() => handleCategoryToggle('risky')} />
+                                <Label htmlFor="risky-check" className="font-normal text-yellow-300">Risky ({risky})</Label>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                <Checkbox id="bad-check" checked={selectedCategories.has('bad')} onCheckedChange={() => handleCategoryToggle('bad')} />
+                                <Label htmlFor="bad-check" className="font-normal text-red-300">Bad ({bad})</Label>
+                            </div>
+                        </div>
+                    </div>
+                </CardContent>
+                 <CardFooter className="flex-wrap justify-between gap-2">
                     <Button variant="outline" onClick={handleReset}>Validate Another List</Button>
+                    <Button onClick={handleDownload} disabled={selectedCategories.size === 0}>
+                        <Download className="mr-2 h-4 w-4" />
+                        Download Selected
+                    </Button>
                 </CardFooter>
             </Card>
+            </>
         )
     };
 
