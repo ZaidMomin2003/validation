@@ -27,6 +27,10 @@ const links = [
         href: '/delivery',
     },
     {
+        title: 'Developer',
+        href: '/developer',
+    },
+    {
         title: 'Support',
         href: '/support',
     },

@@ -13,6 +13,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/bulk-validate',
     '/changelog',
     '/delivery',
+    '/developer',
     '/email-validation',
     '/extract-from-text',
     '/email-system',
