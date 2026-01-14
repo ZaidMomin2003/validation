@@ -16,7 +16,7 @@ export default function DeveloperPage() {
                 <div className="grid md:grid-cols-3 gap-12 items-center">
                     <div className="flex flex-col items-center md:items-start text-center md:text-left">
                         <Avatar className="w-40 h-40 border-4 border-primary shadow-lg">
-                            <AvatarImage src="https://i.pravatar.cc/300?u=zaid" alt="Zaid Momin" />
+                            <AvatarImage src="/admin.jpg" alt="Zaid Momin" />
                             <AvatarFallback>ZM</AvatarFallback>
                         </Avatar>
                         <h1 className="text-4xl font-bold mt-6">Zaid Momin</h1>
@@ -32,7 +32,7 @@ export default function DeveloperPage() {
                             <CardContent className="p-8">
                                 <h2 className="text-xl font-semibold mb-4">About Me</h2>
                                 <p className="text-muted-foreground leading-relaxed">
-                                    I am a passionate software engineer and entrepreneur dedicated to building tools that are not only powerful but also intuitive and accessible. With a background in full-stack development, I founded ZuhanaTech to transform complex problems into elegant software solutions. Cleanmails is the first step in a journey to create a suite of products that empower businesses to grow.
+                                    I am a passionate software engineer and entrepreneur dedicated to building tools that are not only powerful but also intuitive and accessible. With a background in full-stack development, I founded ZuhanaTech, the parent company of Cleanmails, to transform complex problems into elegant software solutions. Cleanmails is the first step in a journey to create a suite of products that empower businesses to grow. My hobbies include exploring new technologies, contributing to open-source projects, and building applications that solve real-world problems.
                                 </p>
                             </CardContent>
                         </Card>
