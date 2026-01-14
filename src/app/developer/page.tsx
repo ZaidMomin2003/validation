@@ -1,23 +1,16 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
 import { Target, Rocket, Eye, Linkedin, Github, Twitter } from 'lucide-react';
 import Link from 'next/link';
-import Image from 'next/image';
 
 export default function DeveloperPage() {
   return (
     <main className="flex-1">
-        <section className="relative py-24 md:py-32">
-             <div className="absolute inset-0 z-0 opacity-10">
-                <Image 
-                    src="https://images.unsplash.com/photo-1593720213428-28a5b9e94613?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3"
-                    alt="Developer background"
-                    fill
-                    className="object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent"></div>
+        <section className="relative overflow-hidden py-24 md:py-32">
+            <div className="absolute inset-0 z-0 opacity-50">
+                <div className="absolute -left-1/4 top-0 h-full w-1/2 bg-primary/10 rounded-full blur-[100px] animate-pulse"></div>
+                <div className="absolute -right-1/4 bottom-0 h-full w-1/2 bg-secondary/10 rounded-full blur-[100px] animate-pulse-slow"></div>
             </div>
             <div className="container mx-auto max-w-5xl px-4 md:px-6 relative z-10">
                 <div className="grid md:grid-cols-3 gap-12 items-center">
@@ -29,13 +22,13 @@ export default function DeveloperPage() {
                         <h1 className="text-4xl font-bold mt-6">Zaid Momin</h1>
                         <p className="text-primary text-lg font-semibold">Founder of ZuhanaTech</p>
                         <div className="flex gap-4 mt-4">
-                            <Link href="#" target="_blank" className="text-muted-foreground hover:text-primary"><Linkedin /></Link>
-                            <Link href="#" target="_blank" className="text-muted-foreground hover:text-primary"><Github /></Link>
-                            <Link href="#" target="_blank" className="text-muted-foreground hover:text-primary"><Twitter /></Link>
+                            <Link href="#" target="_blank" className="text-muted-foreground hover:text-primary transition-colors"><Linkedin /></Link>
+                            <Link href="#" target="_blank" className="text-muted-foreground hover:text-primary transition-colors"><Github /></Link>
+                            <Link href="#" target="_blank" className="text-muted-foreground hover:text-primary transition-colors"><Twitter /></Link>
                         </div>
                     </div>
                      <div className="md:col-span-2">
-                        <Card className="bg-card/5 border-border/20 backdrop-blur-sm">
+                        <Card className="bg-card/50 border-border/30 backdrop-blur-md shadow-2xl shadow-primary/5">
                             <CardContent className="p-8">
                                 <h2 className="text-xl font-semibold mb-4">About Me</h2>
                                 <p className="text-muted-foreground leading-relaxed">
@@ -57,9 +50,9 @@ export default function DeveloperPage() {
                     </p>
                 </div>
                  <div className="grid md:grid-cols-3 gap-8">
-                    <Card className="text-center bg-card/10 border-border/20">
+                    <Card className="text-center bg-card/50 border-border/30 backdrop-blur-md transition-all duration-300 hover:border-primary/50 hover:shadow-2xl hover:shadow-primary/10">
                         <CardHeader>
-                            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 mb-4">
+                            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 mb-4 border border-primary/20">
                                 <Eye className="h-8 w-8 text-primary" />
                             </div>
                             <CardTitle className="text-2xl">Vision</CardTitle>
@@ -68,9 +61,9 @@ export default function DeveloperPage() {
                             <p className="text-muted-foreground">To create a world where technology is a seamless extension of human capability, simplifying complexity and unlocking potential for everyone.</p>
                         </CardContent>
                     </Card>
-                    <Card className="text-center bg-card/10 border-border/20">
+                    <Card className="text-center bg-card/50 border-border/30 backdrop-blur-md transition-all duration-300 hover:border-primary/50 hover:shadow-2xl hover:shadow-primary/10">
                         <CardHeader>
-                            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 mb-4">
+                            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 mb-4 border border-primary/20">
                                 <Rocket className="h-8 w-8 text-primary" />
                             </div>
                             <CardTitle className="text-2xl">Mission</CardTitle>
@@ -79,9 +72,9 @@ export default function DeveloperPage() {
                             <p className="text-muted-foreground">Our mission is to build beautiful, user-centric software products that solve real-world problems for businesses and individuals, one line of code at a time.</p>
                         </CardContent>
                     </Card>
-                    <Card className="text-center bg-card/10 border-border/20">
+                    <Card className="text-center bg-card/50 border-border/30 backdrop-blur-md transition-all duration-300 hover:border-primary/50 hover:shadow-2xl hover:shadow-primary/10">
                         <CardHeader>
-                            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 mb-4">
+                            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 mb-4 border border-primary/20">
                                 <Target className="h-8 w-8 text-primary" />
                             </div>
                             <CardTitle className="text-2xl">Goals</CardTitle>
