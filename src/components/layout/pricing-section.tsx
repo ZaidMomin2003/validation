@@ -93,9 +93,9 @@ export default function PricingSection() {
                                 <span className="mb-4 inline-block text-5xl font-bold">
                                     <span className="text-3xl">$</span>39
                                 </span>
-                                 <Button asChild size="lg" className="w-full md:w-auto bg-indigo-500 hover:bg-indigo-600 text-white">
+                                 <Button asChild size="lg" className="w-full md:w-auto">
                                     <a href="https://zaidbuilds.gumroad.com/l/Cleanmails" target="_blank" rel="noopener noreferrer">
-                                        Purchase on Gumroad
+                                        Price
                                         <ExternalLink className="ml-2 h-4 w-4" />
                                     </a>
                                 </Button>
