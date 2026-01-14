@@ -89,17 +89,21 @@ export default function PricingSection() {
                                     <li className="flex items-center gap-2"><Check className="size-4 text-green-400" /><span>Deploy Anywhere</span></li>
                                 </ul>
                             </div>
-                             <div className="text-center">
-                                <span className="mb-4 inline-block text-5xl font-bold">
-                                    <span className="text-3xl">$</span>39
-                                </span>
-                                 <Button asChild size="lg" className="w-full md:w-auto">
-                                    <a href="https://zaidbuilds.gumroad.com/l/Cleanmails" target="_blank" rel="noopener noreferrer">
-                                        Price
-                                        <ExternalLink className="ml-2 h-4 w-4" />
-                                    </a>
-                                </Button>
-                                <p className="mt-3 text-xs text-gray-500">A secure, one-time payment via Gumroad.</p>
+                             <div className="text-center md:text-right">
+                                <div className="inline-block">
+                                    <div className="mb-4">
+                                        <span className="text-5xl font-bold align-middle">
+                                            <span className="text-3xl align-middle">$</span>39
+                                        </span>
+                                    </div>
+                                    <Button asChild size="lg" className="w-full md:w-auto">
+                                        <a href="https://zaidbuilds.gumroad.com/l/Cleanmails" target="_blank" rel="noopener noreferrer">
+                                            Price
+                                            <ExternalLink className="ml-2 h-4 w-4" />
+                                        </a>
+                                    </Button>
+                                    <p className="mt-3 text-xs text-gray-500">A secure, one-time payment via Gumroad.</p>
+                                </div>
                              </div>
                          </div>
                     </div>
