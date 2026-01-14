@@ -1,7 +1,7 @@
 
 'use client'
 import { Button } from '@/components/ui/button'
-import { Check, Star } from 'lucide-react'
+import { Check, Star, ExternalLink } from 'lucide-react'
 import Link from 'next/link'
 import { Cover } from '@/components/ui/cover';
 import Image from 'next/image';
@@ -46,6 +46,7 @@ export default function PricingSection() {
                                     </Button>
                                 </div>
                                 <p className="mt-4 text-xs text-gray-500">New users get a 1-day free trial.</p>
+                                <p className="mt-1 text-xs font-semibold text-primary">Only the first 200 orders get the LTD at $29.</p>
                             </div>
                             <div className="relative pt-12 md:pt-0 md:pl-12">
                                 <ul role="list" className="space-y-4 text-gray-700">
@@ -76,6 +77,33 @@ export default function PricingSection() {
                             </div>
                         </div>
                     </div>
+
+                    <div className="mt-12 bg-white/5 text-white relative rounded-3xl border border-white/10 shadow-lg p-8">
+                         <div className="grid items-center gap-8 md:grid-cols-2">
+                            <div className="text-center md:text-left">
+                                <h3 className="text-2xl font-semibold">Want to Self-Host?</h3>
+                                <p className="mt-2 text-lg text-gray-400">Get the complete source code and run it on your own infrastructure.</p>
+                                <ul className="mt-4 space-y-2 text-gray-300 text-sm text-left">
+                                    <li className="flex items-center gap-2"><Check className="size-4 text-green-400" /><span>Full Next.js Source Code</span></li>
+                                    <li className="flex items-center gap-2"><Check className="size-4 text-green-400" /><span>One-Time Purchase</span></li>
+                                    <li className="flex items-center gap-2"><Check className="size-4 text-green-400" /><span>Deploy Anywhere</span></li>
+                                </ul>
+                            </div>
+                             <div className="text-center">
+                                <span className="mb-4 inline-block text-5xl font-bold">
+                                    <span className="text-3xl">$</span>39
+                                </span>
+                                 <Button asChild size="lg" className="w-full md:w-auto bg-indigo-500 hover:bg-indigo-600 text-white">
+                                    <a href="https://zaidbuilds.gumroad.com/l/Cleanmails" target="_blank" rel="noopener noreferrer">
+                                        Purchase on Gumroad
+                                        <ExternalLink className="ml-2 h-4 w-4" />
+                                    </a>
+                                </Button>
+                                <p className="mt-3 text-xs text-gray-500">A secure, one-time payment via Gumroad.</p>
+                             </div>
+                         </div>
+                    </div>
+
                 </div>
             </div>
         </div>
