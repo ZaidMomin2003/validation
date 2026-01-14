@@ -21,11 +21,6 @@ export default function DeveloperPage() {
                         </Avatar>
                         <h1 className="text-4xl font-bold mt-6">Zaid Momin</h1>
                         <p className="text-primary text-lg font-semibold">Founder of ZuhanaTech</p>
-                        <div className="flex gap-4 mt-4">
-                            <Link href="#" target="_blank" className="text-muted-foreground hover:text-primary transition-colors"><Linkedin /></Link>
-                            <Link href="#" target="_blank" className="text-muted-foreground hover:text-primary transition-colors"><Github /></Link>
-                            <Link href="#" target="_blank" className="text-muted-foreground hover:text-primary transition-colors"><Twitter /></Link>
-                        </div>
                     </div>
                      <div className="md:col-span-2">
                         <Card className="bg-card/50 border-border/30 backdrop-blur-md shadow-2xl shadow-primary/5">
